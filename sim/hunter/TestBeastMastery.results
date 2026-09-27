@@ -415,8 +415,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-EidolonTalisman-18340"
  value: {
-  dps: 463.6021
-  tps: 266.79256
+  dps: 453.00349
+  tps: 259.37353
  }
 }
 dps_results: {
@@ -625,8 +625,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-GiantstalkerArmor"
  value: {
-  dps: 589.16615
-  tps: 354.6435
+  dps: 570.30048
+  tps: 341.43753
  }
 }
 dps_results: {
@@ -863,8 +863,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-MindtapTalisman-18371"
  value: {
-  dps: 462.62972
-  tps: 269.23531
+  dps: 464.21468
+  tps: 270.80989
  }
 }
 dps_results: {
@@ -1024,8 +1024,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-ShardoftheGods"
  value: {
-  dps: 453.00349
-  tps: 259.37353
+  dps: 459.21678
+  tps: 264.12853
  }
 }
 dps_results: {

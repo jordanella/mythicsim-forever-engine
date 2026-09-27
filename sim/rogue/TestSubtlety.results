@@ -135,8 +135,8 @@ dps_results: {
 dps_results: {
  key: "TestSubtlety-AllItems-BloodfangArmor"
  value: {
-  dps: 333.85449
-  tps: 165.92568
+  dps: 319.18253
+  tps: 158.63372
  }
 }
 dps_results: {
@@ -338,8 +338,8 @@ dps_results: {
 dps_results: {
  key: "TestSubtlety-AllItems-EidolonTalisman-18340"
  value: {
-  dps: 306.55409
-  tps: 152.35738
+  dps: 285.94867
+  tps: 142.11649
  }
 }
 dps_results: {
@@ -724,8 +724,8 @@ dps_results: {
 dps_results: {
  key: "TestSubtlety-AllItems-NightslayerArmor"
  value: {
-  dps: 417.19878
-  tps: 207.34779
+  dps: 377.97089
+  tps: 187.85153
  }
 }
 dps_results: {

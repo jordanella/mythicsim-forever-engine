@@ -583,8 +583,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-MindtapTalisman-18371"
  value: {
-  dps: 230.97153
-  tps: 144.83956
+  dps: 233.4154
+  tps: 145.09204
  }
 }
 dps_results: {
@@ -688,8 +688,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-ShardoftheGods"
  value: {
-  dps: 231.3102
-  tps: 144.37503
+  dps: 232.02586
+  tps: 143.68412
  }
 }
 dps_results: {

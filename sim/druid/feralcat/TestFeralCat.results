@@ -125,7 +125,7 @@ dps_results: {
  value: {
   dps: 309.999
   tps: 174.50339
-  dtps: 3.72578
+  dtps: 3.641
  }
 }
 dps_results: {
@@ -227,9 +227,9 @@ dps_results: {
 dps_results: {
  key: "TestFeralCat-AllItems-CenarionRaiment"
  value: {
-  dps: 345.31488
-  tps: 192.13547
-  dtps: 3.80567
+  dps: 311.83299
+  tps: 175.41133
+  dtps: 3.51888
  }
 }
 dps_results: {
@@ -387,8 +387,8 @@ dps_results: {
 dps_results: {
  key: "TestFeralCat-AllItems-EidolonTalisman-18340"
  value: {
-  dps: 327.03164
-  tps: 182.71289
+  dps: 305.82629
+  tps: 172.15301
   dtps: 3.80567
  }
 }
@@ -797,7 +797,7 @@ dps_results: {
  value: {
   dps: 305.82629
   tps: 172.15301
-  dtps: 3.72089
+  dtps: 3.80567
  }
 }
 dps_results: {
@@ -843,8 +843,8 @@ dps_results: {
 dps_results: {
  key: "TestFeralCat-AllItems-MindtapTalisman-18371"
  value: {
-  dps: 306.56358
-  tps: 175.69922
+  dps: 305.71085
+  tps: 175.19317
   dtps: 3.80567
  }
 }
@@ -979,8 +979,8 @@ dps_results: {
 dps_results: {
  key: "TestFeralCat-AllItems-ShardoftheGods"
  value: {
-  dps: 305.82629
-  tps: 172.15301
+  dps: 306.60555
+  tps: 172.64336
   dtps: 3.72089
  }
 }
@@ -1059,8 +1059,8 @@ dps_results: {
 dps_results: {
  key: "TestFeralCat-AllItems-StormrageRaiment"
  value: {
-  dps: 319.77755
-  tps: 179.30505
+  dps: 305.77427
+  tps: 172.37293
   dtps: 3.72089
  }
 }

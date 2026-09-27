@@ -135,8 +135,8 @@ dps_results: {
 dps_results: {
  key: "TestAssassination-AllItems-BloodfangArmor"
  value: {
-  dps: 370.34452
-  tps: 184.06123
+  dps: 355.02769
+  tps: 176.44876
  }
 }
 dps_results: {
@@ -338,8 +338,8 @@ dps_results: {
 dps_results: {
  key: "TestAssassination-AllItems-EidolonTalisman-18340"
  value: {
-  dps: 344.49165
-  tps: 171.21235
+  dps: 322.87067
+  tps: 160.46672
  }
 }
 dps_results: {
@@ -724,8 +724,8 @@ dps_results: {
 dps_results: {
  key: "TestAssassination-AllItems-NightslayerArmor"
  value: {
-  dps: 464.40186
-  tps: 230.80773
+  dps: 422.54337
+  tps: 210.00405
  }
 }
 dps_results: {
