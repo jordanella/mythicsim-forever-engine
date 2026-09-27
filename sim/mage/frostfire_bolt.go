@@ -1,14 +1,71 @@
 package mage
 
-// TODO: To be implemented. Frostfire Bolt is content Forever added; the sim has never
-// modelled it, so this is a stub rather than a port.
-//
-// Spell IDs: 401502, 1237312, 1237313
-// SpellData: spellData.FrostfireBolt (3 ranks)
-// SpellMask: MageSpellFrostfireBolt
-//
-// Not wired into Initialize() yet -- wiring an unimplemented ability would panic
-// on every character of this class. Wire it when it is implemented.
+import (
+	"fmt"
+
+	"github.com/wowsims/forever/sim/core"
+	"github.com/wowsims/forever/sim/core/spelldata"
+)
+
+// Baseline Forever spell, learned at levels 40, 50 and 60. Both the direct hit and
+// the periodic effect use the client row, including its zero periodic coefficient.
+// The direct chill uses binary resistance, as Frostbolt and the original SoD
+// Frostfire Bolt do. Forever server logs should confirm this inherited rule.
 func (mage *Mage) registerFrostfireBolt() {
-	panic("To be implemented")
+	spellData.FrostfireBolt.Each(func(_ int32, rank *spelldata.Spell) { mage.registerFrostfireBoltRank(rank) })
+}
+
+func (mage *Mage) registerFrostfireBoltRank(rank *spelldata.Spell) {
+	tick := rank.PeriodicEffect()
+	tickLength := tick.Period()
+
+	mage.RegisterSpell(core.SpellConfig{
+		ActionID:       core.ActionID{SpellID: rank.ID},
+		SpellSchool:    rank.SpellSchool(),
+		DefenseType:    rank.DefenseTypeCore(),
+		ProcMask:       core.ProcMaskSpellDamage,
+		Flags:          core.SpellFlagAPL | core.SpellFlagBinary,
+		ClassSpellMask: MageSpellFrostfireBolt,
+		Rank:           rank.RankNumber(),
+		MissileSpeed:   float64(rank.Speed),
+
+		ManaCost: core.ManaCostOptions{
+			FlatCost: int32(rank.Cost()),
+		},
+		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD:      rank.GCD(),
+				CastTime: rank.CastTime(),
+			},
+		},
+
+		Dot: core.DotConfig{
+			Aura: core.Aura{
+				Label: fmt.Sprintf("FrostfireBoltDoT-%d", rank.RankNumber()),
+			},
+			NumberOfTicks:    int32(rank.Duration() / tickLength),
+			TickLength:       tickLength,
+			BonusCoefficient: tick.Coeff(),
+			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				dot.Snapshot(target, tick.Average(core.CharacterLevel))
+			},
+			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
+				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, periodicTickOutcome(rank, dot))
+			},
+		},
+
+		DamageMultiplier: 1,
+		BonusCoefficient: rank.DamageEffect().Coeff(),
+		ThreatMultiplier: 1,
+
+		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+			result := spell.CalcDamage(sim, target, rank.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
+			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
+				spell.DealDamage(sim, result)
+				if result.Landed() {
+					spell.Dot(target).Apply(sim)
+				}
+			})
+		},
+	})
 }

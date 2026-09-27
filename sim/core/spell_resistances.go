@@ -70,7 +70,12 @@ func (unit *Unit) resistCoeff(spell *Spell, attacker *Unit, binary bool) float64
 		return 0
 	}
 
-	resistance := max(0, unit.GetStat(spell.SpellSchool.ResistanceStat())-attacker.stats[stats.SpellPiercing])
+	rawResistance := unit.GetStat(spell.SpellSchool.ResistanceStat())
+	// Frostfire Bolt explicitly checks the lower resistance, even when both are nonzero.
+	if spell.SpellSchool == SpellSchoolFrostfire {
+		rawResistance = min(unit.GetStat(stats.FireResistance), unit.GetStat(stats.FrostResistance))
+	}
+	resistance := max(0, rawResistance-attacker.stats[stats.SpellPiercing])
 	if resistance <= 0 {
 		// Level-based resistance does not apply to binary spells.
 		if binary {
