@@ -395,8 +395,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-EidolonTalisman-18340"
  value: {
-  dps: 429.02718
-  tps: 257.60319
+  dps: 424.34535
+  tps: 254.98136
  }
 }
 dps_results: {
@@ -718,8 +718,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-LawbringerArmor"
  value: {
-  dps: 519.835
-  tps: 308.69328
+  dps: 513.42682
+  tps: 305.09789
  }
 }
 dps_results: {
@@ -879,8 +879,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-MindtapTalisman-18371"
  value: {
-  dps: 432.94703
-  tps: 263.45112
+  dps: 433.02174
+  tps: 263.48753
  }
 }
 dps_results: {
@@ -1033,8 +1033,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-ShardoftheGods"
  value: {
-  dps: 424.34535
-  tps: 254.98136
+  dps: 429.02277
+  tps: 257.62598
  }
 }
 dps_results: {

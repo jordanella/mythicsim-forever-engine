@@ -121,6 +121,14 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-Alcor'sSunrazor-14555"
+ value: {
+  dps: 309.999
+  tps: 174.50339
+  dtps: 3.641
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-ArenaGrandMaster-19024"
  value: {
   dps: 305.82629
@@ -177,11 +185,27 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-Bloodfist-11744"
+ value: {
+  dps: 309.08454
+  tps: 174.09996
+  dtps: 3.80567
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-BloodvineGarb"
  value: {
   dps: 312.30261
   tps: 175.7445
   dtps: 3.80567
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-BonechillHammer-14487"
+ value: {
+  dps: 311.97894
+  tps: 175.59142
+  dtps: 3.84685
  }
 }
 dps_results: {
@@ -203,9 +227,9 @@ dps_results: {
 dps_results: {
  key: "TestFeralCat-AllItems-CenarionRaiment"
  value: {
-  dps: 345.31488
-  tps: 192.13547
-  dtps: 3.80567
+  dps: 311.83299
+  tps: 175.41133
+  dtps: 3.51888
  }
 }
 dps_results: {
@@ -214,6 +238,14 @@ dps_results: {
   dps: 305.69499
   tps: 172.27293
   dtps: 3.80567
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-ColdrageDagger-10761"
+ value: {
+  dps: 310.58687
+  tps: 174.85926
+  dtps: 3.9683
  }
 }
 dps_results: {
@@ -254,6 +286,14 @@ dps_results: {
   dps: 311.01041
   tps: 174.73686
   dtps: 3.81412
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-Darrowspike-13984"
+ value: {
+  dps: 311.13207
+  tps: 175.15769
+  dtps: 3.93018
  }
 }
 dps_results: {
@@ -347,8 +387,8 @@ dps_results: {
 dps_results: {
  key: "TestFeralCat-AllItems-EidolonTalisman-18340"
  value: {
-  dps: 327.03164
-  tps: 182.71289
+  dps: 305.82629
+  tps: 172.15301
   dtps: 3.80567
  }
 }
@@ -526,6 +566,14 @@ dps_results: {
   dps: 306.53491
   tps: 172.50622
   dtps: 3.80567
+ }
+}
+dps_results: {
+ key: "TestFeralCat-AllItems-GlacialBlade-19099"
+ value: {
+  dps: 313.25165
+  tps: 176.17762
+  dtps: 3.77457
  }
 }
 dps_results: {
@@ -725,7 +773,7 @@ dps_results: {
  value: {
   dps: 305.82629
   tps: 172.15301
-  dtps: 3.72089
+  dtps: 3.80567
  }
 }
 dps_results: {
@@ -761,10 +809,18 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestFeralCat-AllItems-MasterworkStormhammer-12794"
+ value: {
+  dps: 308.72615
+  tps: 174.00243
+  dtps: 3.80174
+ }
+}
+dps_results: {
  key: "TestFeralCat-AllItems-MindtapTalisman-18371"
  value: {
-  dps: 306.56358
-  tps: 175.69922
+  dps: 305.71085
+  tps: 175.19317
   dtps: 3.80567
  }
 }
@@ -899,8 +955,8 @@ dps_results: {
 dps_results: {
  key: "TestFeralCat-AllItems-ShardoftheGods"
  value: {
-  dps: 305.82629
-  tps: 172.15301
+  dps: 306.60555
+  tps: 172.64336
   dtps: 3.72089
  }
 }
@@ -979,8 +1035,8 @@ dps_results: {
 dps_results: {
  key: "TestFeralCat-AllItems-StormrageRaiment"
  value: {
-  dps: 319.77755
-  tps: 179.30505
+  dps: 305.77427
+  tps: 172.37293
   dtps: 3.72089
  }
 }

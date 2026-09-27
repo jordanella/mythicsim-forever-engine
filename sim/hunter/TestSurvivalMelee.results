@@ -380,8 +380,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EidolonTalisman-18340"
  value: {
-  dps: 416.43354
-  tps: 263.10434
+  dps: 403.658
+  tps: 254.16146
  }
 }
 dps_results: {
@@ -556,8 +556,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvivalMelee-AllItems-GiantstalkerArmor"
  value: {
-  dps: 518.33345
-  tps: 334.3389
+  dps: 495.10395
+  tps: 318.07825
  }
 }
 dps_results: {
@@ -788,7 +788,7 @@ dps_results: {
  key: "TestSurvivalMelee-AllItems-MindtapTalisman-18371"
  value: {
   dps: 403.658
-  tps: 254.16146
+  tps: 253.96191
  }
 }
 dps_results: {
@@ -942,7 +942,7 @@ dps_results: {
  key: "TestSurvivalMelee-AllItems-ShardoftheGods"
  value: {
   dps: 403.658
-  tps: 254.16146
+  tps: 253.87138
  }
 }
 dps_results: {

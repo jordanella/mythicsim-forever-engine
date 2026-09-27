@@ -380,8 +380,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvival-AllItems-EidolonTalisman-18340"
  value: {
-  dps: 316.11167
-  tps: 191.06926
+  dps: 308.54315
+  tps: 185.77129
  }
 }
 dps_results: {
@@ -555,8 +555,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvival-AllItems-GiantstalkerArmor"
  value: {
-  dps: 420.41904
-  tps: 264.12439
+  dps: 406.8396
+  tps: 254.61878
  }
 }
 dps_results: {
@@ -787,7 +787,7 @@ dps_results: {
  key: "TestSurvival-AllItems-MindtapTalisman-18371"
  value: {
   dps: 308.54315
-  tps: 186.86811
+  tps: 186.39197
  }
 }
 dps_results: {
@@ -941,7 +941,7 @@ dps_results: {
  key: "TestSurvival-AllItems-ShardoftheGods"
  value: {
   dps: 308.54315
-  tps: 185.77129
+  tps: 185.6768
  }
 }
 dps_results: {

@@ -527,8 +527,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-MindtapTalisman-18371"
  value: {
-  dps: 183.96982
-  tps: 153.07861
+  dps: 184.28257
+  tps: 152.10398
  }
 }
 dps_results: {
@@ -632,8 +632,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-ShardoftheGods"
  value: {
-  dps: 183.0792
-  tps: 151.71554
+  dps: 183.04473
+  tps: 150.16821
  }
 }
 dps_results: {

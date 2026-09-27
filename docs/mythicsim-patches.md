@@ -162,7 +162,9 @@ calculations. Compare actual casts and damage before switching.
    go test --tags=with_db ./sim/rogue -run IcebladeHacker
    ```
 
-4. Run the full suite, `go test --tags=with_db $(go list ./sim/... | grep -v sim/web)`. Only
+4. After an inherited-stat database correction, verify offensive stat indices below 30 are unchanged, run the importer and armor regression tests, and regenerate affected result snapshots from a completed full test run. The correction of armor, health, mana, resistance and false Physical Damage changes item and mitigation cases across specs.
+
+5. Run the full suite, `go test --tags=with_db $(go list ./sim/... | grep -v sim/web)`. Only
    `sim/warlock/TestDestruction` should fail, from patch 3's Conflagrate, and
    `sim/hunter/TestSurvivalMelee` wherever upstream moved hunter numbers (re-bless it into patch 5).
    If upstream's AllItems rows for Iceblade Hacker or Warblade of Caer Darrow move, re-bless them
@@ -170,7 +172,7 @@ calculations. Compare actual casts and damage before switching.
    `TestDestruction.results.tmp` over `TestDestruction.results`) and fold it into patch 3, so
    the patch carries the golden it moves. Any other failure is upstream's or the rebase's, not a
    golden to re-bless.
-5. Check each patch's "drop it when" condition above, and update this file when a patch goes.
+6. Check each patch's "drop it when" condition above, and update this file when a patch goes.
 
 ## 8. Legacy stat indices and armor
 

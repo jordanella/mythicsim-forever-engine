@@ -730,8 +730,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-MindtapTalisman-18371"
  value: {
-  dps: 126.19416
-  tps: 84.17991
+  dps: 128.84804
+  tps: 85.57314
  }
 }
 dps_results: {
@@ -884,8 +884,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-ShardoftheGods"
  value: {
-  dps: 122.72718
-  tps: 78.92881
+  dps: 125.77811
+  tps: 80.70185
  }
 }
 dps_results: {
@@ -1045,8 +1045,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-TheEarthfury"
  value: {
-  dps: 162.90024
-  tps: 102.04398
+  dps: 167.51361
+  tps: 104.68507
  }
 }
 dps_results: {
