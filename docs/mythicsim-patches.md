@@ -1,8 +1,8 @@
 # MythicSim downstream patches
 
 MythicSim runs this engine from its fork (`sage3648/mythicsim-forever-engine`, branch
-`mythicsim/forever-70009-procs-sep27`). The branch is ElliotWood/Forever master, which is built on the
-official wowsims/forever, plus the six patches below. The first base was `442076902` (Merge
+`mythicsim/forever-70009-explosives-sep27`). The branch is ElliotWood/Forever master, which is built on the
+official wowsims/forever, plus the seven patches below. The first base was `442076902` (Merge
 wowsims/forever master ea5412873). The current base is `f43042dc09` (2026-09-27). It includes the 2026-09-27 client hotfix database, Stinging Viper and eight Classic weapon procs, Mage Scroll of Cryoblast, non-engineer explosives and SAF-T / EZ-Thro bombs, Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
 
 Keep the set small. Each patch exists because MythicSim needs something upstream does not do
@@ -151,3 +151,18 @@ against upstream's version:
    the patch carries the golden it moves. Any other failure is upstream's or the rebase's, not a
    golden to re-bless.
 5. Check each patch's "drop it when" condition above, and update this file when a patch goes.
+
+## 7. Legacy stat indices and armor
+
+The inherited snapshot was imported before Resilience was removed from the Stat
+proto. Its armor and later stats were one index too high. The importer now resolves
+stat names against the current enum. The guarded migration corrects inherited
+items, enchants and suffixes, preserves distinct client stat maps, restores missing
+armor, and takes base/bonus armor from the pinned Forever planner. No conditional
+attack power or spell effects are copied from the planner. Full generation uses
+the same armor source. JSON and embedded binaries are updated together.
+
+Validation: Python importer regressions and `go test -tags with_db ./sim/core
+-run TestForeverReferenceArmor` check all 12 affected reference armor pieces and
+Stoneskin Gargoyle Cape's 43 base armor plus 50 bonus armor. The one-time migration
+refuses to run against an already migrated or different source snapshot.
