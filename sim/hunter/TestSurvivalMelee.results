@@ -84,6 +84,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestSurvivalMelee-AllItems-ArgentAvenger-13246"
+ value: {
+  dps: 481.0545
+  tps: 309.79837
+ }
+}
+dps_results: {
  key: "TestSurvivalMelee-AllItems-BadgeoftheSwarmguard-21670"
  value: {
   dps: 407.73283
@@ -413,6 +420,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestSurvivalMelee-AllItems-ElectrifiedDagger-19100"
+ value: {
+  dps: 494.58463
+  tps: 319.44953
+ }
+}
+dps_results: {
  key: "TestSurvivalMelee-AllItems-Enchant2HWeapon-GrandArcanist-7941"
  value: {
   dps: 403.658
@@ -469,6 +483,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestSurvivalMelee-AllItems-EnchantWeapon-FieryWeapon-803"
+ value: {
+  dps: 415.84572
+  tps: 262.69986
+ }
+}
+dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantWeapon-GrandSorcerer-7942"
  value: {
   dps: 403.658
@@ -480,6 +501,13 @@ dps_results: {
  value: {
   dps: 403.658
   tps: 253.9228
+ }
+}
+dps_results: {
+ key: "TestSurvivalMelee-AllItems-EnchantWeapon-Lifestealing-1898"
+ value: {
+  dps: 413.55271
+  tps: 261.07439
  }
 }
 dps_results: {
@@ -544,6 +572,13 @@ dps_results: {
  value: {
   dps: 474.75356
   tps: 305.24508
+ }
+}
+dps_results: {
+ key: "TestSurvivalMelee-AllItems-FlurryAxe-871"
+ value: {
+  dps: 497.40287
+  tps: 321.94823
  }
 }
 dps_results: {
@@ -974,6 +1009,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestSurvivalMelee-AllItems-Shadowstrike-17074"
+ value: {
+  dps: 482.07333
+  tps: 310.03003
+ }
+}
+dps_results: {
  key: "TestSurvivalMelee-AllItems-ShardoftheFallenStar-21891"
  value: {
   dps: 404.4378
@@ -985,6 +1027,13 @@ dps_results: {
  value: {
   dps: 403.658
   tps: 253.87138
+ }
+}
+dps_results: {
+ key: "TestSurvivalMelee-AllItems-SkullforgeReaver-13361"
+ value: {
+  dps: 482.29336
+  tps: 310.87599
  }
 }
 dps_results: {
@@ -1062,6 +1111,13 @@ dps_results: {
  value: {
   dps: 409.10472
   tps: 257.94783
+ }
+}
+dps_results: {
+ key: "TestSurvivalMelee-AllItems-SwordofZeal-6622"
+ value: {
+  dps: 343.46286
+  tps: 211.9311
  }
 }
 dps_results: {
