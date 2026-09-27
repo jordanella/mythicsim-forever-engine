@@ -121,8 +121,8 @@ dps_results: {
 dps_results: {
  key: "TestFury-AllItems-BattlegearofMight"
  value: {
-  dps: 400.60521
-  tps: 251.97569
+  dps: 370.75142
+  tps: 234.43534
  }
 }
 dps_results: {
@@ -142,8 +142,8 @@ dps_results: {
 dps_results: {
  key: "TestFury-AllItems-BattlegearofWrath"
  value: {
-  dps: 334.90165
-  tps: 213.30729
+  dps: 322.80785
+  tps: 206.20746
  }
 }
 dps_results: {
@@ -464,8 +464,8 @@ dps_results: {
 dps_results: {
  key: "TestFury-AllItems-EidolonTalisman-18340"
  value: {
-  dps: 328.32079
-  tps: 209.61488
+  dps: 310.18009
+  tps: 198.96514
  }
 }
 dps_results: {

@@ -611,8 +611,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-MindtapTalisman-18371"
  value: {
-  dps: 275.48551
-  tps: 203.9599
+  dps: 276.06201
+  tps: 204.29749
  }
 }
 dps_results: {
@@ -723,8 +723,8 @@ dps_results: {
 dps_results: {
  key: "TestArcane-AllItems-ShardoftheGods"
  value: {
-  dps: 274.54137
-  tps: 197.92718
+  dps: 274.70975
+  tps: 198.90458
  }
 }
 dps_results: {

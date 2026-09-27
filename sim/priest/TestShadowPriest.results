@@ -584,7 +584,7 @@ dps_results: {
  key: "TestShadowPriest-AllItems-MindtapTalisman-18371"
  value: {
   dps: 344.54324
-  tps: 248.75299
+  tps: 248.78625
  }
 }
 dps_results: {
@@ -674,8 +674,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-ShardoftheGods"
  value: {
-  dps: 339.61891
-  tps: 241.8152
+  dps: 343.98268
+  tps: 244.89931
  }
 }
 dps_results: {

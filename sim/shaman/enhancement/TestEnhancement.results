@@ -359,8 +359,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-EidolonTalisman-18340"
  value: {
-  dps: 186.99894
-  tps: 106.62837
+  dps: 171.66039
+  tps: 99.11248
  }
 }
 dps_results: {
@@ -745,7 +745,7 @@ dps_results: {
  key: "TestEnhancement-AllItems-MindtapTalisman-18371"
  value: {
   dps: 171.66039
-  tps: 99.11248
+  tps: 98.58702
  }
 }
 dps_results: {
@@ -878,7 +878,7 @@ dps_results: {
  key: "TestEnhancement-AllItems-ShardoftheGods"
  value: {
   dps: 171.66039
-  tps: 99.11248
+  tps: 98.36593
  }
 }
 dps_results: {
@@ -1031,8 +1031,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-TheEarthfury"
  value: {
-  dps: 224.38974
-  tps: 124.89172
+  dps: 199.14771
+  tps: 111.64122
  }
 }
 dps_results: {
@@ -1087,8 +1087,8 @@ dps_results: {
 dps_results: {
  key: "TestEnhancement-AllItems-TheTenStorms"
  value: {
-  dps: 196.07912
-  tps: 111.0376
+  dps: 185.56161
+  tps: 105.88402
  }
 }
 dps_results: {

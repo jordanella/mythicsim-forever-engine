@@ -611,8 +611,8 @@ dps_results: {
 dps_results: {
  key: "TestFire-AllItems-MindtapTalisman-18371"
  value: {
-  dps: 196.02223
-  tps: 128.40479
+  dps: 200.51794
+  tps: 130.94496
  }
 }
 dps_results: {
@@ -723,8 +723,8 @@ dps_results: {
 dps_results: {
  key: "TestFire-AllItems-ShardoftheGods"
  value: {
-  dps: 183.39321
-  tps: 118.13127
+  dps: 190.86685
+  tps: 122.31344
  }
 }
 dps_results: {
