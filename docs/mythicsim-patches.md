@@ -206,3 +206,29 @@ mana lost to the cap.
 
 Drop this patch when upstream gives the refund a distinct resource action ID
 or exposes separate positive and negative resource totals in the result schema.
+
+## 10. Innervate resource attribution
+
+Self-cast Innervate recorded a synthetic 0.2 mana per use. External Innervate
+recorded an estimate on top of the real mana ticks, double-counting regeneration.
+Both now use one driver that attributes each tick's incremental regeneration to
+Innervate and subtracts it from ordinary regeneration. Baseline regeneration gets
+mana-cap space first; the bonus records only the remaining actual gain.
+
+The reporting baseline follows other spirit effects, including additive Evocation,
+form changes, current Spirit/MP5 and regen speed. Live arithmetic, tick timing and
+cast decisions remain unchanged. This does not establish or change the game's
+Evocation/Innervate stacking rules. Source-attributed passive regeneration does not
+create mana-gain threat; the old synthetic entries incorrectly did. Only TPS values
+changed in the Balance and Feral Cat golden fixtures.
+
+Validation: core tests cover casting, noncasting, caps, dynamic stats, regen speed,
+overlap, expiry and reset. Class tests exercise self/external Innervate and both
+Evocation activation orders. All core, Druid and Mage suites pass with the embedded
+database. Paired 10,000-iteration, seed-42, 120/300-second Balance and Arcane replays
+have identical damage actions, auras, DPS and OOM time. Resource totals match after
+removing the old synthetic row. The 300-second Balance build now attributes
+2,965.21236 actual mana per fight to Innervate instead of 0.2.
+
+Drop this patch when upstream reports actual Innervate gains without also counting
+them as ordinary regeneration, including cap losses and passive-regen threat rules.

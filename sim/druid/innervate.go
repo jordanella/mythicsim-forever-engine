@@ -16,14 +16,7 @@ func (druid *Druid) registerInnervateCD() {
 
 	actionID := core.ActionID{SpellID: innervateRank.ID, Tag: druid.Index}
 
-	amount := 0.05
-	if innervateTarget == &druid.Unit {
-		// TODO: Forever drops Dreamstate; the self-cast base amount stands until we know
-		// whether the effect moved onto another talent.
-		amount = 0.2
-	}
-
-	innervateAura := druid.innervateAura(innervateTargetChar, amount)
+	innervateAura := druid.innervateAura(innervateTargetChar)
 
 	innervateSpell := druid.RegisterSpell(Humanoid|Moonkin|Tree, core.SpellConfig{
 		ActionID:       actionID,
@@ -64,29 +57,10 @@ func (druid *Druid) registerInnervateCD() {
 // The generated Innervate aura states no regen (auras 134 and 110 are left out), so the druid's own
 // cast attaches it: full spirit regen while casting at 5x rate, as core's raid-config driver does.
 // A second druid innervating the same target reuses the first one's aura and its hooks.
-func (druid *Druid) innervateAura(char *core.Character, expectedBonusMana float64) *core.Aura {
+func (druid *Druid) innervateAura(char *core.Character) *core.Aura {
 	if aura := char.GetAura("Innervates (Player)"); aura != nil {
 		return aura
 	}
 
-	aura := buffs.InnervatesAura(&char.Unit, true, 0)
-	manaMetrics := char.NewManaMetrics(aura.ActionID)
-	const ticks = 10
-	return aura.ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
-		char.PseudoStats.ForceFullSpiritRegen = true
-		char.PseudoStats.SpiritRegenMultiplier *= 5
-		char.UpdateManaRegenRates()
-
-		core.StartPeriodicAction(sim, core.PeriodicActionOptions{
-			Period:   aura.Duration / ticks,
-			NumTicks: ticks,
-			OnAction: func(sim *core.Simulation) {
-				manaMetrics.AddEvent(expectedBonusMana/ticks, expectedBonusMana/ticks)
-			},
-		})
-	}).ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
-		char.PseudoStats.ForceFullSpiritRegen = false
-		char.PseudoStats.SpiritRegenMultiplier /= 5
-		char.UpdateManaRegenRates()
-	})
+	return buffs.AttachInnervateRegen(char, buffs.InnervatesAura(&char.Unit, true, 0))
 }

@@ -115,7 +115,7 @@ func (druid *Druid) RegisterCatFormAura() {
 			druid.SetCurrentPowerBar(core.EnergyBar)
 
 			druid.PseudoStats.ThreatMultiplier *= CatFormThreatMultiplier
-			druid.PseudoStats.SpiritRegenMultiplier *= AnimalSpiritRegenSuppression
+			druid.MultiplySpiritRegenMultiplier(AnimalSpiritRegenSuppression)
 
 			druid.AddStatsDynamic(sim, statBonus)
 			druid.EnableBuildPhaseStatDep(sim, agiApDep)
@@ -134,7 +134,7 @@ func (druid *Druid) RegisterCatFormAura() {
 			druid.form = Humanoid
 
 			druid.PseudoStats.ThreatMultiplier /= CatFormThreatMultiplier
-			druid.PseudoStats.SpiritRegenMultiplier /= AnimalSpiritRegenSuppression
+			druid.DivideSpiritRegenMultiplier(AnimalSpiritRegenSuppression)
 
 			druid.AddStatsDynamic(sim, statBonus.Invert())
 			druid.DisableBuildPhaseStatDep(sim, agiApDep)
@@ -271,7 +271,7 @@ func (druid *Druid) RegisterBearFormAura() {
 			druid.SetCurrentPowerBar(core.RageBar)
 
 			druid.PseudoStats.ThreatMultiplier *= BearFormThreatMultiplier
-			druid.PseudoStats.SpiritRegenMultiplier *= AnimalSpiritRegenSuppression
+			druid.MultiplySpiritRegenMultiplier(AnimalSpiritRegenSuppression)
 
 			druid.AddStatsDynamic(sim, statBonus)
 			druid.ApplyDynamicEquipScaling(sim, stats.Armor, BaseBearArmorMulti)
@@ -297,7 +297,7 @@ func (druid *Druid) RegisterBearFormAura() {
 			druid.form = Humanoid
 
 			druid.PseudoStats.ThreatMultiplier /= BearFormThreatMultiplier
-			druid.PseudoStats.SpiritRegenMultiplier /= AnimalSpiritRegenSuppression
+			druid.DivideSpiritRegenMultiplier(AnimalSpiritRegenSuppression)
 
 			druid.AddStatsDynamic(sim, statBonus.Invert())
 			druid.RemoveDynamicEquipScaling(sim, stats.Armor, BaseBearArmorMulti)

@@ -21,13 +21,13 @@ func (mage *Mage) registerEvocation() {
 		ActionID: actionID,
 		Duration: core.NeverExpires,
 		OnGain: func(_ *core.Aura, _ *core.Simulation) {
-			mage.PseudoStats.SpiritRegenMultiplier += regenMultiplier
-			mage.PseudoStats.ForceFullSpiritRegen = true
+			mage.AddSpiritRegenMultiplier(regenMultiplier)
+			mage.SetForceFullSpiritRegen(true)
 			mage.UpdateManaRegenRates()
 		},
 		OnExpire: func(_ *core.Aura, _ *core.Simulation) {
-			mage.PseudoStats.SpiritRegenMultiplier -= regenMultiplier
-			mage.PseudoStats.ForceFullSpiritRegen = false
+			mage.AddSpiritRegenMultiplier(-regenMultiplier)
+			mage.SetForceFullSpiritRegen(false)
 			mage.UpdateManaRegenRates()
 		},
 	})

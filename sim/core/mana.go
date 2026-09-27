@@ -16,7 +16,8 @@ type manaBar struct {
 
 	currentMana float64
 
-	manaRegenMultiplier float64
+	manaRegenMultiplier    float64
+	spiritRegenAttribution *spiritRegenAttribution
 
 	// Mana per second from spirit is spiritRegenBase + Spirit*spiritRegenPerSpirit.
 	spiritRegenBase      float64
@@ -134,7 +135,7 @@ func (mb *manaBar) doneIteration(sim *Simulation) {
 	manaGainSpell := mb.unit.GetSpell(ActionID{OtherID: proto.OtherAction_OtherActionManaGain})
 
 	for _, resourceMetrics := range mb.unit.Metrics.resources {
-		if resourceMetrics.Type != proto.ResourceType_ResourceTypeMana {
+		if resourceMetrics.Type != proto.ResourceType_ResourceTypeMana || resourceMetrics.isManaRegen {
 			continue
 		}
 		if resourceMetrics.ActionID.SameActionIgnoreTag(ActionID{OtherID: proto.OtherAction_OtherActionManaRegen}) {
@@ -216,12 +217,88 @@ func (unit *Unit) MultiplyManaRegenSpeed(sim *Simulation, multiplier float64) {
 
 // Applies 1 'tick' of mana regen, which worth 2s of regeneration based on mp5/int/spirit/etc.
 func (unit *Unit) ManaTick(sim *Simulation) {
-	if sim.CurrentTime < unit.PseudoStats.FiveSecondRuleRefreshTime {
-		regen := unit.manaTickWhileCasting
-		unit.AddMana(sim, max(0, regen), unit.manaCastingMetrics)
-	} else {
-		regen := unit.manaTickWhileNotCasting
-		unit.AddMana(sim, max(0, regen), unit.manaNotCastingMetrics)
+	casting := sim.CurrentTime < unit.PseudoStats.FiveSecondRuleRefreshTime
+	regen, metrics := unit.manaTickWhileNotCasting, unit.manaNotCastingMetrics
+	if casting {
+		regen, metrics = unit.manaTickWhileCasting, unit.manaCastingMetrics
+	}
+	regen = max(0, regen)
+	before := unit.CurrentMana()
+	unit.AddMana(sim, regen, metrics)
+
+	if source := unit.spiritRegenAttribution; source != nil {
+		spirit := unit.SpiritManaRegenPerSecond() * source.multiplier
+		if casting && !source.forceFull {
+			spirit *= unit.PseudoStats.SpiritRegenRateCasting
+		}
+		baseline := max(0, (unit.MP5ManaRegenPerSecond()+spirit)*unit.manaRegenMultiplier*2)
+		bonus := max(0, regen-baseline)
+		if bonus > 0 {
+			// Credit ordinary regeneration first. Only the remaining room in the
+			// mana bar is an actual gain caused by the bonus.
+			actual := unit.CurrentMana() - before
+			bonusActual := min(bonus, max(0, actual-min(regen, baseline)))
+			metrics.Gain -= bonus
+			metrics.ActualGain -= bonusActual
+			source.metrics.AddEvent(bonus, bonusActual)
+		}
+	}
+}
+
+// The baseline follows the same other regen effects while excluding one active
+// source. In particular, additive Evocation and multiplicative shapeshifts mean
+// dividing the final multiplier by five cannot recover Innervate's baseline.
+type spiritRegenAttribution struct {
+	metrics    *ResourceMetrics
+	multiplier float64
+	forceFull  bool
+}
+
+// StartSpiritRegenAttribution must run before applying the source's own effect.
+// Its caller excludes overlapping copies of the same source.
+func (unit *Unit) StartSpiritRegenAttribution(metrics *ResourceMetrics) {
+	if unit.spiritRegenAttribution != nil {
+		panic("overlapping spirit regeneration attribution")
+	}
+	metrics.isManaRegen = true
+	unit.spiritRegenAttribution = &spiritRegenAttribution{
+		metrics:    metrics,
+		multiplier: unit.PseudoStats.SpiritRegenMultiplier,
+		forceFull:  unit.PseudoStats.ForceFullSpiritRegen,
+	}
+}
+
+func (unit *Unit) StopSpiritRegenAttribution() {
+	unit.spiritRegenAttribution = nil
+}
+
+// Other spirit regen effects update both the live state and the reporting
+// baseline. These helpers preserve the existing arithmetic and effect ordering.
+func (unit *Unit) MultiplySpiritRegenMultiplier(multiplier float64) {
+	unit.PseudoStats.SpiritRegenMultiplier *= multiplier
+	if source := unit.spiritRegenAttribution; source != nil {
+		source.multiplier *= multiplier
+	}
+}
+
+func (unit *Unit) DivideSpiritRegenMultiplier(divisor float64) {
+	unit.PseudoStats.SpiritRegenMultiplier /= divisor
+	if source := unit.spiritRegenAttribution; source != nil {
+		source.multiplier /= divisor
+	}
+}
+
+func (unit *Unit) AddSpiritRegenMultiplier(amount float64) {
+	unit.PseudoStats.SpiritRegenMultiplier += amount
+	if source := unit.spiritRegenAttribution; source != nil {
+		source.multiplier += amount
+	}
+}
+
+func (unit *Unit) SetForceFullSpiritRegen(full bool) {
+	unit.PseudoStats.ForceFullSpiritRegen = full
+	if source := unit.spiritRegenAttribution; source != nil {
+		source.forceFull = full
 	}
 }
 
@@ -312,6 +389,7 @@ func (mb *manaBar) reset() {
 	mb.currentMana = mb.unit.MaxMana()
 
 	mb.manaRegenMultiplier = 1.0
+	mb.spiritRegenAttribution = nil
 
 	mb.waitingForMana = 0
 	mb.waitingForManaStartTime = 0

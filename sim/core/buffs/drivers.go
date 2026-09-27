@@ -45,32 +45,10 @@ func driveBattleShout(char *core.Character, party *proto.PartyBuffs) {
 // up and the metrics record what the character gains from it.
 func driveInnervates(char *core.Character, individual *proto.IndividualBuffs) {
 	aura := InnervatesAura(&char.Unit, false, 0)
-	manaMetrics := char.NewManaMetrics(aura.ActionID)
-
-	threshold, expectedMana := 0.0, 0.0
+	AttachInnervateRegen(char, aura)
+	threshold := 0.0
 	char.Env.RegisterPostFinalizeEffect(func() {
 		threshold = innervateManaThreshold(char)
-		expectedMana = char.SpiritManaRegenPerSecond() * innervateSpiritRegenMultiplier * aura.Duration.Seconds()
-	})
-
-	const ticks = 10
-	aura.ApplyOnGain(func(aura *core.Aura, sim *core.Simulation) {
-		char.PseudoStats.ForceFullSpiritRegen = true
-		char.PseudoStats.SpiritRegenMultiplier *= innervateSpiritRegenMultiplier
-		char.UpdateManaRegenRates()
-
-		perTick := expectedMana / ticks
-		core.StartPeriodicAction(sim, core.PeriodicActionOptions{
-			Period:   aura.Duration / ticks,
-			NumTicks: ticks,
-			OnAction: func(sim *core.Simulation) {
-				manaMetrics.AddEvent(perTick, perTick)
-			},
-		})
-	}).ApplyOnExpire(func(aura *core.Aura, sim *core.Simulation) {
-		char.PseudoStats.ForceFullSpiritRegen = false
-		char.PseudoStats.SpiritRegenMultiplier /= innervateSpiritRegenMultiplier
-		char.UpdateManaRegenRates()
 	})
 
 	core.NewGeneratedExternalCD(char, aura, core.GeneratedExternalCD{
@@ -80,6 +58,23 @@ func driveInnervates(char *core.Character, individual *proto.IndividualBuffs) {
 		ShouldActivate: func(_ *core.Simulation, char *core.Character) bool {
 			return char.CurrentMana() <= threshold
 		},
+	})
+}
+
+// AttachInnervateRegen is shared by player casts and external cooldowns. Actual
+// mana still arrives on the normal regen ticks; reporting splits its bonus out.
+func AttachInnervateRegen(char *core.Character, aura *core.Aura) *core.Aura {
+	manaMetrics := char.NewManaMetrics(aura.ActionID)
+	return aura.ApplyOnGain(func(_ *core.Aura, _ *core.Simulation) {
+		char.StartSpiritRegenAttribution(manaMetrics)
+		char.PseudoStats.ForceFullSpiritRegen = true
+		char.PseudoStats.SpiritRegenMultiplier *= innervateSpiritRegenMultiplier
+		char.UpdateManaRegenRates()
+	}).ApplyOnExpire(func(_ *core.Aura, _ *core.Simulation) {
+		char.StopSpiritRegenAttribution()
+		char.PseudoStats.ForceFullSpiritRegen = false
+		char.PseudoStats.SpiritRegenMultiplier /= innervateSpiritRegenMultiplier
+		char.UpdateManaRegenRates()
 	})
 }
 

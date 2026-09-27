@@ -278,6 +278,9 @@ func NewUnitMetrics() UnitMetrics {
 }
 
 type ResourceMetrics struct {
+	// Attributed passive regeneration must not generate mana-gain threat.
+	isManaRegen bool
+
 	ActionID ActionID
 	Type     proto.ResourceType
 
