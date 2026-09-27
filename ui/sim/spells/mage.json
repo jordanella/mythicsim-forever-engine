@@ -316,9 +316,9 @@
 	"400625": {
 		"ability": "Hot Streak",
 		"file": "sim/mage/talents_fire.go",
-		"note": "Hot Streak's buff, Forever's own id; it is a later expansion spell, so the Classic database has no entry for it. Beta client 1.60.1.70009: 20 sec (15 before 70009), -25% Pyroblast cast time a stack, 3 stacks, spent by the next Pyroblast. Frostfire Bolt, which the Forever tooltip also names, is not in the sim, so it cannot grant a stack.",
+		"note": "Hot Streak's buff, Forever's own id; it is a later expansion spell, so the Classic database has no entry for it. Beta client 1.60.1.70009: 20 sec (15 before 70009), -25% Pyroblast cast time a stack, 3 stacks, spent by the next Pyroblast. Frostfire Bolt direct crits also grant a stack.",
 		"source": "forever",
-		"tooltip": "Your non-periodic critical strikes with Fireball, Fire Blast and Scorch grant Hot Streak for 20 sec.\nEach stack reduces the cast time of Pyroblast by 25%, stacking up to 3 times."
+		"tooltip": "Your non-periodic critical strikes with Fireball, Frostfire Bolt, Fire Blast and Scorch grant Hot Streak for 20 sec.\nEach stack reduces the cast time of Pyroblast by 25%, stacking up to 3 times."
 	},
 	"400669": {
 		"ability": "Fingers of Frost",
@@ -342,7 +342,7 @@
 		"ability": "Missile Barrage",
 		"file": "sim/mage/talents_arcane.go",
 		"foreverId": 400589,
-		"note": "Missile Barrage is a later expansion spell; the sim keeps 44404 as its action id, which the Forever client store does not carry. Beta client 1.60.1.70009 (400588, 400589): 40% on Arcane Blast, 15 sec, -50% channel with a missile every 0.5 sec, -100% cost. The 20% for Fireball and Frostbolt is from the 69893 read; 400588's second effect holds 5, which the sim does not read. Frostfire Bolt, also named, is not in the sim.",
+		"note": "Missile Barrage is a later expansion spell; the sim keeps 44404 as its action id, which the Forever client store does not carry. Beta client 1.60.1.70009 (400588, 400589): 40% on Arcane Blast, 15 sec, -50% channel with a missile every 0.5 sec, -100% cost. The 20% for Fireball and Frostbolt is from the 69893 read; 400588's second effect holds 5, which the sim does not read. Frostfire Bolt also triggers the existing proc chance.",
 		"source": "forever",
 		"tooltip": "Your Arcane Blast has a 40% chance, and your Fireball and Frostbolt a 20% chance, to grant Missile Barrage.\nYour next Arcane Missiles costs no mana and fires a missile every 0.5 sec instead of every second, halving the channel. Lasts 15 sec."
 	},
@@ -457,5 +457,26 @@
 		"note": "Beta client 1.60.1.70009: about 30% less damage at every rank (rank 7 237-280 -> 166-196); coefficient .429, cost and cast unchanged. Every rank is registered, so the fire rotation can drop to rank 1 when mana runs short.",
 		"source": "forever",
 		"tooltip": "100 Mana\n1.5 sec cast\nScorch the enemy for 88 to 106 Fire damage."
+	},
+	"401502": {
+		"ability": "Frostfire Bolt",
+		"file": "sim/mage/frostfire_bolt.go",
+		"note": "Forever client 1.60.1.70009: baseline Mage spell. All ranks read direct damage, coefficient, cost, travel speed and periodic damage from the client store. Dual Fire and Frost school, lower resistance and strongest school bonus. The periodic coefficient is zero; the periodic-can-crit flag is set. Binary resistance follows the original SoD spell and needs Forever server-log confirmation.",
+		"source": "forever",
+		"tooltip": "Launches a bolt of frostfire. Counts as both Frost and Fire damage and checks the lower resistance."
+	},
+	"1237312": {
+		"ability": "Frostfire Bolt",
+		"file": "sim/mage/frostfire_bolt.go",
+		"note": "Forever client 1.60.1.70009: baseline Mage spell. All ranks read direct damage, coefficient, cost, travel speed and periodic damage from the client store. Dual Fire and Frost school, lower resistance and strongest school bonus. The periodic coefficient is zero; the periodic-can-crit flag is set. Binary resistance follows the original SoD spell and needs Forever server-log confirmation.",
+		"source": "forever",
+		"tooltip": "Launches a bolt of frostfire. Counts as both Frost and Fire damage and checks the lower resistance."
+	},
+	"1237313": {
+		"ability": "Frostfire Bolt",
+		"file": "sim/mage/frostfire_bolt.go",
+		"note": "Forever client 1.60.1.70009: baseline Mage spell. All ranks read direct damage, coefficient, cost, travel speed and periodic damage from the client store. Dual Fire and Frost school, lower resistance and strongest school bonus. The periodic coefficient is zero; the periodic-can-crit flag is set. Binary resistance follows the original SoD spell and needs Forever server-log confirmation.",
+		"source": "forever",
+		"tooltip": "Launches a bolt of frostfire. Counts as both Frost and Fire damage and checks the lower resistance."
 	}
 }

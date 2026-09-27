@@ -1,9 +1,9 @@
 # MythicSim downstream patches
 
 MythicSim runs this engine from its fork (`sage3648/mythicsim-forever-engine`, branch
-`mythicsim/forever-70009-explosives-sep27`). The branch is ElliotWood/Forever master, which is built on the
-official wowsims/forever, plus the six patches below. The first base was `442076902` (Merge
-wowsims/forever master ea5412873). The current base is `53fc20bc9d` (2026-09-27). It includes Mage Scroll of Cryoblast, non-engineer explosives and SAF-T / EZ-Thro bombs, Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
+`codex/forever-frostfire`). The branch is ElliotWood/Forever master, which is built on the
+official wowsims/forever, plus the seven patches below. The first base was `442076902` (Merge
+wowsims/forever master ea5412873). The current base is `39358a035c` (2026-09-27). It includes Stinging Viper poison and the September 27 database refresh, Mage Scroll of Cryoblast, non-engineer explosives and SAF-T / EZ-Thro bombs, Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
 
 Keep the set small. Each patch exists because MythicSim needs something upstream does not do
 yet. Drop a patch as soon as upstream covers it; do not keep ours alongside an upstream version.
@@ -16,6 +16,7 @@ yet. Drop a patch as soon as upstream covers it; do not keep ours alongside an u
 | 4 | `hunter: Aspect of the Beast` | Forever made Beast the melee aspect. Upstream models only Hawk, so a melee hunter has no aspect. |
 | 5 | `rotation: a melee Survival rotation` | Upstream's Survival rotation shoots from range, so Raptor Strike, Mongoose Bite and Strider Kick never fire. MythicSim ranks melee Survival. |
 | 6 | `items: Iceblade Hacker and Warblade of Caer Darrow proc from their own hand` | The two hand-written weapon procs fired off both hands, so a main-hand Iceblade Hacker added its Frost damage to every off-hand swing. |
+| 7 | `mage: implement baseline Frostfire Bolt` | The upstream spell is an unwired stub; the hybrid otherwise casts no damage spells. |
 
 ## 1. `cli: sim --strict`
 
@@ -121,6 +122,25 @@ against upstream's version:
 - **Drop it when** upstream's generator carries these procs (the file says to remove an entry
   then), or upstream scopes them to their hand. A generated `CreateWeaponCoHProcDamage` already
   does.
+
+## 7. Frostfire Bolt
+
+Registers the three baseline Mage ranks from the client store and adds an experimental Frostfire
+hybrid rotation. All ranks have a direct hit and a periodic effect. The spell counts as both Fire
+and Frost for talent mods and direct-hit procs. Hot Streak, Fingers of Frost and Missile Barrage
+explicitly include it. Improved Fireball reduces its cast time; Improved Frostbolt does not.
+
+Core Frostfire handling takes the lower Fire/Frost resistance and the larger school spell-power,
+hit and school multiplier values, avoiding duplicate Curse of the Elements or Elemental Precision.
+This is limited to the Frostfire school so other mixed-school implementations are unchanged.
+
+The pinned client store provides the damage, coefficients, mana, speed and periodic-crit flag.
+Binary resistance follows Frostbolt and the original WoWSims SoD Frostfire Bolt, and still needs
+Forever combat-log confirmation. The existing Fingers of Frost in-flight rule and Missile Barrage
+proc chance remain the engine's beta assumptions. See `docs/frostfire-bolt.md` for evidence and tests.
+
+Drop this patch once upstream implements all ranks, the relevant talent hooks and dual-school
+calculations. Compare actual casts and damage before switching.
 
 ## Rebasing onto a newer upstream
 

@@ -209,7 +209,7 @@ func (mage *Mage) registerArcaneMeditation() {
 	mage.PseudoStats.SpiritRegenRateCasting += spellData.ArcaneMeditation.FractionAt(mage.Talents.ArcaneMeditation)
 }
 
-// Casting Arcane Blast (40%), Fireball or Frostbolt (20%) can make the next Arcane Missiles free and
+// Casting Arcane Blast (40%), Fireball, Frostbolt or Frostfire Bolt (20%) can make the next Arcane Missiles free and
 // fire its missiles every 0.5 sec instead of every second: the same count in half the channel.
 // The generated tables have no Missile Barrage rows, so 44404 and the chances are carried over from
 // our Forever sim.
@@ -244,7 +244,7 @@ func (mage *Mage) registerMissileBarrage() {
 			switch {
 			case spell.Matches(MageSpellArcaneBlast):
 				procChance = .40
-			case spell.Matches(MageSpellFireball | MageSpellFrostbolt):
+			case spell.Matches(MageSpellFireball | MageSpellFrostbolt | MageSpellFrostfireBolt):
 				procChance = .20
 			default:
 				return
