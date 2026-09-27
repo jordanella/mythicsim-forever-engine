@@ -204,6 +204,7 @@ func main() {
 	ApplyGlobalFilters(db)
 	// After the global filters: those are for the client's rows, ours were filtered on master.
 	mergeForeverSimDB(db, fmt.Sprintf("%s/forever_sim_db.json", inputsDir))
+	fillPlannerArmor(db, fmt.Sprintf("%s/wowhead_forever_gearplanner.txt", inputsDir))
 	leftovers := db.Clone()
 	ApplyNonSimmableFilters(leftovers)
 	leftovers.WriteBinaryAndJson(fmt.Sprintf("%s/leftover_db.bin", dbDir), fmt.Sprintf("%s/leftover_db.json", dbDir))
@@ -915,5 +916,36 @@ func FillArmorFromOurs(db *database.WowDatabase, ours *database.WowDatabase) {
 				opt.Stats[feral] = ourOpt.Stats[feral]
 			}
 		}
+	}
+}
+
+// The pinned Forever planner separates base armor from bonus armor. Apply only
+// these fields, never its aggregated conditional attack power or spell effects.
+func fillPlannerArmor(db *database.WowDatabase, path string) {
+	text := tools.ReadFile(path)
+	start, end := strings.Index(text, "{"), strings.Index(text, "});")
+	if start < 0 || end < start {
+		panic("invalid Forever gear planner")
+	}
+	raw := strings.TrimSpace(text[start : end+1])
+	raw = strings.TrimSuffix(strings.TrimSpace(strings.TrimSuffix(raw, "}")), ",") + "}"
+	var rows map[string]struct {
+		Stats map[string]float64 `json:"stats"`
+	}
+	if err := json.Unmarshal([]byte(raw), &rows); err != nil {
+		panic(err)
+	}
+	for id, item := range db.Items {
+		row := rows[fmt.Sprint(id)]
+		armor, ok := row.Stats["armor"]
+		opt := item.ScalingOptions[0]
+		if !ok || opt == nil {
+			continue
+		}
+		if opt.Stats == nil {
+			opt.Stats = map[int32]float64{}
+		}
+		opt.Stats[int32(proto.Stat_StatArmor)] = armor
+		opt.Stats[int32(proto.Stat_StatBonusArmor)] = row.Stats["armorbonus"]
 	}
 }
