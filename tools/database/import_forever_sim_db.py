@@ -10,29 +10,32 @@ rating, at the client's CombatRatings conversion (sim/core/base_stats_auto_gen.g
 """
 import json
 import sys
+import re
+from pathlib import Path
 
-# master Stat -> (this engine's Stat, rating per master unit)
-STATS = {
-    0: (0, 1), 1: (1, 1), 2: (2, 1), 3: (3, 1), 4: (16, 1),  # str agi sta int spi
-    5: (5, 1),  # SpellPower -> SpellDamage (heals read SpellDamage here)
-    6: (6, 1), 7: (7, 1), 8: (8, 1), 9: (9, 1), 10: (10, 1), 11: (11, 1),  # school damage
-    12: (35, 1),  # MP5
-    13: (12, 10), 14: (13, 14), 15: (14, 10),  # spell hit/crit/haste %
-    16: (15, 1),  # spell penetration
-    17: (17, 1),  # AP
-    18: (20, 10), 19: (21, 14), 20: (22, 10),  # melee hit/crit/haste %
-    21: (23, 1),
-    22: (24, 10),  # expertise %: 2.5 rating per 0.25%
-    23: (34, 1), 26: (31, 1), 27: (18, 1),  # mana, armor, RAP
-    28: (25, 1),  # defense skill, 1 rating per point
-    29: (26, 5), 30: (27, 1), 31: (28, 12), 32: (29, 15),  # block %, block value, dodge %, parry %
-    33: (30, 1), 34: (33, 1),  # resilience, health
-    35: (36, 1), 36: (37, 1), 37: (38, 1), 38: (39, 1), 39: (40, 1),  # resistances
-    40: (32, 1), 41: (4, 1), 42: (5, 1), 43: (19, 1),  # bonus armor, healing, spell damage, feral AP
+# Read enum identities instead of duplicating their positions. Removing Resilience
+# shifted armor, health, mana, MP5 and every resistance in the current engine.
+PROTO = (Path(__file__).resolve().parents[2] / "proto/common.proto").read_text()
+STAT_IDS = {name: int(value) for name, value in re.findall(r"Stat(\w+)\s*=\s*(\d+);", PROTO.split("enum Stat {")[1].split("}")[0])}
+# Legacy Classic stat index -> current stat name and conversion factor.
+LEGACY_STATS = {
+    0: ("Strength", 1), 1: ("Agility", 1), 2: ("Stamina", 1), 3: ("Intellect", 1), 4: ("Spirit", 1),
+    5: ("SpellDamage", 1), 6: ("ArcaneDamage", 1), 7: ("FireDamage", 1), 8: ("FrostDamage", 1),
+    9: ("HolyDamage", 1), 10: ("NatureDamage", 1), 11: ("ShadowDamage", 1), 12: ("MP5", 1),
+    13: ("SpellHitRating", 10), 14: ("SpellCritRating", 14), 15: ("SpellHasteRating", 10),
+    16: ("SpellPiercing", 1), 17: ("AttackPower", 1), 18: ("MeleeHitRating", 10),
+    19: ("MeleeCritRating", 14), 20: ("MeleeHasteRating", 10), 21: ("ArmorPenetration", 1),
+    22: ("ExpertiseRating", 10), 23: ("Mana", 1), 26: ("Armor", 1), 27: ("RangedAttackPower", 1),
+    28: ("DefenseRating", 1), 29: ("BlockRating", 5), 30: ("BlockValue", 1),
+    31: ("DodgeRating", 12), 32: ("ParryRating", 15), 34: ("Health", 1),
+    35: ("ArcaneResistance", 1), 36: ("FireResistance", 1), 37: ("FrostResistance", 1),
+    38: ("NatureResistance", 1), 39: ("ShadowResistance", 1), 40: ("BonusArmor", 1),
+    41: ("HealingPower", 1), 42: ("SpellDamage", 1), 43: ("FeralAttackPower", 1),
 }
+STATS = {old: (STAT_IDS[name], factor) for old, (name, factor) in LEGACY_STATS.items()}
 CLASSES = {1: 11, 2: 3, 3: 8, 4: 2, 5: 5, 6: 4, 7: 7, 8: 9, 9: 1}
 RANGED_TYPES = {4: 6, 5: 7, 6: 4, 7: 8, 8: 5}
-NUM_STATS = 42
+NUM_STATS = max(STAT_IDS.values()) + 1
 
 
 def convert_stats(values):
@@ -44,7 +47,7 @@ def convert_stats(values):
             a[spell] = 0
     out = {}
     for i, v in enumerate(a):
-        if v:
+        if v and i != 33:  # Resilience no longer exists in Forever.
             j, per = STATS[i]
             out[j] = out.get(j, 0) + round(v * per, 4)
     return out
@@ -61,7 +64,7 @@ def item(m):
     scaling = {'ilvl': m.get('ilvl', 0)}
     stats = convert_stats(m.get('stats', []))
     if m.get('bonusPhysicalDamage'):
-        stats[41] = m['bonusPhysicalDamage']
+        stats[STAT_IDS['PhysicalDamage']] = m['bonusPhysicalDamage']
     if stats:
         scaling['stats'] = {str(k): v for k, v in sorted(stats.items())}
     if m.get('weaponDamageMin'):
