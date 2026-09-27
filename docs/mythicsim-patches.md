@@ -190,3 +190,19 @@ proc chance remain the engine's beta assumptions. See `docs/frostfire-bolt.md` f
 Drop this patch once upstream implements all ranks, the relevant talent hooks and dual-school
 calculations. Compare actual casts and damage before switching.
 
+## 9. Light's Vigil refund reporting
+
+The resource serializer merges rows sharing an ActionID. Light's Vigil used the
+same ID for its cost and 75% refund, producing one net-negative row and hiding
+its refund from resource-source breakdowns. Give only the refund metric tag 1.
+The spell's cost, damage, refund calculation and timing remain unchanged.
+
+Evidence: the shared Shockadin report `4161cca1-f878-498b-8aa4-8386c5f85331`.
+`TestLightsVigilReportsCostAndRefundSeparately` exercises all three ranks. A
+10,000-iteration replay on seed 42 produces identical DPS, threat, damage taken,
+healing, time out of mana, actions and auras; the two resource rows sum to the
+original net row. Costs and refunds can now be shown independently, including
+mana lost to the cap.
+
+Drop this patch when upstream gives the refund a distinct resource action ID
+or exposes separate positive and negative resource totals in the result schema.

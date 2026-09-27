@@ -79,7 +79,10 @@ func (paladin *Paladin) registerLightsVigilRank(_ int32, rank *spelldata.Spell) 
 		},
 	})
 
-	manaMetrics := paladin.NewManaMetrics(core.ActionID{SpellID: rank.ID})
+	// Keep the refund distinct from the spell's spending metric. Reports
+	// merge rows with identical action IDs, which otherwise hides the gain
+	// inside a net-negative cost row.
+	manaMetrics := paladin.NewManaMetrics(core.ActionID{SpellID: rank.ID, Tag: 1})
 	vigil.strike.RelatedAuraArrays = vigil.auras.ToMap()
 
 	paladin.RegisterSpell(core.SpellConfig{
