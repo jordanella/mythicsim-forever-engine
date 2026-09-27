@@ -135,8 +135,8 @@ dps_results: {
 dps_results: {
  key: "TestCombat-AllItems-BloodfangArmor"
  value: {
-  dps: 368.13481
-  tps: 182.963
+  dps: 351.27631
+  tps: 174.58432
  }
 }
 dps_results: {
@@ -338,8 +338,8 @@ dps_results: {
 dps_results: {
  key: "TestCombat-AllItems-EidolonTalisman-18340"
  value: {
-  dps: 341.89872
-  tps: 169.92366
+  dps: 318.11786
+  tps: 158.10458
  }
 }
 dps_results: {
@@ -724,8 +724,8 @@ dps_results: {
 dps_results: {
  key: "TestCombat-AllItems-NightslayerArmor"
  value: {
-  dps: 468.23971
-  tps: 232.71513
+  dps: 422.874
+  tps: 210.16838
  }
 }
 dps_results: {

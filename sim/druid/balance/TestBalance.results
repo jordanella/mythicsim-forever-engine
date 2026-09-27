@@ -156,8 +156,8 @@ dps_results: {
 dps_results: {
  key: "TestBalance-AllItems-CenarionRaiment"
  value: {
-  dps: 200.13071
-  tps: 103.79242
+  dps: 199.85179
+  tps: 103.66376
  }
 }
 dps_results: {
@@ -709,8 +709,8 @@ dps_results: {
 dps_results: {
  key: "TestBalance-AllItems-MindtapTalisman-18371"
  value: {
-  dps: 178.92835
-  tps: 96.65175
+  dps: 179.0515
+  tps: 96.75094
  }
 }
 dps_results: {
@@ -828,8 +828,8 @@ dps_results: {
 dps_results: {
  key: "TestBalance-AllItems-ShardoftheGods"
  value: {
-  dps: 175.5457
-  tps: 91.56559
+  dps: 180.01101
+  tps: 93.8765
  }
 }
 dps_results: {
@@ -898,8 +898,8 @@ dps_results: {
 dps_results: {
  key: "TestBalance-AllItems-StormrageRaiment"
  value: {
-  dps: 181.08723
-  tps: 94.43663
+  dps: 181.59231
+  tps: 94.67593
  }
 }
 dps_results: {
