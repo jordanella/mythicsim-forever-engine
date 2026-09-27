@@ -562,8 +562,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-Plaguefang-279876"
  value: {
-  dps: 170.8078
-  tps: 143.54489
+  dps: 183.0792
+  tps: 151.71554
  }
 }
 dps_results: {

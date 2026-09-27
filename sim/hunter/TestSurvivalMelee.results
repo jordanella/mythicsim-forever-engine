@@ -91,6 +91,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestSurvivalMelee-AllItems-BarbaricCrossbow-272999"
+ value: {
+  dps: 399.6431
+  tps: 251.35103
+ }
+}
+dps_results: {
  key: "TestSurvivalMelee-AllItems-Beastmaster'sBoots-22061"
  value: {
   dps: 411.27458
@@ -277,6 +284,13 @@ dps_results: {
  value: {
   dps: 403.658
   tps: 254.16146
+ }
+}
+dps_results: {
+ key: "TestSurvivalMelee-AllItems-DefiasLeather"
+ value: {
+  dps: 412.62906
+  tps: 260.29266
  }
 }
 dps_results: {
@@ -817,6 +831,13 @@ dps_results: {
  value: {
   dps: 407.30779
   tps: 256.71631
+ }
+}
+dps_results: {
+ key: "TestSurvivalMelee-AllItems-Plaguefang-279876"
+ value: {
+  dps: 463.6295
+  tps: 297.71496
  }
 }
 dps_results: {
