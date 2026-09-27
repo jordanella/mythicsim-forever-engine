@@ -1382,8 +1382,8 @@ dps_results: {
 dps_results: {
  key: "TestArms-AllItems-WarbladeofCaerDarrow-13982"
  value: {
-  dps: 316.85314
-  tps: 194.3982
+  dps: 294.35914
+  tps: 182.15564
  }
 }
 dps_results: {

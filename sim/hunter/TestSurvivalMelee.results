@@ -1149,6 +1149,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestSurvivalMelee-AllItems-Venomstrike-6469"
+ value: {
+  dps: 399.6431
+  tps: 251.35103
+ }
+}
+dps_results: {
  key: "TestSurvivalMelee-AllItems-VestmentsoftheDevout"
  value: {
   dps: 424.66555
