@@ -79,8 +79,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-ArgentAvenger-13246"
  value: {
-  dps: 170.8078
-  tps: 143.54489
+  dps: 183.0792
+  tps: 151.71554
  }
 }
 dps_results: {
@@ -268,8 +268,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-ElectrifiedDagger-19100"
  value: {
-  dps: 170.8078
-  tps: 143.54489
+  dps: 183.0792
+  tps: 151.71554
  }
 }
 dps_results: {
@@ -331,8 +331,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-EnchantWeapon-FieryWeapon-803"
  value: {
-  dps: 170.8078
-  tps: 143.54489
+  dps: 183.0792
+  tps: 151.71554
  }
 }
 dps_results: {
@@ -352,8 +352,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-EnchantWeapon-Lifestealing-1898"
  value: {
-  dps: 170.8078
-  tps: 143.54489
+  dps: 183.0792
+  tps: 151.71554
  }
 }
 dps_results: {
@@ -695,8 +695,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-SkullforgeReaver-13361"
  value: {
-  dps: 170.8078
-  tps: 143.54489
+  dps: 183.0792
+  tps: 151.71554
  }
 }
 dps_results: {
@@ -744,8 +744,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-SwordofZeal-6622"
  value: {
-  dps: 170.8078
-  tps: 143.54489
+  dps: 183.0792
+  tps: 151.71554
  }
 }
 dps_results: {
