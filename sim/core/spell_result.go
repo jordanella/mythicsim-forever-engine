@@ -205,13 +205,25 @@ func (spell *Spell) BonusDamage(attackTable *AttackTable) float64 {
 	if spell.SpellSchool.Matches(SpellSchoolPhysical) {
 		bonusDamage += spell.Unit.stats[stats.PhysicalDamage]
 	} else {
-		bonusDamage += spell.SpellDamage(attackTable.Defender) + attackTable.MobTypeBonusStats[attackTable.Defender.MobType][stats.SpellDamage] + attackTable.Defender.PseudoStats.SchoolBonusSpellDamage[spell.SchoolIndex]
+		bonusDamage += spell.SpellDamage(attackTable.Defender) + attackTable.MobTypeBonusStats[attackTable.Defender.MobType][stats.SpellDamage] + spell.schoolValue(attackTable.Defender.PseudoStats.SchoolBonusSpellDamage)
 	}
 
 	return bonusDamage
 }
 
+// schoolValue selects one school bonus for Frostfire, so an effect applying to both
+// schools (such as Curse of the Elements) is never counted twice.
+func (spell *Spell) schoolValue(values [stats.SchoolLen]float64) float64 {
+	if spell.SpellSchool == SpellSchoolFrostfire {
+		return max(values[stats.SchoolIndexFire], values[stats.SchoolIndexFrost])
+	}
+	return values[spell.SchoolIndex]
+}
+
 func (spell *Spell) SpellSchoolBonusDamage() float64 {
+	if spell.SpellSchool == SpellSchoolFrostfire {
+		return max(spell.Unit.GetStat(stats.FireDamage), spell.Unit.GetStat(stats.FrostDamage))
+	}
 	schoolBonusSpellDamage := 0.0
 
 	switch spell.SchoolIndex {
@@ -241,7 +253,11 @@ func (spell *Spell) SpellHitChance(target *Unit) float64 {
 	// All talents that modify spell school specific hit name their spells by class mask, so this
 	// hit only reaches spells that carry one, either the sim's tag or the client's class flags.
 	if spell.ClassSpellMask != 0 || !spell.ClassFlags.IsZero() {
-		hitPercent += spell.Unit.PseudoStats.SchoolBonusHitChance[spell.SpellSchool.SchoolIndex()]
+		if spell.SpellSchool == SpellSchoolFrostfire {
+			hitPercent += spell.schoolValue(spell.Unit.PseudoStats.SchoolBonusHitChance)
+		} else {
+			hitPercent += spell.Unit.PseudoStats.SchoolBonusHitChance[spell.SpellSchool.SchoolIndex()]
+		}
 	}
 	return hitPercent / 100
 }
@@ -770,7 +786,7 @@ func (spell *Spell) attackerDamageMultiplierInternal(attackTable *AttackTable) f
 	}
 
 	return spell.Unit.PseudoStats.DamageDealtMultiplier *
-		spell.Unit.PseudoStats.SchoolDamageDealtMultiplier[spell.SchoolIndex] *
+		spell.schoolValue(spell.Unit.PseudoStats.SchoolDamageDealtMultiplier) *
 		attackTable.DamageDealtMultiplier
 }
 
@@ -793,7 +809,7 @@ func (spell *Spell) TargetDamageMultiplier(sim *Simulation, attackTable *AttackT
 	}
 
 	multiplier := attackTable.Defender.PseudoStats.DamageTakenMultiplier *
-		attackTable.Defender.PseudoStats.SchoolDamageTakenMultiplier[spell.SchoolIndex] *
+		spell.schoolValue(attackTable.Defender.PseudoStats.SchoolDamageTakenMultiplier) *
 		attackTable.DamageTakenMultiplier
 
 	if spell.Flags.Matches(SpellFlagDisease) {

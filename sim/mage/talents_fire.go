@@ -73,7 +73,7 @@ func (mage *Mage) registerImprovedFireball() {
 	}
 
 	mage.AddStaticMod(core.SpellModConfig{
-		ClassMask: MageSpellFireball,
+		ClassMask: MageSpellFireball | MageSpellFrostfireBolt,
 		TimeValue: time.Millisecond * time.Duration(spellData.ImprovedFireball.Effect(dbcenums.A_ADD_FLAT_MODIFIER, int32(dbcenums.SPELLMOD_CASTING_TIME)).ValueAt(mage.Talents.ImprovedFireball)),
 		Kind:      core.SpellMod_CastTime_Flat,
 	})
@@ -198,10 +198,9 @@ func (mage *Mage) registerImprovedFireWard() {
 	}
 }
 
-// Fireball, Fire Blast and Scorch crits each take 25% off Pyroblast's cast time, stacking 3 times,
+// Fireball, Frostfire Bolt, Fire Blast and Scorch crits each take 25% off Pyroblast's cast time, stacking 3 times,
 // so the stacks are worth holding rather than spending. The buff is 400625: its duration (20 sec since
-// build 70009), stack cap and per-stack cast time cut are read from the row. The tooltip names
-// Frostfire Bolt too, which is not modelled yet (frostfire_bolt.go).
+// build 70009), stack cap and per-stack cast time cut are read from the row.
 func (mage *Mage) registerHotStreak() {
 	if !mage.Talents.HotStreak {
 		return
@@ -240,7 +239,7 @@ func (mage *Mage) registerHotStreak() {
 	mage.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Hot Streak Trigger",
 		Callback:           core.CallbackOnSpellHitDealt,
-		ClassSpellMask:     MageSpellFireball | MageSpellFireBlast | MageSpellScorch,
+		ClassSpellMask:     MageSpellFireball | MageSpellFrostfireBolt | MageSpellFireBlast | MageSpellScorch,
 		Outcome:            core.OutcomeCrit,
 		TriggerImmediately: true,
 		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
