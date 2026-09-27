@@ -65,8 +65,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-Alcor'sSunrazor-14555"
  value: {
-  dps: 170.8078
-  tps: 143.54489
+  dps: 183.0792
+  tps: 151.71554
  }
 }
 dps_results: {
@@ -128,8 +128,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-ColdrageDagger-10761"
  value: {
-  dps: 170.8078
-  tps: 143.54489
+  dps: 183.0792
+  tps: 151.71554
  }
 }
 dps_results: {
@@ -177,8 +177,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-Darrowspike-13984"
  value: {
-  dps: 170.8078
-  tps: 143.54489
+  dps: 183.0792
+  tps: 151.71554
  }
 }
 dps_results: {
@@ -422,8 +422,8 @@ dps_results: {
 dps_results: {
  key: "TestDestruction-AllItems-GlacialBlade-19099"
  value: {
-  dps: 170.8078
-  tps: 143.54489
+  dps: 183.0792
+  tps: 151.71554
  }
 }
 dps_results: {

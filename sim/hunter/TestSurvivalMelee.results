@@ -63,6 +63,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestSurvivalMelee-AllItems-Alcor'sSunrazor-14555"
+ value: {
+  dps: 501.20172
+  tps: 324.68613
+ }
+}
+dps_results: {
  key: "TestSurvivalMelee-AllItems-Annihilator-12798"
  value: {
   dps: 486.30631
@@ -168,6 +175,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestSurvivalMelee-AllItems-Bloodfist-11744"
+ value: {
+  dps: 485.42044
+  tps: 313.45513
+ }
+}
+dps_results: {
  key: "TestSurvivalMelee-AllItems-BloodmailRegalia"
  value: {
   dps: 447.22779
@@ -231,6 +245,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestSurvivalMelee-AllItems-ColdrageDagger-10761"
+ value: {
+  dps: 487.96263
+  tps: 315.6068
+ }
+}
+dps_results: {
  key: "TestSurvivalMelee-AllItems-CrudeScope-30"
  value: {
   dps: 403.658
@@ -277,6 +298,13 @@ dps_results: {
  value: {
   dps: 415.40235
   tps: 262.36399
+ }
+}
+dps_results: {
+ key: "TestSurvivalMelee-AllItems-Darrowspike-13984"
+ value: {
+  dps: 495.45763
+  tps: 320.86884
  }
 }
 dps_results: {
@@ -512,6 +540,13 @@ dps_results: {
  }
 }
 dps_results: {
+ key: "TestSurvivalMelee-AllItems-FlameWrath-11809"
+ value: {
+  dps: 474.75356
+  tps: 305.24508
+ }
+}
+dps_results: {
  key: "TestSurvivalMelee-AllItems-ForceofWill-11810"
  value: {
   dps: 403.658
@@ -565,6 +600,13 @@ dps_results: {
  value: {
   dps: 405.52854
   tps: 255.47084
+ }
+}
+dps_results: {
+ key: "TestSurvivalMelee-AllItems-GlacialBlade-19099"
+ value: {
+  dps: 494.13477
+  tps: 319.13991
  }
 }
 dps_results: {
