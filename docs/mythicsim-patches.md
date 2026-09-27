@@ -1,9 +1,9 @@
 # MythicSim downstream patches
 
 MythicSim runs this engine from its fork (`sage3648/mythicsim-forever-engine`, branch
-`mythicsim/forever-70009-weapon-fixes-sep27`). The branch is ElliotWood/Forever master, which is built on the
+`mythicsim/forever-70009-bleed-fixes-sep27`). The branch is ElliotWood/Forever master, which is built on the
 official wowsims/forever, plus the six patches below. The first base was `442076902` (Merge
-wowsims/forever master ea5412873). The current base is `89423d8daf` (2026-09-27). It includes Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
+wowsims/forever master ea5412873). The current base is `e70f15039c` (2026-09-27). It includes Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
 
 Keep the set small. Each patch exists because MythicSim needs something upstream does not do
 yet. Drop a patch as soon as upstream covers it; do not keep ours alongside an upstream version.
