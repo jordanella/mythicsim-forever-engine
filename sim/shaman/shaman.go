@@ -41,6 +41,15 @@ func NewShaman(character *core.Character, talents string, selfBuffs SelfBuffs) *
 	return shaman
 }
 
+// A hard cast holds the melee swing (core.AutoAttacks.HoldMeleeForCast): on the Forever beta a
+// Lightning Bolt cast between swings resets the swing timer as it completes, and a swing due during
+// the cast lands as it completes. A bolt Maelstrom Weapon makes instant leaves the swing alone.
+func (shaman *Shaman) holdMeleeForCast(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
+	if castTime := shaman.ApplyCastSpeedForSpell(cast.CastTime, spell); castTime > 0 {
+		shaman.AutoAttacks.HoldMeleeForCast(sim, sim.CurrentTime+castTime)
+	}
+}
+
 func (shaman *Shaman) GetImbueProcMask(imbue proto.ShamanImbue) core.ProcMask {
 	var mask core.ProcMask
 	if shaman.SelfBuffs.ImbueMH == imbue || shaman.SelfBuffs.ImbueMHSwap == imbue {

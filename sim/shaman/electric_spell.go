@@ -52,12 +52,7 @@ func (shaman *Shaman) newElectricSpellConfig(config ShamSpellConfig) core.SpellC
 				CastTime: config.BaseCastTime,
 				GCD:      core.GCDDefault,
 			},
-			ModifyCast: func(sim *core.Simulation, spell *core.Spell, cast *core.Cast) {
-				castTime := shaman.ApplyCastSpeedForSpell(cast.CastTime, spell)
-				if sim.CurrentTime+castTime > shaman.AutoAttacks.NextAttackAt() {
-					shaman.AutoAttacks.StopMeleeUntil(sim, sim.CurrentTime+castTime)
-				}
-			},
+			ModifyCast: shaman.holdMeleeForCast,
 		},
 
 		DamageMultiplier: 1,

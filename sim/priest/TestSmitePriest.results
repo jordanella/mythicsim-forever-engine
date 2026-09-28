@@ -373,8 +373,8 @@ dps_results: {
 dps_results: {
  key: "TestSmitePriest-AllItems-EverlookPathcarver-274759"
  value: {
-  dps: 156.71942
-  tps: 114.58916
+  dps: 156.4772
+  tps: 114.4196
  }
 }
 dps_results: {
