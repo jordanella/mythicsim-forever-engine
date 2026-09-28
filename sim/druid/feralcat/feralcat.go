@@ -69,17 +69,15 @@ func (cat *FeralDruid) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 }
 
 // AddPartyBuffs auto-applies Leader of the Pack from the druid's own talent.
-// Windfury Totem is stripped so cats never register the WF proc aura, but
-// TotemTwisting is preserved so Grace of Air gets the correct reduced uptime.
+//
+// Windfury Totem is kept. In Classic the totem enchanted the held weapon, which
+// a shapeshifted druid does not swing, so the Classic sim stripped it. Forever's
+// totem (8515) is a party aura that procs 8516 off melee autos and specials, with
+// no weapon involved, so it procs in Cat Form too.
 func (cat *FeralDruid) AddPartyBuffs(partyBuffs *proto.PartyBuffs) {
 	if cat.Talents.LeaderOfThePack {
 		partyBuffs.LeaderOfThePack = true
 	}
-
-	// Feral cats do not proc Windfury Totem. Strip the aura so the sim never
-	// registers WF procs, while keeping TotemTwisting intact so that Grace of
-	// Air receives the correct ~90% uptime when twisting is enabled.
-	partyBuffs.WindfuryTotem = false
 }
 
 func (cat *FeralDruid) Initialize() {

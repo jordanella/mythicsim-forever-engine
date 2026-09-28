@@ -79,15 +79,12 @@ func (bear *GuardianDruid) ApplyTalents() {
 	bear.Druid.ApplyTalents()
 }
 
-// Bear druids do not proc Windfury Totem. Strip the aura so the sim never
-// registers WF procs, while keeping TotemTwisting intact so that Grace of
-// Air receives the correct ~90% uptime when twisting is enabled.
+// Windfury Totem is kept: Forever's totem is a party aura rather than a weapon
+// enchant, so it procs in Bear Form. See the Cat's AddPartyBuffs.
 func (bear *GuardianDruid) AddPartyBuffs(partyBuffs *proto.PartyBuffs) {
 	if bear.Talents.LeaderOfThePack {
 		partyBuffs.LeaderOfThePack = true
 	}
-
-	partyBuffs.WindfuryTotem = false
 }
 
 func (bear *GuardianDruid) Initialize() {
