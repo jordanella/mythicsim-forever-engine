@@ -2,7 +2,7 @@
 
 MythicSim runs this engine from its fork (`sage3648/mythicsim-forever-engine`, branch
 `codex/forever-frostfire-omen`). The branch is ElliotWood/Forever master, which is built on the
-official wowsims/forever, plus the eight patches below. The first base was `442076902` (Merge
+official wowsims/forever, plus the patches below. The first base was `442076902` (Merge
 wowsims/forever master ea5412873). The current base is `8dc19a4241` (2026-09-27). It includes form-speed and actual spell cast-time Omen of Clarity proc corrections, life-drain weapon effects, Sword of Zeal, Argent Avenger, Fiery Weapon and Lifestealing enchants, Flurry Axe and Electrified Dagger, the 2026-09-27 client hotfix database, Stinging Viper and eight Classic weapon procs, Mage Scroll of Cryoblast, non-engineer explosives and SAF-T / EZ-Thro bombs, Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
 
 Keep the set small. Each patch exists because MythicSim needs something upstream does not do
@@ -325,3 +325,63 @@ Bear suite goldens are regenerated because the suite's party buffs include the
 totem; no other class's results move.
 
 Drop this patch when upstream stops stripping Windfury Totem from the feral specs.
+
+## 15. Rage log lines name the real maximum
+
+Boundless Rage raises a Warrior's maximum rage by 10, 20 or 30 (`warrior.go`), and a
+Gnome's Expansive Mind raises it 5% more (`racials.go`). Both were applied, but
+`rageBar.AddRage` and `SpendRage` logged `of 100 total` whatever the bar held, unlike
+energy, which logs its own maximum. MythicSim's timeline reads the maximum from those
+lines, so every Warrior's rage row said "max 100". Both lines now log `rb.maxRage`.
+Nothing the sim computes changes.
+
+Validation: `sim/warrior/dps/max_rage_log_test.go` checks the log's maximum for a
+Human without the talent (100), with Boundless Rage 3/3 (130) and a Gnome with it
+(136.5). It fails on the unpatched source.
+
+Drop this patch when upstream logs the rage bar's maximum.
+
+## 16. Faerie Fire and Curse of Recklessness share their armor reduction
+
+In client 1.60.1.70009 both take 505 armor (9907 and 11717), and Wowhead's Forever
+class guides state they no longer stack. The client rows carry nothing that says so,
+and the buff manifest gave each its own category, so a target with both lost 1010.
+Both now sit in `MinorArmorReduction` with the new manifest option `PerStat`: each
+stat the aura attaches bids alone in the category, so only the armor competes and
+each keeps anything else it does. `gen_buffs.go` renders `PerStat: true` into the
+`buffs.Meta`, and `newDebuff` bids with `spelldata.ExclusivePerStat` for it. The two
+generated rows in `sim/core/buffs/debuffs_auto_gen.go` were edited to match what the
+generator writes, since `gen_spelldata` needs the client database; the synthetic
+render fixture covers the new field.
+
+Validation: `sim/core/buffs/armor_reduction_test.go` applies each alone (-505) and
+both together (-505, not -1010), and fails on the unpatched source. Every suite that
+puts both on the target moves: all physical specs, pets, and one physical weapon
+proc (Everlook Pathcarver) in the caster suites. Healer suites do not.
+
+Drop this patch when the client data puts the two in one exclusive category, or if a
+combat log shows them stacking on live.
+
+## 17. A hard-cast Shaman spell holds the melee swing
+
+Tested on the Forever beta: a Lightning Bolt cast between swings resets the swing
+timer as it completes; a swing that comes due during the cast waits at zero and
+lands as it completes; a bolt Maelstrom Weapon makes instant leaves the swing alone.
+The engine only acted when the cast would end after the next swing, and then pushed
+that swing a full swing past the cast, so a bolt that fit between swings cost no
+melee at all. That made weaving 3 to 4 stack bolts between swings look free.
+
+`AutoAttacks.HoldMeleeForCast` models the tested behaviour, and Lightning Bolt, Chain
+Lightning and Lava Burst call it for any cast longer than zero. A held swing lands one
+nanosecond after the cast completes: at the same instant it would wake the rotation
+before the cast's completion runs, and a new cast would replace it, losing the
+bolt's damage and cost.
+
+Validation: `sim/shaman/enhancement/swing_hold_test.go` chain-casts an unhasted
+2H Orc until it is out of mana, then melees, and checks from the log that no swing
+lands inside a cast, that swings due during one land as it completes, that a swing
+after a cast that completed first comes at least a full swing later, and that every
+bolt started also completes. It fails on the unpatched source. The Enhancement suite
+goldens move.
+
+Drop this patch when upstream models a hard cast resetting the swing timer.
