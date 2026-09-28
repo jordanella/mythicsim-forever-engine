@@ -229,6 +229,16 @@ func (unit *Unit) RegisterSpell(config SpellConfig) *Spell {
 		panic("Cast.SharedCD w/o Duration specified for spell " + config.ActionID.String())
 	}
 
+	// The reverse of the two checks above: a Duration with no Timer is never read, so the spell
+	// would silently have no cooldown at all.
+	if config.Cast.CD.Timer == nil && config.Cast.CD.Duration != 0 {
+		panic("Cast.CD Duration w/o Timer specified for spell " + config.ActionID.String())
+	}
+
+	if config.Cast.SharedCD.Timer == nil && config.Cast.SharedCD.Duration != 0 {
+		panic("Cast.SharedCD Duration w/o Timer specified for spell " + config.ActionID.String())
+	}
+
 	if config.Charges > 0 && config.RechargeTime == 0 {
 		panic("Spell has charges but no recharge time.")
 	}

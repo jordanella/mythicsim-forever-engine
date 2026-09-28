@@ -929,15 +929,29 @@ func fillPlannerArmor(db *database.WowDatabase, path string) {
 	}
 	raw := strings.TrimSpace(text[start : end+1])
 	raw = strings.TrimSuffix(strings.TrimSpace(strings.TrimSuffix(raw, "}")), ",") + "}"
+	// Most stats are numbers, but some keys hold objects (appearances, skillBuff), so the map is
+	// decoded loosely and only the two fields read here are given a type.
 	var rows map[string]struct {
-		Stats map[string]float64 `json:"stats"`
+		Stats map[string]json.RawMessage `json:"stats"`
 	}
 	if err := json.Unmarshal([]byte(raw), &rows); err != nil {
 		panic(err)
 	}
+	stat := func(id string, stats map[string]json.RawMessage, key string) (float64, bool) {
+		value, ok := stats[key]
+		if !ok {
+			return 0, false
+		}
+		var number float64
+		if err := json.Unmarshal(value, &number); err != nil {
+			panic(fmt.Sprintf("Forever gear planner item %s: %q is not a number: %s", id, key, value))
+		}
+		return number, true
+	}
 	for id, item := range db.Items {
-		row := rows[fmt.Sprint(id)]
-		armor, ok := row.Stats["armor"]
+		key := fmt.Sprint(id)
+		row := rows[key]
+		armor, ok := stat(key, row.Stats, "armor")
 		opt := item.ScalingOptions[0]
 		if !ok || opt == nil {
 			continue
@@ -946,6 +960,6 @@ func fillPlannerArmor(db *database.WowDatabase, path string) {
 			opt.Stats = map[int32]float64{}
 		}
 		opt.Stats[int32(proto.Stat_StatArmor)] = armor
-		opt.Stats[int32(proto.Stat_StatBonusArmor)] = row.Stats["armorbonus"]
+		opt.Stats[int32(proto.Stat_StatBonusArmor)], _ = stat(key, row.Stats, "armorbonus")
 	}
 }

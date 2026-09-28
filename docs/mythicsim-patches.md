@@ -247,3 +247,55 @@ afterward. Keep the engine's strict missing-defense-type guard.
 
 Drop this patch when upstream declares the same defense type for every rank of
 the triggered Holy Nova heal and the regression passes.
+
+## 12. Unset spell field guards
+
+A field left at its Go zero value can mean "never set" rather than a real value.
+Three of them were read without a check, and each fails silently or only by
+chance:
+
+- **DefenseType.** `CritDamageMultiplier` panics on `DefenseTypeNone`, but only
+  once a crit lands. A spell with a low crit chance passes every test and fails in
+  a user's sim, which is how the Holy Nova heal (patch 11) shipped. The three crit
+  chance functions (`PhysicalCritChance`, `SpellCritChance`, `HealingCritChance`)
+  now call `requireDefenseType`, so a missing DefenseType fails on the spell's
+  first crit roll. Every crit path, including the attack-table and expected-damage
+  helpers, goes through one of them. The strict panic in `CritDamageMultiplier`
+  stays, as patch 11 asks.
+- **SnapshotAttackerMultiplier.** An expired dot resets its snapshot to 0. A custom
+  `OnSnapshot` that sets `SnapshotBaseDamage` but not the multiplier leaves that 0
+  in place, and every tick deals or heals nothing. `TakeSnapshot` marks the
+  multiplier with NaN before the callback, panics if a base amount was set without
+  a multiplier, and otherwise restores the previous value. A multiplier the
+  callback computes as 0 is kept.
+- **Cast.CD / Cast.SharedCD.** A Timer without a Duration was already rejected. A
+  Duration without a Timer is never read, so the spell silently had no cooldown;
+  `RegisterSpell` now rejects it too.
+
+The snapshot guard found one live case: the Bloodfang 8-piece heal set only
+`SnapshotBaseDamage = 50` and had no `DamageMultiplier`, so every tick healed for
+50 x 0. It now snapshots through `SnapshotHeal` with a multiplier of 1.
+
+Separately, `gen_db` decoded the pinned Forever planner's `stats` as
+`map[string]float64`. 10,287 rows carry an `appearances` object and 3 a `skillBuff`
+object there, so `make db` panicked in `fillPlannerArmor` on the committed
+`wowhead_forever_gearplanner.txt`. The map is now decoded loosely and only `armor`
+and `armorbonus` are typed, with a panic naming the item if either is ever not a
+number. A full `make db DB2TOOL_FLAGS="--cdn --dbcache ..."` run then completes.
+The regenerated database is not part of this patch: its armor for the 14 items
+whose values move matches the planner on 13 of them (the committed database on 1),
+but the effect generator also swaps Skullflame Shield's active proc from
+Flamestrike to Drain Life, which needs its own look.
+
+Validation: `sim/core/unset_field_guards_test.go` covers a damage and a healing crit
+roll without a DefenseType (panics at 0% crit), the same spell with one (casts), a
+snapshot that sets a base amount but no multiplier (panics), a computed 0
+multiplier (allowed), and both cooldown cases. The full suite,
+`go test --tags=with_db $(go list ./sim/... | grep -v sim/web)`, has the same
+results with and without the patch: every class suite passes, so no registered
+spell trips a guard, and only the stale `sim/common/TestRegisteredEffects` baseline
+fails, as it does on the base branch.
+
+Drop this patch when upstream checks DefenseType at the crit roll, rejects an
+unset snapshot multiplier and a cooldown Duration without a Timer, and decodes the
+planner stats without assuming every value is a number.

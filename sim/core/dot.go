@@ -70,8 +70,21 @@ type Dot struct {
 //
 // doRollover will apply previously snapshotted crit/%dmg instead of recalculating.
 func (dot *Dot) TakeSnapshot(sim *Simulation) {
-	if dot.onSnapshot != nil {
-		dot.onSnapshot(sim, dot.Unit, dot)
+	if dot.onSnapshot == nil {
+		return
+	}
+
+	// A custom OnSnapshot that sets a base amount but never the attacker multiplier leaves the
+	// multiplier at the 0 an expired dot is reset to, so every tick deals or heals nothing. Mark it
+	// before the callback so an unset multiplier can be told apart from one computed as 0.
+	previous := dot.SnapshotAttackerMultiplier
+	dot.SnapshotAttackerMultiplier = math.NaN()
+	dot.onSnapshot(sim, dot.Unit, dot)
+	if math.IsNaN(dot.SnapshotAttackerMultiplier) {
+		if dot.SnapshotBaseDamage != 0 {
+			panic(dot.Spell.ActionID.String() + " OnSnapshot sets SnapshotBaseDamage but not SnapshotAttackerMultiplier")
+		}
+		dot.SnapshotAttackerMultiplier = previous
 	}
 }
 
