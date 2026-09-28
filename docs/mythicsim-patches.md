@@ -232,3 +232,18 @@ removing the old synthetic row. The 300-second Balance build now attributes
 
 Drop this patch when upstream reports actual Innervate gains without also counting
 them as ordinary regeneration, including cap losses and passive-regen threat rules.
+
+## 11. Holy Nova healing crit defense type
+
+Holy Nova's triggered party heal used `OutcomeHealingCrit` without declaring a
+DefenseType. Its first healing crit panicked in `CritDamageMultiplier`, failing
+the simulation. Declare `core.DefenseTypeMagic` on the shared heal configuration,
+which gives all six ranks the existing 1.5 base healing crit multiplier.
+
+`TestHolyNovaHealingCritAllRanks` casts each rank with a forced healing crit and
+checks positive healing, a recorded crit, and the multiplier. A 100-iteration
+Docker reproduction failed before the patch and completed with 309 healing crits
+afterward. Keep the engine's strict missing-defense-type guard.
+
+Drop this patch when upstream declares the same defense type for every rank of
+the triggered Holy Nova heal and the regression passes.

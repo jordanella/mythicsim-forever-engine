@@ -126,6 +126,7 @@ func (priest *Priest) registerHolyNovaSpell(rank *spelldata.Spell) {
 	healSpell := priest.RegisterSpell(core.SpellConfig{
 		ActionID:    core.ActionID{SpellID: heal.ID},
 		SpellSchool: core.SpellSchoolHoly,
+		DefenseType: core.DefenseTypeMagic,
 		ProcMask:    core.ProcMaskSpellHealing,
 		Flags:       core.SpellFlagHelpful | core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell,
 
