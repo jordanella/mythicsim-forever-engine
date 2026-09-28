@@ -299,3 +299,29 @@ fails, as it does on the base branch.
 Drop this patch when upstream checks DefenseType at the crit roll, rejects an
 unset snapshot multiplier and a cooldown Duration without a Timer, and decodes the
 planner stats without assuming every value is a number.
+
+## 13. Windfury Totem procs in Cat and Bear Form
+
+Classic's Windfury Totem enchanted the held weapon: the totem's periodic aura
+(8515) cast 8514, which applied temporary enchant 1783. A shapeshifted druid does
+not swing its weapon, so the Classic sim stripped `WindfuryTotem` from the party
+buffs of both feral specs.
+
+Forever changed the totem. In client 1.60.1.70009, 8515 is an area party aura
+(effect 35, aura 42) with a 20% chance on melee autos and melee specials
+(`ProcTypeMask` 0x14) that triggers 8516, the extra attack and its attack power.
+Nothing in it names a weapon, so a cat or bear procs it like anyone else.
+`feralcat.AddPartyBuffs` and `feralbear.AddPartyBuffs` no longer clear
+`WindfuryTotem`. The shared driver already swings the current main-hand weapon,
+which in form is the paw.
+
+Validation: `sim/druid/feralcat/windfury_test.go` and
+`sim/druid/feralbear/windfury_test.go` run full sims with a 3.5 s two-hander
+equipped. With the totem they record Windfury extra attacks (tag 25584) at a
+plausible rate per auto, and each extra attack hits for about what the form's own
+auto does plus the proc's attack power, not like a swing of the two-hander.
+Without the totem they record none. Both fail on the unpatched source. The Cat and
+Bear suite goldens are regenerated because the suite's party buffs include the
+totem; no other class's results move.
+
+Drop this patch when upstream stops stripping Windfury Totem from the feral specs.
