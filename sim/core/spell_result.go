@@ -186,7 +186,19 @@ func (spell *Spell) PhysicalHitChance(attackTable *AttackTable) float64 {
 func (spell *Spell) PhysicalHitCheck(sim *Simulation, attackTable *AttackTable) bool {
 	return sim.Proc(1.0-spell.GetPhysicalMissChance(attackTable), "Physical Hit Roll")
 }
+
+// requireDefenseType fails a spell that rolls for a crit without declaring its DefenseType, which
+// CritDamageMultiplier needs. CritDamageMultiplier already panics, but only once a crit lands, so a
+// spell with a low crit chance can pass every test and fail in a user's sim. Checking at the roll
+// makes the missing field fail on the spell's first cast instead.
+func (spell *Spell) requireDefenseType() {
+	if spell.DefenseType == DefenseTypeNone {
+		panic(fmt.Sprintf("%s rolls for a critical strike but has no DefenseType", spell.ActionID))
+	}
+}
+
 func (spell *Spell) PhysicalCritChance(attackTable *AttackTable) float64 {
+	spell.requireDefenseType()
 	critPercent := spell.Unit.stats[stats.PhysicalCritPercent] + spell.BonusCritPercent - attackTable.Defender.PseudoStats.ReducedCritTakenPercent
 
 	if spell.ProcMask.Matches(ProcMaskRanged) {
@@ -279,6 +291,7 @@ func (spell *Spell) MagicHitCheck(sim *Simulation, attackTable *AttackTable) boo
 }
 
 func (spell *Spell) SpellCritChance(target *Unit) float64 {
+	spell.requireDefenseType()
 	attackTable := spell.Unit.AttackTables[target.UnitIndex]
 	critPercent := spell.Unit.stats[stats.SpellCritPercent] +
 		spell.BonusCritPercent +
@@ -299,6 +312,7 @@ func (spell *Spell) HealingPower(target *Unit) float64 {
 	return spell.Unit.GetStat(stats.HealingPower) + target.PseudoStats.BonusHealingTaken
 }
 func (spell *Spell) HealingCritChance() float64 {
+	spell.requireDefenseType()
 	return (spell.Unit.GetStat(stats.SpellCritPercent) + spell.BonusCritPercent) / 100
 }
 

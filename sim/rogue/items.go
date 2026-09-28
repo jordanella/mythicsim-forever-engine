@@ -195,6 +195,9 @@ var ItemSetBloodfangArmor = core.NewItemSet(core.ItemSet{
 				DefenseType: core.DefenseTypeMelee,
 				ProcMask:    core.ProcMaskEmpty,
 				Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell,
+
+				DamageMultiplier: 1,
+
 				Hot: core.DotConfig{
 					Aura: core.Aura{
 						Label: "Bloodfang",
@@ -202,7 +205,7 @@ var ItemSetBloodfangArmor = core.NewItemSet(core.ItemSet{
 					NumberOfTicks: 6,
 					TickLength:    time.Second,
 					OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-						dot.SnapshotBaseDamage = 50
+						dot.SnapshotHeal(target, 50)
 					},
 					OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 						dot.CalcAndDealPeriodicSnapshotHealing(sim, target, dot.OutcomeTick)
