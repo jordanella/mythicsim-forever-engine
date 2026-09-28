@@ -201,7 +201,7 @@ func syntheticBuffRows() []ResolvedBuff {
 		{
 			BuffSpec: buffmanifest.BuffSpec{
 				Field: "curse_of_elements", Category: "CurseOfElements",
-				SingleAura: true,
+				PerStat: true,
 			},
 			Scope: buffmanifest.ScopeDebuff, Proto: buffmanifest.ProtoBool,
 			Go: "SynthCurseOfElements", Name: "Curse of the Elements",

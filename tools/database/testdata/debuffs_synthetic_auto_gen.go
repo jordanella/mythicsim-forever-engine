@@ -76,10 +76,10 @@ func SynthExposeArmorAura(unit *core.Unit, isPlayer bool, talentPoints int32) *c
 var SynthCurseOfElementsCategory = "CurseOfElements"
 var synthCurseOfElementsSpell = spelldata.MustFind(1311680)
 var synthCurseOfElementsMeta = &Meta{
-	Label:      "Curse of the Elements",
-	Spell:      synthCurseOfElementsSpell,
-	Category:   SynthCurseOfElementsCategory,
-	SingleAura: true,
+	Label:    "Curse of the Elements",
+	Spell:    synthCurseOfElementsSpell,
+	Category: SynthCurseOfElementsCategory,
+	PerStat:  true,
 }
 
 func SynthCurseOfElementsValue(talentPoints int32) float64 {

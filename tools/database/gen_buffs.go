@@ -716,6 +716,9 @@ func buffMetaFields(row ResolvedBuff, rendered buffRow) string {
 	if row.SingleAura {
 		b.WriteString("SingleAura: true,\n")
 	}
+	if row.PerStat {
+		b.WriteString("PerStat: true,\n")
+	}
 	if row.TalentRanks > 0 {
 		fmt.Fprintf(&b, "Talent: spelldata.Talent(%d, %d),\n", row.TalentSpellID, row.TalentRanks)
 		fmt.Fprintf(&b, "TalentEffect: %d,\n", row.TalentPosition)

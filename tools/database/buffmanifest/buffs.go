@@ -427,20 +427,23 @@ var Debuffs = []BuffSpec{
 			proto.Stat_StatSpellDamage,
 		},
 	},
+	// Forever gives Curse of Recklessness and Faerie Fire the same 505 armor and stops them stacking
+	// it (Wowhead's Forever class guides; the client rows carry no category that says so). They share
+	// a category per stat, so only the armor competes and the curse keeps the rest.
 	{
-		Field:      "curse_of_recklessness",
-		SpellID:    11717,
-		Category:   "CurseOfRecklessness",
-		SingleAura: true,
+		Field:    "curse_of_recklessness",
+		SpellID:  11717,
+		Category: "MinorArmorReduction",
+		PerStat:  true,
 		Stats: []proto.Stat{
 			proto.Stat_StatAttackPower,
 		},
 	},
 	{
-		Field:      "faerie_fire",
-		SpellID:    9907,
-		Category:   "FaerieFireAura",
-		SingleAura: true,
+		Field:    "faerie_fire",
+		SpellID:  9907,
+		Category: "MinorArmorReduction",
+		PerStat:  true,
 		Stats: []proto.Stat{
 			proto.Stat_StatAttackPower,
 			proto.Stat_StatMeleeHitRating,

@@ -112,8 +112,11 @@ type BuffSpec struct {
 	Category       string // exclusive-effect category value, "" = none
 	SharedCategory string // second exclusive category the aura also joins, "" = none
 	SingleAura     bool
-	Driver         bool         // apply block hands the field to drive<Go>; the aura is not simply always up
-	Stats          []proto.Stat // UI relevance tags
+	// PerStat makes each stat the aura attaches bid alone in Category, so auras sharing the category
+	// compete only on the stats they share and keep the rest.
+	PerStat bool
+	Driver  bool         // apply block hands the field to drive<Go>; the aura is not simply always up
+	Stats   []proto.Stat // UI relevance tags
 	// ImpAction names the improved state's source when it is not a talent: an
 	// item, or the spell an item set grants at a piece threshold. It is the icon
 	// the improved state shows.

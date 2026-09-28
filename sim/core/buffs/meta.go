@@ -26,6 +26,9 @@ type Meta struct {
 	SharedCategory string
 	// The category holds one aura at a time, and the aura bids in it as a whole.
 	SingleAura bool
+	// Each stat the aura attaches bids alone in Category, so auras sharing it compete only on the
+	// stats they share.
+	PerStat bool
 
 	// The improving talent, and the effect of it that prices the buff, counted the way EffectN
 	// counts. TalentScalesDuration says the talent prices the duration rather than the amount.
@@ -116,7 +119,7 @@ func newItemCountBuff(unit *core.Unit, m *Meta, isPlayer bool, count float64) *c
 func (m *Meta) buff(unit *core.Unit, isPlayer bool, talentPoints int32, opts []spelldata.ParseOpt) *core.Aura {
 	opts = append(opts, spelldata.SchoolResistances())
 	if m.Category != "" {
-		if m.SingleAura {
+		if m.SingleAura && !m.PerStat {
 			opts = append(opts, spelldata.Exclusive(m.Category, true))
 		} else {
 			opts = append(opts, spelldata.ExclusivePerStat(m.Category))
@@ -128,12 +131,16 @@ func (m *Meta) buff(unit *core.Unit, isPlayer bool, talentPoints int32, opts []s
 }
 
 // The aura a generated debuff registers on the target: labelled and tagged like newBuff, never in a
-// build phase, with Exclusive(Category, SingleAura) where it names a category and no school
-// resistance categories of its own.
+// build phase, with Exclusive(Category, SingleAura) where it names a category, ExclusivePerStat
+// with PerStat, and no school resistance categories of its own.
 func newDebuff(target *core.Unit, m *Meta, isPlayer bool, talentPoints int32) *core.Aura {
 	opts := m.Options(talentPoints)
 	if m.Category != "" {
-		opts = append(opts, spelldata.Exclusive(m.Category, m.SingleAura))
+		if m.PerStat {
+			opts = append(opts, spelldata.ExclusivePerStat(m.Category))
+		} else {
+			opts = append(opts, spelldata.Exclusive(m.Category, m.SingleAura))
+		}
 	}
 	return m.parsedAura(target, isPlayer, talentPoints, core.CharacterBuildPhaseNone, opts)
 }
