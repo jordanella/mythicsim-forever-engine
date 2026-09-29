@@ -546,3 +546,27 @@ Not covered, still on stored numbers: hunter pet abilities, Lacerating Strikes, 
 Deep Wounds have no attack power share to read.
 
 Drop this patch when upstream's dots tick on current stats the same way.
+
+## 23. Rain of Fire
+
+Rain of Fire had client data (`spellData.RainOfFire`, 5740 to 11678, and Forever's
+`RainOfFireTriggered`, 1282380 to 1282385) and a class mask (`WarlockSpellRainOfFire`, already in the
+fire and Destruction groups), but no spell was registered, so a rotation line naming it was dropped
+with "does not know spell" and Warlocks had no ground AoE in multi-target sims.
+
+Forever's Rain of Fire is an area trigger, like its Blizzard: rank 4 (11678) is an 8 second channel
+costing 1185 mana whose periodic dummy fires every 2 seconds and casts 1282385, a direct Fire hit for
+221 (0.083 spell power coefficient) on every enemy in the area. `registerRainOfFire`
+(`sim/warlock/rain_of_fire.go`) reads all of that from the client data: the channel is an AoE dot
+with the dummy's period, each tick casts the damage spell with `CalcAndDealAoeDamage`, and the tick
+rolls crit unless the client marks the damage spell as unable to (it does not). Both spells carry
+`WarlockSpellRainOfFire`, so the existing fire and Destruction talent modifiers apply.
+
+Measured with a gearless Warlock against three targets (30 s, 200 iterations): 2 channels a fight
+(mana-bound), 4 ticks per channel on every target, about 211 per landed tick after partial
+resists.
+
+Validation: `TestRainOfFireRainsOnEveryTarget` in `sim/warlock/rain_of_fire_test.go`. On the
+unpatched source the channel is never cast. No suite golden moves: no preset rotation casts it.
+
+Drop this patch when upstream registers Rain of Fire.

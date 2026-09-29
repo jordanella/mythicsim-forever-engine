@@ -108,6 +108,7 @@ func (warlock *Warlock) Initialize() {
 	warlock.registerImmolate()
 	warlock.registerIncinerate()
 	warlock.registerLifeTap()
+	warlock.registerRainOfFire()
 	warlock.registerShadowBolt()
 	warlock.registerSearingPain()
 	warlock.registerSiphonLifeSpell()
