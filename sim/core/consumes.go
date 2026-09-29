@@ -23,7 +23,7 @@ func registerScrollAura(character *Character, label string, itemID int32, stat s
 }
 
 // Registers all consume-related effects to the Agent.
-func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
+func applyConsumeEffects(agent Agent, _ *proto.PartyBuffs) {
 	character := agent.GetCharacter()
 	consumables := character.Consumables
 	if consumables == nil {
@@ -104,8 +104,9 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 		registerDragonbreathChili(character)
 	}
 
-	// Static Imbues
-	if consumables.MhImbueId != 0 && !partyBuffs.WindfuryTotem {
+	// Static Imbues. Forever's Windfury Totem is a party aura that procs, not Classic's weapon
+	// enchant, so it no longer displaces a main-hand stone or oil.
+	if consumables.MhImbueId != 0 {
 		registerStaticImbue(agent, consumables.MhImbueId, character.AutoAttacks.MH())
 	}
 	if consumables.OhImbueId != 0 {

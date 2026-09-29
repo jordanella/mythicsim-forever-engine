@@ -416,3 +416,19 @@ bolt started also completes. It fails on the unpatched source. The Enhancement s
 goldens move.
 
 Drop this patch when upstream models a hard cast resetting the swing timer.
+
+## 18. Windfury Totem leaves the main-hand stone or oil alone
+
+Classic's Windfury Totem enchanted the held weapon, so `applyConsumeEffects` skipped
+a main-hand stone or oil whenever the party had the totem. Forever's totem is a party
+aura that procs extra attacks and names no weapon (see patch 13), so the main-hand
+imbue now applies beside it. Rogue poisons were never affected: they register in
+`sim/rogue/poisons.go`, not here.
+
+Validation: `sim/warrior/dps/windfury_imbue_test.go` checks that a main-hand
+Elemental Sharpening Stone adds 2% crit with and without the totem. It fails on the
+unpatched source. No suite golden moves, since none pairs a main-hand stone with the
+totem.
+
+Drop this patch when upstream stops displacing the main-hand imbue under Windfury
+Totem.
