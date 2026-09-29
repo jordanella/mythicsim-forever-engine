@@ -183,7 +183,7 @@
 	"15473": {
 		"ability": "Shadowform",
 		"file": "sim/priest/talents_shadow.go",
-		"note": "Beta client 1.60.1.70009: Classic's 15473 is +15% Shadow damage and -15% Physical damage taken; Forever adds -50% Shadow mana cost and +100% critical strike damage bonus (on Mind Blast, Mind Flay, Shadow Word: Pain and Devouring Plague, the mask 41984016 names) and drops the damage to 10%. The form blocks only healing. The sim charges nothing to cast it where the client says 40% of base mana, as it did for Classic.",
+		"note": "Beta client 1.60.1.70009: Classic's 15473 is +15% Shadow damage and -15% Physical damage taken; Forever adds -50% Shadow mana cost and +100% critical strike damage bonus (on Mind Blast, Mind Flay, Shadow Word: Pain and Devouring Plague, the mask 41984016 names, plus Shadow Word: Death, which Forever has since added) and drops the damage to 10%. The form blocks only healing. The sim charges nothing to cast it where the client says 40% of base mana, as it did for Classic.",
 		"source": "forever",
 		"tooltip": "Instant\nAssume Shadowform, increasing your Shadow damage by 10%, reducing the Mana cost of all Shadow spells by 50%, increasing the critical strike damage bonus of your Shadow spells by 100%, and reducing Physical damage taken by you by 15%. However, you may not cast healing spells while in this form."
 	},
@@ -225,35 +225,35 @@
 	"19276": {
 		"ability": "Devouring Plague",
 		"file": "sim/priest/devouring_plague.go",
-		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal and never crit (the client leaves Periodic Can Crit off).",
+		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal. The client leaves Periodic Can Crit off, but Forever has since changed the ticks to crit, so the sim lets them crit.",
 		"source": "forever",
 		"tooltip": "350 Mana\nInstant\n1 min cooldown\nAfflicts the target with a disease that causes 232 Shadow damage over 24 sec. Damage caused by the Devouring Plague heals the caster."
 	},
 	"19277": {
 		"ability": "Devouring Plague",
 		"file": "sim/priest/devouring_plague.go",
-		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal and never crit (the client leaves Periodic Can Crit off).",
+		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal. The client leaves Periodic Can Crit off, but Forever has since changed the ticks to crit, so the sim lets them crit.",
 		"source": "forever",
 		"tooltip": "495 Mana\nInstant\n1 min cooldown\nAfflicts the target with a disease that causes 344 Shadow damage over 24 sec. Damage caused by the Devouring Plague heals the caster."
 	},
 	"19278": {
 		"ability": "Devouring Plague",
 		"file": "sim/priest/devouring_plague.go",
-		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal and never crit (the client leaves Periodic Can Crit off).",
+		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal. The client leaves Periodic Can Crit off, but Forever has since changed the ticks to crit, so the sim lets them crit.",
 		"source": "forever",
 		"tooltip": "645 Mana\nInstant\n1 min cooldown\nAfflicts the target with a disease that causes 488 Shadow damage over 24 sec. Damage caused by the Devouring Plague heals the caster."
 	},
 	"19279": {
 		"ability": "Devouring Plague",
 		"file": "sim/priest/devouring_plague.go",
-		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal and never crit (the client leaves Periodic Can Crit off).",
+		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal. The client leaves Periodic Can Crit off, but Forever has since changed the ticks to crit, so the sim lets them crit.",
 		"source": "forever",
 		"tooltip": "810 Mana\nInstant\n1 min cooldown\nAfflicts the target with a disease that causes 656 Shadow damage over 24 sec. Damage caused by the Devouring Plague heals the caster."
 	},
 	"19280": {
 		"ability": "Devouring Plague",
 		"file": "sim/priest/devouring_plague.go",
-		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal and never crit (the client leaves Periodic Can Crit off).",
+		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal. The client leaves Periodic Can Crit off, but Forever has since changed the ticks to crit, so the sim lets them crit.",
 		"source": "forever",
 		"tooltip": "985 Mana\nInstant\n1 min cooldown\nAfflicts the target with a disease that causes 848 Shadow damage over 24 sec. Damage caused by the Devouring Plague heals the caster."
 	},
@@ -372,7 +372,7 @@
 	"2944": {
 		"ability": "Devouring Plague",
 		"file": "sim/priest/devouring_plague.go",
-		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal and never crit (the client leaves Periodic Can Crit off).",
+		"note": "Beta client 1.60.1.70009: rank 6 904 -> 848 over 8 ticks, .063 -> .1 a tick, cooldown 3 min -> 1 min, and every race learns it. The ticks heal the priest for what they deal. The client leaves Periodic Can Crit off, but Forever has since changed the ticks to crit, so the sim lets them crit.",
 		"source": "forever",
 		"tooltip": "215 Mana\nInstant\n1 min cooldown\nAfflicts the target with a disease that causes 128 Shadow damage over 24 sec. Damage caused by the Devouring Plague heals the caster."
 	},
