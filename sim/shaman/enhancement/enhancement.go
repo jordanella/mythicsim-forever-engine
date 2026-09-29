@@ -82,6 +82,7 @@ func (enh *EnhancementShaman) Initialize() {
 	enh.RegisterFrostbrandImbue(enh.GetImbueProcMask(proto.ShamanImbue_FrostbrandWeapon))
 	enh.RegisterFlametongueImbue(enh.GetImbueProcMask(proto.ShamanImbue_FlametongueWeapon))
 	enh.RegisterWindfuryImbue(enh.GetImbueProcMask(proto.ShamanImbue_WindfuryWeapon))
+	enh.RegisterRockbiterImbue(enh.GetImbueProcMask(proto.ShamanImbue_RockbiterWeapon))
 }
 
 func (enh *EnhancementShaman) Reset(sim *core.Simulation) {

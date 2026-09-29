@@ -149,7 +149,7 @@ func (shaman *Shaman) applySpiritWeapons() {
 		return
 	}
 
-	// Client 16268: parry and -30% threat; its Rockbiter half (eff 1) has nothing to act on, the sim has no Rockbiter.
+	// Client 16268: parry and -30% threat; its Rockbiter half (eff 1) has nothing to act on, since the sim leaves out Rockbiter's threat.
 	shaman.PseudoStats.CanParry = true
 	shaman.PseudoStats.ThreatMultiplier *= spellData.SpiritWeapons.Effect(dbcenums.A_MOD_THREAT, 127).MultiplierAt(1)
 }
