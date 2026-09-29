@@ -264,12 +264,11 @@ func (shaman *Shaman) RegisterFlametongueImbue(procMask core.ProcMask) {
 		}
 
 		flameTongueSpell := shaman.newFlametongueImbueSpell(weapon)
-		aura := shaman.makeFTProcTriggerAura(itemSlot, triggerProcMask, flameTongueSpell)
-		if itemSlot == proto.ItemSlot_ItemSlotMainHand {
-			aura.NewExclusiveEffect(buffs.WindfuryTotemCategory, false, core.ExclusiveEffect{
-				Priority: shaman.WindfuryAPBonus * 2, // Need to be higher than Windfury Totem priority
-			})
-		}
+		// Not in Windfury Totem's exclusive category. Classic's totem enchanted the main-hand weapon,
+		// so any main-hand imbue displaced it; Forever's is a party aura that names no weapon, and
+		// the beta describes only Windfury Weapon as disabling it ("When applied to mainhand,
+		// disables any benefit you personally benefit from Windfury Totem").
+		shaman.makeFTProcTriggerAura(itemSlot, triggerProcMask, flameTongueSpell)
 	}
 
 	shaman.setupItemSwapImbue(proto.ShamanImbue_FlametongueWeapon, flametongueEnchantID)

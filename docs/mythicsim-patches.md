@@ -457,3 +457,25 @@ attack power in either or both hands and that Windfury Weapon adds none standing
 on the unpatched source. No suite golden moves, since none imbues Rockbiter.
 
 Drop this patch when upstream registers Rockbiter Weapon.
+
+## 20. Flametongue Weapon keeps Windfury Totem's procs
+
+`RegisterFlametongueImbue` put a main-hand Flametongue Weapon in Windfury Totem's exclusive category at a
+higher priority, copied from Classic, where the totem enchanted the main-hand weapon and any main-hand imbue
+displaced it. Forever's totem is a party aura that names no weapon (patches 13 and 18), and the beta describes
+only Windfury Weapon as disabling it: "When applied to mainhand, disables any benefit you personally benefit
+from Windfury Totem". So with Flametongue in the main hand the totem stood up 96% of the fight and never
+proced: the "Windfury Totem (proc)" aura showed 0% and the extra attack dealt nothing (reported by Kerani on
+the Discord, 2026-09-29). Frostbrand and Rockbiter were never in the category.
+
+The Flametongue block is removed; Windfury Weapon keeps its own.
+
+Measured on the Enhancement reference (120 +/- 15 s, 10,000 iterations, board seed), Flametongue main hand
+with the party's Windfury Totem: 510.5 before, 583.9 after, and the totem's proc aura is up 119.8 s of 120.
+Every other imbue is unchanged.
+
+Validation: `TestOnlyWindfuryWeaponDisplacesWindfuryTotem` in `sim/shaman/enhancement/rockbiter_test.go`
+checks which main-hand imbues leave the totem's "Windfury Totem Trigger" active. It fails on the unpatched
+source for Flametongue. No suite golden moves.
+
+Drop this patch when upstream models the totem and Flametongue Weapon the same way.

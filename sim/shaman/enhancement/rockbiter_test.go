@@ -47,3 +47,37 @@ func TestRockbiterWeaponAddsAttackPower(t *testing.T) {
 		t.Errorf("Windfury Weapon adds %v standing attack power, want 0", got)
 	}
 }
+
+// Forever's Windfury Totem is a party aura, and only Windfury Weapon in the main hand is described as
+// disabling it. Flametongue, Frostbrand and Rockbiter Weapon leave the totem's procs running.
+func TestOnlyWindfuryWeaponDisplacesWindfuryTotem(t *testing.T) {
+	totemProcs := func(mh proto.ShamanImbue) bool {
+		player := &proto.Player{
+			Name: "Shaman", Class: proto.Class_ClassShaman, Race: proto.Race_RaceOrc,
+			Equipment: &proto.EquipmentSpec{Items: []*proto.ItemSpec{{Id: 12784}}},
+			Buffs:     &proto.IndividualBuffs{}, Consumables: &proto.ConsumesSpec{},
+			Spec: &proto.Player_EnhancementShaman{EnhancementShaman: &proto.EnhancementShaman{
+				Options: &proto.EnhancementShaman_Options{ClassOptions: &proto.ShamanOptions{ImbueMh: mh}},
+			}},
+			Rotation: core.APLRotationFromJsonString(`{"type":"TypeAPL","priorityList":[]}`),
+		}
+		sim := core.NewSim(&proto.RaidSimRequest{
+			SimOptions: &proto.SimOptions{RandomSeed: 1},
+			Raid:       core.SinglePlayerRaidProto(player, &proto.PartyBuffs{WindfuryTotem: true}, &proto.RaidBuffs{}, &proto.Debuffs{}),
+			Encounter:  core.MakeSingleTargetEncounter(0),
+		}, simsignals.CreateSignals())
+		sim.Reset()
+		return sim.Raid.Parties[0].Players[0].GetCharacter().GetAura("Windfury Totem Trigger").IsActive()
+	}
+	for imbue, want := range map[proto.ShamanImbue]bool{
+		proto.ShamanImbue_NoImbue:           true,
+		proto.ShamanImbue_FlametongueWeapon: true,
+		proto.ShamanImbue_FrostbrandWeapon:  true,
+		proto.ShamanImbue_RockbiterWeapon:   true,
+		proto.ShamanImbue_WindfuryWeapon:    false,
+	} {
+		if got := totemProcs(imbue); got != want {
+			t.Errorf("main hand %v: the party's Windfury Totem procs = %v, want %v", imbue, got, want)
+		}
+	}
+}
