@@ -47,6 +47,18 @@ type Dot struct {
 	SnapshotBaseDamage         float64
 	SnapshotAttackerMultiplier float64
 
+	// Forever dots tick on the caster's current stats, not the ones in force when the dot landed. A dot
+	// built by Snapshot or SnapshotPhysical keeps its flat damage in SnapshotBaseDamage and swaps what
+	// was folded in from the caster - a spell power share (Snapshot with a BonusCoefficient) and an
+	// attack power share (SnapshotAttackPowerShare) - for its current value at every tick, and takes
+	// the attacker multiplier afresh. The fields below remember what was folded in to take it out.
+	tickOnCurrentStats  bool
+	readsSpellPower     bool
+	snapshotSpellPower  float64
+	attackPowerShare    float64
+	attackPowerRanged   bool
+	snapshotAttackPower float64
+
 	BaseTickCount          int32 // base tick count without haste applied
 	remainingTicks         int32
 	tmpExtraTicks          int32         // extra ticks that are added during the runtime of the dot
@@ -199,6 +211,8 @@ func (dot *Dot) AddTick() {
 func (dot *Dot) CopyDotAndApply(sim *Simulation, originaldot *Dot) {
 	dot.TakeSnapshot(sim)
 	dot.SnapshotBaseDamage = originaldot.SnapshotBaseDamage
+	dot.snapshotSpellPower = originaldot.snapshotSpellPower
+	dot.snapshotAttackPower = originaldot.snapshotAttackPower
 
 	dot.tickPeriod = originaldot.tickPeriod
 	dot.remainingTicks = originaldot.remainingTicks
@@ -448,6 +462,8 @@ type DotState struct {
 
 	SnapshotBaseDamage         float64
 	SnapshotAttackerMultiplier float64
+	SnapshotSpellPower         float64
+	SnapshotAttackPower        float64
 	TicksRemaining             int32
 	ExtraTicks                 int32
 	TickPeriod                 time.Duration
@@ -460,6 +476,8 @@ func (dot *Dot) SaveState(sim *Simulation) DotState {
 		AuraState:                  aura,
 		SnapshotBaseDamage:         dot.SnapshotBaseDamage,
 		SnapshotAttackerMultiplier: dot.SnapshotAttackerMultiplier,
+		SnapshotSpellPower:         dot.snapshotSpellPower,
+		SnapshotAttackPower:        dot.snapshotAttackPower,
 		TicksRemaining:             dot.remainingTicks,
 		ExtraTicks:                 dot.tmpExtraTicks,
 		TickPeriod:                 dot.tickPeriod,
@@ -473,6 +491,8 @@ func (dot *Dot) RestoreState(state DotState, sim *Simulation) {
 	dot.tmpExtraTicks = state.ExtraTicks
 	dot.SnapshotBaseDamage = state.SnapshotBaseDamage
 	dot.SnapshotAttackerMultiplier = state.SnapshotAttackerMultiplier
+	dot.snapshotSpellPower = state.SnapshotSpellPower
+	dot.snapshotAttackPower = state.SnapshotAttackPower
 	dot.Aura.RestoreState(state.AuraState, sim)
 
 	// recreate with new period, resetting the next tick.

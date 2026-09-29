@@ -61,11 +61,15 @@ func (rogue *Rogue) registerRupture() {
 			TickLength:    tickLength,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				damage := rogue.ruptureDamage(target, rogue.ComboPoints(), tickDamage, damagePerComboPoint)
+				// Hemorrhage scales the flat damage and the attack power share alike.
+				multiplier := 1.0
 				if rogue.isHemorrhaging(target) {
-					damage *= HemorrhageRuptureMultiplier
+					multiplier = HemorrhageRuptureMultiplier
 				}
-				dot.SnapshotPhysical(target, damage)
+				share := ruptureAttackPowerShare(rogue.ComboPoints()) * multiplier
+				flat := (tickDamage + damagePerComboPoint*float64(rogue.ComboPoints())) * multiplier
+				dot.SnapshotPhysical(target, flat+share*rogue.Rupture.MeleeAttackPower(target))
+				dot.SnapshotAttackPowerShare(target, share, false)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, ruptureRank.TickOutcome(dot))
@@ -88,8 +92,7 @@ func (rogue *Rogue) registerRupture() {
 	})
 }
 
-func (rogue *Rogue) ruptureDamage(target *core.Unit, comboPoints int32, baseDamage float64, damagePerComboPoint float64) float64 {
-	return baseDamage +
-		damagePerComboPoint*float64(comboPoints) +
-		[]float64{0, 0.01, 0.02, 0.03, 0.03, 0.03}[comboPoints]*rogue.Rupture.MeleeAttackPower(target)
+// The share of attack power a tick adds, read at the tick.
+func ruptureAttackPowerShare(comboPoints int32) float64 {
+	return []float64{0, 0.01, 0.02, 0.03, 0.03, 0.03}[comboPoints]
 }

@@ -48,7 +48,10 @@ func (druid *Druid) registerRipSpell() {
 			TickLength:    ripTick.Period(),
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.SnapshotPhysical(target, ripTickDamage(float64(druid.ComboPoints()), dot.Spell.MeleeAttackPower(target)))
+				comboPoints := float64(druid.ComboPoints())
+				share := ripAttackPowerShare(comboPoints)
+				dot.SnapshotPhysical(target, ripFlatDamage(comboPoints)+share*dot.Spell.MeleeAttackPower(target))
+				dot.SnapshotAttackPowerShare(target, share, false)
 				druid.UpdateBleedPower(druid.Rip, sim, target, true, true)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
@@ -85,8 +88,17 @@ func (druid *Druid) registerRipSpell() {
 	druid.Rip.ShortName = "Rip"
 }
 
+func ripFlatDamage(comboPoints float64) float64 {
+	return ripTick.Average(core.CharacterLevel) + ripTickPerComboPoint*comboPoints
+}
+
+// The share of attack power a tick adds, read at the tick.
+func ripAttackPowerShare(comboPoints float64) float64 {
+	return 0.01 * min(comboPoints, 4)
+}
+
 func ripTickDamage(comboPoints float64, attackPower float64) float64 {
-	return ripTick.Average(core.CharacterLevel) + ripTickPerComboPoint*comboPoints + 0.01*min(comboPoints, 4)*attackPower
+	return ripFlatDamage(comboPoints) + ripAttackPowerShare(comboPoints)*attackPower
 }
 
 func (druid *Druid) CurrentRipCost() float64 {

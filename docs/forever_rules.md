@@ -14,6 +14,7 @@ below is gated on `IsForever()` unless it says the class code is Forever-only.
 | Rule | Source | Here |
 |---|---|---|
 | Periodic damage can crit: dots and bleeds roll for critical strikes using the snapshot crit chance. Spells that must not (Ignite) carry `SpellFlagNoPeriodicCrit`. | Tooltip wording ("non-periodic" qualifiers on Nature's Grace, Primal Fury; Pandemic exists) | `sim/core/ruleset.go`, `sim/core/dot.go` |
+| Dots tick on the caster's current spell power, attack power and damage multipliers, not the ones in force when they landed. | Beta log (foreverlogs.gg report 2668, Eureka! on a running Shadow Word: Pain) | `sim/core/dot.go`, `sim/core/spell_result.go` |
 | Hit and crit from gear apply to every kind of attack: an item's melee/spell hit and crit are summed and paid into both pools. Attribute conversions unchanged. | Panel | `sim/core/ruleset.go` `unifyEquipHitAndCrit` |
 | Bonus healing on gear carries a damage component: `SpellDamage += HealingPower / 3`. | Panel | `sim/core/ruleset.go` `addHealingSpellDamage` |
 | Improved Shadow Bolt and Stormstrike are personal: they raise only their caster's damage and are no longer raid debuffs. | Panel, confirmed by search | `sim/core/debuffs.go`, `sim/shaman/stormstrike.go` |

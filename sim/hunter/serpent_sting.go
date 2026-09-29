@@ -42,6 +42,7 @@ func (hunter *Hunter) registerSerpentStingSpell() {
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, tickDamage+rapPerTick*dot.Spell.RangedAttackPower(target))
+				dot.SnapshotAttackPowerShare(target, rapPerTick, true)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, rank.TickOutcome(dot))

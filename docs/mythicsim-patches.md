@@ -502,3 +502,47 @@ does not.
 
 Drop this patch when upstream models the aura, and compare the demon's stats before switching.
 The numbers are Sage's and the beta testers' readings, not client data.
+
+## 22. Dots tick on the caster's current stats
+
+A dot built by `Dot.Snapshot` stored the caster's spell power share and whole attacker damage multiplier
+when it landed, and every tick dealt those stored numbers. Forever's dots do not snapshot: the beta log of a
+Gnome priest (foreverlogs.gg report 2668, encounter 4607) has Shadow Word: Pain ticking 34, 34, 34 and then
+38, 38, 38, 39 on the same application when Eureka! is cast after it landed, with Eureka! the only change on
+the priest (eight applications in the log agree, 37.8 inside the window against 34.2 outside). Redfall
+reported the developers confirming it (Discord, 2026-09-29). Upstream's Rend already reads attack power at
+each tick (#524: Battle Shout gained mid-bleed raises the next tick).
+
+`core.Dot` now remembers what `Snapshot` and `SnapshotPhysical` folded in and swaps it at every tick: the
+spell power share (`BonusCoefficient` times the caster's current spell power) and the attacker multiplier
+(talents, personal buffs, Eureka!, school and target-table multipliers, `PeriodicDamageMultiplier`) are read
+when the tick lands. Flat damage stays with the application: combo point values, a Deadly Poison stack count,
+Bane of Agony's ramp, the T5 set bonus's edit of `SnapshotBaseDamage`. Crit chance and target-side modifiers
+were already read at the tick. A dot that writes `SnapshotBaseDamage` by hand, and every snapshot heal,
+ticks on the stored numbers as before.
+
+A spell whose base damage includes a share of attack power declares it with `Dot.SnapshotAttackPowerShare`
+(share, melee or ranged) right after the snapshot, and the tick reads that share from the attack power it has
+then: Rip (1% a combo point, four at most), Rupture (its per point share, Hemorrhage scaling both halves),
+Garrote (3%) and Serpent Sting (3.5% ranged). `CopyDotAndApply` and `SaveState`/`RestoreState` carry the two
+remembered shares.
+
+Measured on the 26 reference builds at pin `2e2fa64cd`, before patch 21's demon scaling (board seed, 10,000 iterations, empty trinket slots): Affliction Warlock
+474.21 to 470.65 (its Gnome Eureka! used to lock +10% into the DoTs it cast at the pull), Destruction 507.63
+to 510.76 (Improved Shadow Bolt now reaches running DoTs), Shadow Priest 615.16 to 617.98 (Shadow Weaving),
+Feral Druid -0.18, Fire Mage -0.06, Frostfire Mage -0.07, Enhancement Shaman -0.04, Subtlety Rogue +0.08; the
+other 18 are identical to four decimals.
+
+Validation: `TestDotTicksOnCurrentSpellPower`, `TestDotTicksOnCurrentMultiplier` and
+`TestDotTicksOnCurrentAttackPower` in `sim/core/dot_test.go` (the first replaces `TestDotSnapshotSpellDamage`,
+which asserted the old rule), `TestDotTicksReadTheDamageMultiplierAtTheTick` in `sim/warlock` (Corruption's
+tick multiplier steps up while Eureka! is up and back down after) and `TestSerpentStingTickReadsAttackPowerAtTheTick`
+in `sim/hunter`. The warlock and hunter tests fail with the current-stat read disabled. Goldens moved:
+Balance, Feral Cat, Beast Mastery, Marksmanship, Survival, Fire, Shadow Priest, Smite Priest, Subtlety,
+Elemental, Affliction and Destruction.
+
+Not covered, still on stored numbers: hunter pet abilities, Lacerating Strikes, two item-proc dots
+(`sim/common/classic/items_weapons.go`, `sim/rogue/items.go`) and the healing hots. Rake, Lacerate and
+Deep Wounds have no attack power share to read.
+
+Drop this patch when upstream's dots tick on current stats the same way.

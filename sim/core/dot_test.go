@@ -146,20 +146,25 @@ func TestDotSnapshot(t *testing.T) {
 	expectDotTickDamage(t, sim, fa.Dot, 150) // (100) * 1.5
 }
 
-func TestDotSnapshotSpellDamage(t *testing.T) {
+// Forever dots tick on the caster's current stats (docs/mythicsim-patches.md, patch 22): spell power
+// gained after the dot landed is in the next tick, and a dot that lands later takes the same.
+func TestDotTicksOnCurrentSpellPower(t *testing.T) {
 	sim := SetupFakeSim()
 	fa := sim.Raid.Parties[0].Players[0].(*FakeAgent)
 
 	fa.Dot.Apply(sim)
 	expectDotTickDamage(t, sim, fa.Dot, 150) // (100) * 1.5
 
-	// Spell power shouldn't get applied because dot was already snapshot.
 	fa.GetCharacter().AddStatDynamic(sim, stats.SpellDamage, 100)
-	expectDotTickDamage(t, sim, fa.Dot, 150) // (100) * 1.5
+	expectDotTickDamage(t, sim, fa.Dot, 300) // (100 + 100) * 1.5
 
+	fa.GetCharacter().AddStatDynamic(sim, stats.SpellDamage, -100)
+	expectDotTickDamage(t, sim, fa.Dot, 150)
+
+	fa.GetCharacter().AddStatDynamic(sim, stats.SpellDamage, 100)
 	fa.Dot.Deactivate(sim)
 	fa.Dot.Apply(sim)
-	expectDotTickDamage(t, sim, fa.Dot, 300) // (100 + 100) * 1.5
+	expectDotTickDamage(t, sim, fa.Dot, 300)
 }
 
 func TestDotSnapshotSpellMultiplier(t *testing.T) {
@@ -170,4 +175,39 @@ func TestDotSnapshotSpellMultiplier(t *testing.T) {
 
 	fa.Dot.Apply(sim)
 	expectDotTickDamage(t, sim, fa.Dot, 300) // (100) * 1.5 * 2
+}
+
+// A damage multiplier that arrives after the dot landed is in the next tick, and leaves with the buff
+// (the beta log of Eureka! on a running Shadow Word: Pain, foreverlogs.gg report 2668).
+func TestDotTicksOnCurrentMultiplier(t *testing.T) {
+	sim := SetupFakeSim()
+	fa := sim.Raid.Parties[0].Players[0].(*FakeAgent)
+	spell := fa.GetCharacter().Spellbook[0]
+
+	fa.Dot.Apply(sim)
+	expectDotTickDamage(t, sim, fa.Dot, 150) // (100) * 1.5
+
+	spell.DamageMultiplier *= 2
+	expectDotTickDamage(t, sim, fa.Dot, 300) // (100) * 1.5 * 2
+
+	spell.DamageMultiplier /= 2
+	expectDotTickDamage(t, sim, fa.Dot, 150)
+}
+
+// A share of attack power marked with SnapshotAttackPowerShare is read at the tick.
+func TestDotTicksOnCurrentAttackPower(t *testing.T) {
+	sim := SetupFakeSim()
+	fa := sim.Raid.Parties[0].Players[0].(*FakeAgent)
+	fa.Dot.onSnapshot = func(_ *Simulation, target *Unit, dot *Dot) {
+		dot.SnapshotPhysical(target, 100+0.1*dot.Spell.MeleeAttackPower(target))
+		dot.SnapshotAttackPowerShare(target, 0.1, false)
+	}
+	fa.Dot.BonusCoefficient = 0
+	fa.GetCharacter().AddStatDynamic(sim, stats.AttackPower, 200)
+
+	fa.Dot.Apply(sim)
+	expectDotTickDamage(t, sim, fa.Dot, 180) // (100 + 0.1 * 200) * 1.5
+
+	fa.GetCharacter().AddStatDynamic(sim, stats.AttackPower, 100)
+	expectDotTickDamage(t, sim, fa.Dot, 195) // (100 + 0.1 * 300) * 1.5
 }

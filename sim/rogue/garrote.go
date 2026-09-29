@@ -6,6 +6,9 @@ import (
 
 var garroteRank = spellData.Garrote.Highest()
 
+// A tick adds 3% of attack power (beta logs, report 2683), read at the tick.
+const garroteAttackPowerShare = 0.03
+
 func (rogue *Rogue) registerGarrote() {
 	tick := garroteRank.PeriodicEffect()
 	tickLength := tick.Period()
@@ -50,7 +53,8 @@ func (rogue *Rogue) registerGarrote() {
 			NumberOfTicks: int32(garroteRank.Duration() / tickLength),
 			TickLength:    tickLength,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.SnapshotPhysical(target, tickDamage+dot.Spell.MeleeAttackPower(target)*0.03)
+				dot.SnapshotPhysical(target, tickDamage+dot.Spell.MeleeAttackPower(target)*garroteAttackPowerShare)
+				dot.SnapshotAttackPowerShare(target, garroteAttackPowerShare, false)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, garroteRank.TickOutcome(dot))

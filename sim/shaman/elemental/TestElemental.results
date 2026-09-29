@@ -485,8 +485,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-EyeofMoam-21473"
  value: {
-  dps: 126.36783
-  tps: 81.04729
+  dps: 126.269
+  tps: 80.98849
  }
 }
 dps_results: {
@@ -828,8 +828,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-NaturalAlignmentCrystal-19344"
  value: {
-  dps: 124.3267
-  tps: 79.9115
+  dps: 124.17046
+  tps: 79.81854
  }
 }
 dps_results: {
@@ -1101,15 +1101,15 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 142.39716
-  tps: 90.3578
+  dps: 142.55915
+  tps: 90.45419
  }
 }
 dps_results: {
  key: "TestElemental-AllItems-TalismanofEphemeralPower-18820"
  value: {
-  dps: 134.65371
-  tps: 85.90583
+  dps: 134.04954
+  tps: 85.54635
  }
 }
 dps_results: {
@@ -1136,15 +1136,15 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-TheElements"
  value: {
-  dps: 190.54476
-  tps: 118.16431
+  dps: 190.64012
+  tps: 118.22105
  }
 }
 dps_results: {
  key: "TestElemental-AllItems-TheFiveThunders"
  value: {
-  dps: 201.15148
-  tps: 124.3974
+  dps: 201.2674
+  tps: 124.46637
  }
 }
 dps_results: {
@@ -1185,8 +1185,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-TheRestrainedEssenceofSapphiron-23046"
  value: {
-  dps: 152.1408
-  tps: 95.97522
+  dps: 151.96721
+  tps: 95.87193
  }
 }
 dps_results: {
@@ -1290,8 +1290,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-WrathofCenarius-21190"
  value: {
-  dps: 137.37547
-  tps: 87.43089
+  dps: 137.52738
+  tps: 87.52128
  }
 }
 dps_results: {
@@ -1353,22 +1353,22 @@ dps_results: {
 dps_results: {
  key: "TestElemental-Settings-Orc-Naked-Standard-forever-FullBuffs-0.0yards-LongMultiTarget"
  value: {
-  dps: 379.08729
-  tps: 377.24445
+  dps: 379.08042
+  tps: 377.24036
  }
 }
 dps_results: {
  key: "TestElemental-Settings-Orc-Naked-Standard-forever-FullBuffs-0.0yards-LongSingleTarget"
  value: {
-  dps: 119.88082
-  tps: 77.25528
+  dps: 119.87273
+  tps: 77.25047
  }
 }
 dps_results: {
  key: "TestElemental-Settings-Orc-Naked-Standard-forever-FullBuffs-0.0yards-ShortSingleTarget"
  value: {
-  dps: 164.59885
-  tps: 102.61456
+  dps: 164.57459
+  tps: 102.60012
  }
 }
 dps_results: {
