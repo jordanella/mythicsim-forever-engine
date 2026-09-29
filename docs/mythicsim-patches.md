@@ -326,6 +326,37 @@ totem; no other class's results move.
 
 Drop this patch when upstream stops stripping Windfury Totem from the feral specs.
 
+## 14. Forever Shadow crits: Devouring Plague ticks and Shadow Word: Death
+
+Two Shadow crit behaviours on the live Forever server are not in beta client
+1.60.1.70009, which the engine otherwise follows. Both were reported by players
+running the Shadow benchmark rather than read from client data:
+
+- **Devouring Plague ticks crit.** Every rank's row leaves Periodic Can Crit
+  (`ATTR_EX_8_PERIODIC_CAN_CRIT`) off, so `priestTickOutcome(rank.PeriodicCanCrit())`
+  never rolled. The benchmark report this fork produced shows 0 crit ticks in 72,232.
+  The ticks now always roll for a crit; the heal still equals the damage dealt.
+- **Shadowform's +100% critical strike damage bonus covers Shadow Word: Death.**
+  The client's mask (41984016) names Mind Blast, Mind Flay, Shadow Word: Pain,
+  Devouring Plague and Mana Burn. `PriestSpellShadowWordDeath` is added to the
+  modifier's class mask, so Shadow Word: Death crits for 2.0 in Shadowform like the
+  rest instead of 1.5.
+
+The spell notes in `ui/sim/spells/priest.json` say the same. Measured on the current
+tier Shadow benchmark (Undead, 120 s, 100,000 iterations): the preset rotation goes
+from 581.10 to 588.66 DPS, about +2.0 from Devouring Plague and +5.6 from Shadow
+Word: Death.
+
+Validation: `sim/priest/shadow_crits_regression_test.go` forces a Devouring Plague
+tick at 100% crit for every rank and checks the Shadow Word: Death and Mind Blast
+crit multipliers with and without Shadowform. Both tests fail without the patch.
+Only `TestShadowPriest` goldens move (re-blessed); `TestSmitePriest` is unchanged,
+and the rest of the full suite matches the base branch.
+
+Drop this patch when the client data sets Periodic Can Crit on the Devouring Plague
+ranks and Shadowform's crit damage mask names Shadow Word: Death, or if a combat log
+shows either behaviour is not live.
+
 ## 15. Rage log lines name the real maximum
 
 Boundless Rage raises a Warrior's maximum rage by 10, 20 or 30 (`warrior.go`), and a
