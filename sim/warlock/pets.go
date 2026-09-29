@@ -20,8 +20,8 @@ type WarlockPet struct {
 	SoulLinkAura     *core.Aura
 }
 
-// Level 60 pet stats, from our Forever sim. Forever's demons inherit nothing from the warlock, so
-// there is no stat inheritance function to speak of.
+// Level 60 pet stats, from our Forever sim. What the demons inherit from the warlock is
+// petStatInheritance.
 var petBaseStats = map[proto.WarlockOptions_Summon]stats.Stats{
 	proto.WarlockOptions_Imp: {
 		stats.Strength:  122,
@@ -83,6 +83,32 @@ func (warlock *Warlock) registerPets() {
 	warlock.BasePets = []*WarlockPet{warlock.Imp, warlock.Voidwalker, warlock.Succubus, warlock.Felhunter}
 }
 
+// What a Forever demon gets from its warlock through the client's hidden Warlock Pet Scaling aura
+// (416189, "Owner Power Scaling"): the beta shows 100% of the warlock's hit and crit, 10% of
+// its spell power as the demon's spell power and 17% of it as attack power. The aura carries
+// placeholder values, so these come from the beta's own pet stats, not from client data. The
+// warlock's spell hit and crit feed the demon's melee too, since a caster has none of its own.
+// Checked on the level 20 beta only for hit from a talent (Suppression, Discord 2026-09-29):
+// the demon's hit followed it. Hit from gear was not testable there and is assumed to follow
+// the same path.
+// Everything here is linear, which the dynamic inheritance needs: it passes the warlock's stat
+// changes through as they come, so a spell power proc reaches the demon at these rates.
+const (
+	petSpellDamageFraction = 0.10
+	petAttackPowerFraction = 0.17
+)
+
+func petStatInheritance(ownerStats stats.Stats) stats.Stats {
+	inherited := stats.Stats{}
+	inherited[stats.SpellHitPercent] = ownerStats[stats.SpellHitPercent]
+	inherited[stats.PhysicalHitPercent] = ownerStats[stats.SpellHitPercent]
+	inherited[stats.SpellCritPercent] = ownerStats[stats.SpellCritPercent]
+	inherited[stats.PhysicalCritPercent] = ownerStats[stats.SpellCritPercent]
+	inherited[stats.SpellDamage] = ownerStats[stats.SpellDamage] * petSpellDamageFraction
+	inherited[stats.AttackPower] = ownerStats[stats.SpellDamage] * petAttackPowerFraction
+	return inherited
+}
+
 func (warlock *Warlock) registerPet(summon proto.WarlockOptions_Summon) *WarlockPet {
 	enabledOnStart := warlock.Options.Summon == summon
 
@@ -92,7 +118,8 @@ func (warlock *Warlock) registerPet(summon proto.WarlockOptions_Summon) *Warlock
 			Name:            proto.WarlockOptions_Summon_name[int32(summon)],
 			Owner:           &warlock.Character,
 			BaseStats:       petBaseStats[summon],
-			StatInheritance: func(_ stats.Stats) stats.Stats { return stats.Stats{} },
+			StatInheritance: petStatInheritance,
+			IsDynamic:       true,
 			EnabledOnStart:  enabledOnStart,
 		}),
 	}

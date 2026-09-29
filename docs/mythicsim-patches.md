@@ -479,3 +479,26 @@ checks which main-hand imbues leave the totem's "Windfury Totem Trigger" active.
 source for Flametongue. No suite golden moves.
 
 Drop this patch when upstream models the totem and Flametongue Weapon the same way.
+
+## 21. Warlock demons inherit hit, crit, spell power and attack power
+
+Upstream gives every warlock demon an empty stat inheritance ("Forever's demons inherit nothing
+from the warlock"). The client has a hidden passive aura, Warlock Pet Scaling (416189, flagged
+Owner Power Scaling), whose effects include hit, crit, spell haste, attack power, damage done and
+more, with placeholder values in the database. The beta's pet stats show 100% of the warlock's hit
+and crit, 10% of its spell power as the demon's spell power and 17% of it as attack power.
+
+The patch inherits exactly those, dynamically, so a spell power proc reaches the demon at the
+same rates. The warlock's spell hit and crit also fill the demon's melee hit and crit. Hit from a
+talent (Suppression) was seen reaching the pet on the level 20 beta; hit from gear was not
+testable there. Haste, Intellect, health, resistances and mana regen are also on the aura and are
+not modelled. The demon keeps its own Agility and Intellect crit on top of the inherited crit.
+
+Validation: `sim/warlock/pets_test.go` checks the mapping and that it is linear. On the
+Demonology reference the Succubus's Lash of Pain goes from 17.1% miss and no crits to 10.1% miss
+and 13.9% crit, its DPS from 61.1 to 84.2 and the warlock's total from 576.7 to 599.8. The
+Affliction golden moves (naked, average 229.7 to 239.3 DPS); Destruction sacrifices its demon and
+does not.
+
+Drop this patch when upstream models the aura, and compare the demon's stats before switching.
+The numbers are Sage's and the beta testers' readings, not client data.
