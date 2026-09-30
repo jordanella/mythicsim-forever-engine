@@ -1,3 +1,5 @@
+Follow-up: [Imp and Demonic Brand validation, 2026-09-30](imp-brand-2026-09-30.md) supersedes the older Brand status below.
+
 # Warlock: beta client pass (17 September 2026)
 
 Beta build `1.60.1.69893` against Classic Era `1.15.9.69722`, read with `tools/data_watch/spell_client.py` and

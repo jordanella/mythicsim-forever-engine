@@ -1,0 +1,315 @@
+{
+  "baselineEngine": "307cc9e74c633be35b6c8fe1929e08d9a6da1c39",
+  "seed": 30930,
+  "cases": {
+    "d1a5f5b6": {
+      "result": {
+        "iterations": 3000,
+        "averageDuration": 119.61758260212933,
+        "totalDps": 484.685953334928,
+        "resultSha256": "216d98586097f1f5346d5e5a0835b4c5b2acd42566042f2b1fcc68b7bf1af58d",
+        "pets": [
+          {
+            "name": "Imp",
+            "dps": 41.525555728733316,
+            "actions": [
+              {
+                "id": {
+                  "rank": 0,
+                  "spellId": 11763,
+                  "tag": 0
+                },
+                "school": 4,
+                "casts": 29.044,
+                "hits": 21.05366666666667,
+                "crits": 4.8133333333333335,
+                "misses": 3.177,
+                "damage": 4990.023751600544,
+                "critDamage": 1273.8260665439357,
+                "castTimeMs": 59914.666666666664,
+                "damagePerLandedHit": 192.91080340203902
+              }
+            ]
+          }
+        ]
+      },
+      "fixed": {
+        "iterations": 3000,
+        "averageDuration": 119.61758260212933,
+        "totalDps": 508.4187544815096,
+        "resultSha256": "655f766ae313492857af08e955a0b1bd389a0f2bb72823d54970dc9ecc01d06e",
+        "pets": [
+          {
+            "name": "Imp",
+            "dps": 65.06474531250848,
+            "actions": [
+              {
+                "id": {
+                  "spellId": 1293698,
+                  "tag": 0,
+                  "rank": 0
+                },
+                "school": 4,
+                "casts": 0.0,
+                "hits": 21.662666666666667,
+                "crits": 0.0,
+                "misses": 0.0,
+                "damage": 2835.470690348986,
+                "critDamage": 0.0,
+                "castTimeMs": 0.0,
+                "damagePerLandedHit": 130.89204270091338
+              },
+              {
+                "id": {
+                  "spellId": 11763,
+                  "tag": 0,
+                  "rank": 0
+                },
+                "school": 4,
+                "casts": 29.023333333333333,
+                "hits": 21.060666666666666,
+                "crits": 4.788333333333333,
+                "misses": 3.1743333333333332,
+                "damage": 4985.076940143173,
+                "critDamage": 1268.0017066227228,
+                "castTimeMs": 59865.333333333336,
+                "damagePerLandedHit": 192.85376378750328
+              }
+            ]
+          }
+        ]
+      },
+      "unlimited-mana": {
+        "iterations": 3000,
+        "averageDuration": 119.61758260212933,
+        "totalDps": 568.6869757998351,
+        "resultSha256": "aef01f715c9802ec4cd08ece3ec29fb374048774cbbd1a3f489f3f323a7f39fb",
+        "diagnosticOnly": true,
+        "pets": [
+          {
+            "name": "Imp",
+            "dps": 125.37286694703727,
+            "actions": [
+              {
+                "id": {
+                  "spellId": 1293698,
+                  "tag": 0,
+                  "rank": 0
+                },
+                "school": 4,
+                "casts": 0.0,
+                "hits": 43.83266666666667,
+                "crits": 0.0,
+                "misses": 0.0,
+                "damage": 5728.064964999037,
+                "critDamage": 0.0,
+                "castTimeMs": 0.0,
+                "damagePerLandedHit": 130.68027570759335
+              },
+              {
+                "id": {
+                  "spellId": 11763,
+                  "tag": 0,
+                  "rank": 0
+                },
+                "school": 4,
+                "casts": 53.965,
+                "hits": 39.103,
+                "crits": 8.937,
+                "misses": 5.925,
+                "damage": 9270.96064884586,
+                "critDamage": 2365.6943289479905,
+                "castTimeMs": 109745.33333333333,
+                "damagePerLandedHit": 192.9841933564917
+              }
+            ]
+          }
+        ]
+      },
+      "zero-inherited-sp": {
+        "iterations": 3000,
+        "averageDuration": 119.61758260212933,
+        "totalDps": 498.34575609769644,
+        "resultSha256": "94f036f6ace349dcd4794bc3f60c8c8466723a59a3dce98f70edc6bc09d5fb9d",
+        "diagnosticOnly": true,
+        "pets": [
+          {
+            "name": "Imp",
+            "dps": 54.991746928695505,
+            "actions": [
+              {
+                "id": {
+                  "spellId": 1293698,
+                  "tag": 0,
+                  "rank": 0
+                },
+                "school": 4,
+                "casts": 0.0,
+                "hits": 21.662666666666667,
+                "crits": 0.0,
+                "misses": 0.0,
+                "damage": 2835.470690348986,
+                "critDamage": 0.0,
+                "castTimeMs": 0.0,
+                "damagePerLandedHit": 130.89204270091338
+              },
+              {
+                "id": {
+                  "spellId": 11763,
+                  "tag": 0,
+                  "rank": 0
+                },
+                "school": 4,
+                "casts": 29.023333333333333,
+                "hits": 21.060666666666666,
+                "crits": 4.788333333333333,
+                "misses": 3.1743333333333332,
+                "damage": 3774.572806658126,
+                "critDamage": 960.0732067981769,
+                "castTimeMs": 59865.333333333336,
+                "damagePerLandedHit": 146.0239392881011
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "da4362b9": {
+      "result": {
+        "iterations": 3000,
+        "averageDuration": 119.61758260212933,
+        "totalDps": 605.0571511429755,
+        "resultSha256": "89da4d8c4910a115a14afe4ed09214ce7df94bd6e4245f4724f9ef6a477daec2",
+        "pets": [
+          {
+            "name": "Succubus",
+            "dps": 99.93513526556723,
+            "actions": [
+              {
+                "id": {
+                  "rank": 0,
+                  "spellId": 11780,
+                  "tag": 0
+                },
+                "school": 32,
+                "casts": 10.457666666666666,
+                "hits": 8.068,
+                "crits": 1.3236666666666668,
+                "misses": 1.066,
+                "damage": 1585.0365984280847,
+                "critDamage": 313.1617902891482,
+                "castTimeMs": 15686.5,
+                "damagePerLandedHit": 168.77053399411727
+              },
+              {
+                "id": {
+                  "otherId": "OtherActionAttack",
+                  "rank": 0,
+                  "tag": 1
+                },
+                "school": 1,
+                "casts": 60.288666666666664,
+                "hits": 22.881666666666668,
+                "crits": 8.19,
+                "misses": 1.205,
+                "damage": 8496.506813419266,
+                "critDamage": 2534.4662499827937,
+                "castTimeMs": 0.0,
+                "damagePerLandedHit": 273.44869860277635
+              },
+              {
+                "id": {
+                  "rank": 0,
+                  "spellId": 1293696,
+                  "tag": 0
+                },
+                "school": 32,
+                "casts": 0.0,
+                "hits": 13.256666666666666,
+                "crits": 0.0,
+                "misses": 1.4953333333333334,
+                "damage": 1868.136664344618,
+                "critDamage": 0.0,
+                "castTimeMs": 0.0,
+                "damagePerLandedHit": 140.92054294779618
+              }
+            ]
+          }
+        ]
+      },
+      "fixed": {
+        "iterations": 3000,
+        "averageDuration": 119.61758260212933,
+        "totalDps": 608.9232511420537,
+        "resultSha256": "0756a8d5fc8af9d7ee028315f776ac51cfa55a157684ff4cfeb8895b2b1ef365",
+        "pets": [
+          {
+            "name": "Succubus",
+            "dps": 104.78331628205399,
+            "actions": [
+              {
+                "id": {
+                  "otherId": "OtherActionAttack",
+                  "tag": 1,
+                  "rank": 0
+                },
+                "school": 1,
+                "casts": 60.288666666666664,
+                "hits": 22.82,
+                "crits": 8.130666666666666,
+                "misses": 1.2156666666666667,
+                "damage": 8476.532256220195,
+                "critDamage": 2514.6620720171877,
+                "castTimeMs": 0.0,
+                "damagePerLandedHit": 273.8723642857513
+              },
+              {
+                "id": {
+                  "spellId": 1293697,
+                  "tag": 0,
+                  "rank": 0
+                },
+                "school": 32,
+                "casts": 0.0,
+                "hits": 17.518,
+                "crits": 0.0,
+                "misses": 0.0,
+                "damage": 2464.8132915621723,
+                "critDamage": 0.0,
+                "castTimeMs": 0.0,
+                "damagePerLandedHit": 140.70175200149401
+              },
+              {
+                "id": {
+                  "spellId": 11780,
+                  "tag": 0,
+                  "rank": 0
+                },
+                "school": 32,
+                "casts": 10.457666666666666,
+                "hits": 8.094333333333333,
+                "crits": 1.3163333333333334,
+                "misses": 1.047,
+                "damage": 1587.4482276855213,
+                "critDamage": 311.2578724543292,
+                "castTimeMs": 15686.5,
+                "damagePerLandedHit": 168.68605423124697
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "patchedCliSha256": "f07bfb0b6946edd95bccf14642ba038f1d96f428a6dc08634fbd5c9c82381f1d",
+  "diagnostics": {
+    "unlimited-mana": {
+      "cliSha256": "ffd9f1b296eda4f94592e0acf6d4d17cd0fab12babdac8ba72f1314e41ced8bf",
+      "overlaySourceSha256": "f603ccaf8a5ff4aead19713723847122056e318574138d6e2d59e47cd013e3fd"
+    },
+    "zero-inherited-sp": {
+      "cliSha256": "6fc439d5c24ca00ed6245b97e1453400a073b74c106e32ac1081d3b28bbf91d7",
+      "overlaySourceSha256": "f5cc99613206d9923c2ebe79cfe03f4c814138171b6724b4493daeb057f5bab3"
+    }
+  }
+}

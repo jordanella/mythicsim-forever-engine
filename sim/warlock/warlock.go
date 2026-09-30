@@ -47,6 +47,7 @@ type Warlock struct {
 	DecimationAura          *core.Aura
 	NightfallProcAura       *core.Aura
 	ImprovedShadowBoltAuras core.AuraArray
+	DemonicBrandAuras       core.AuraArray
 	SoulLinkAura            *core.Aura
 	MasterDemonologistAura  *core.Aura
 

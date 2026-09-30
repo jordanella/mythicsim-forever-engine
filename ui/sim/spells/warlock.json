@@ -77,11 +77,31 @@
 	},
 	"1293696": {
 		"ability": "Demonic Brand",
-		"assumptions": ["The extra hit carries three times normal threat, rolls spell hit and cannot crit"],
+		"assumptions": ["The extra hit carries three times normal threat and cannot crit. Server-side pet filtering and the threat factor have not been measured in a beta combat log."],
 		"file": "sim/warlock/talents_demonology.go",
-		"note": "The brand the pet carries (10 sec, beta client 1.60.1.70009), whose id the sim gives the branded hit. The talent is 1293695: 17/33/50% less Searing Pain threat and 2/4/6 branded attacks. #432 settled the hit from the client's SpellDescriptionVariables formula for 1293696/1293697 (1.60.1.69977, also resolved on Wowhead's Forever tooltip), ((level - 26) * 1.5) + 14 to + 17 plus 7.8% of Shadow spell power.",
+		"note": "Target debuff, 10 sec and 2/4/6 charges. Build 70124 permits landed direct harmful magic and melee/ranged hits, including Firebolt and Lash of Pain. The Imp damage event is 1293698 (Fire), other demons use 1293697 (Shadow); both client rows have CannotMiss. Each uses ((level - 26) * 1.5) + 14 to + 17 plus 7.8% of the matching owner school spell power. A pet-side compatibility aura mirrors the most recently branded target for saved APLs. See docs/beta-pass/imp-brand-2026-09-30.md for evidence and unresolved beta assumptions.",
 		"source": "assumed",
-		"tooltip": "Your pet's next attacks against the branded target generate high threat and deal 65 to 68 plus 7.8% of Shadow spell power Fire or Shadow damage based on the pet."
+		"tooltip": "Your pet's next attacks against the branded target generate high threat and deal 65 to 68 plus 7.8% of the matching spell power as Fire or Shadow damage based on the pet."
+	},
+	"1293697": {
+		"ability": "Demonic Brand (Shadow)",
+		"assumptions": [
+			"Three times normal threat, no crit, and owner spell power retained; not verified in a beta combat log."
+		],
+		"file": "sim/warlock/talents_demonology.go",
+		"note": "Damage event for melee demons and Lash of Pain. Client build 70124: CannotMiss, matching school, and SpellDescriptionVariables formula. See docs/beta-pass/imp-brand-2026-09-30.md.",
+		"source": "assumed",
+		"tooltip": "Consumes a charge on the branded target and deals 65 to 68 plus 7.8% of Shadow spell power as Shadow damage."
+	},
+	"1293698": {
+		"ability": "Demonic Brand (Fire)",
+		"assumptions": [
+			"Three times normal threat, no crit, and owner spell power retained; not verified in a beta combat log."
+		],
+		"file": "sim/warlock/talents_demonology.go",
+		"note": "Damage event for Imp Firebolt. Client build 70124: CannotMiss, matching school, and SpellDescriptionVariables formula. See docs/beta-pass/imp-brand-2026-09-30.md.",
+		"source": "assumed",
+		"tooltip": "Consumes a charge on the branded target and deals 65 to 68 plus 7.8% of Fire spell power as Fire damage."
 	},
 	"1293813": {
 		"ability": "Incinerate",
