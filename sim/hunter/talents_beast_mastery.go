@@ -179,18 +179,15 @@ func (hunter *Hunter) registerIntimidation() {
 		ProcMask: core.ProcMaskEmpty,
 		Flags:    core.SpellFlagAPL,
 
-		// 8% of base mana and a 1 min cooldown in both clients (19577); the generated row carries
-		// neither, so both are kept from our client-verified sim.
-		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 8,
-		},
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				NonEmpty: true,
+				GCD: rank.GCD(),
 			},
+			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    hunter.NewTimer(),
-				Duration: core.DurationFromSeconds(60),
+				Duration: max(rank.Cooldown(), rank.CategoryCooldown()),
 			},
 		},
 
@@ -232,9 +229,7 @@ func (hunter *Hunter) registerBestialWrath() {
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL,
 
-		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 12,
-		},
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				NonEmpty: true,

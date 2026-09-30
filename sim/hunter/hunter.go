@@ -297,7 +297,8 @@ func (hunter *Hunter) AddStatDependencies() {
 	// A Classic hunter gets two ranged attack power per agility, not one.
 	hunter.AddStatDependency(stats.Agility, stats.RangedAttackPower, 2)
 	hunter.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[hunter.Class])
-	hunter.AddStatDependency(stats.Agility, stats.DodgeRating, 1.0/25*core.DodgeRatingPerDodgePercent)
+	// Classic's hunter dodges at twice its crit rate per agility (26.5 agility a dodge at 60, not TBC's 25).
+	hunter.AddStatDependency(stats.Agility, stats.DodgeRating, 2*core.CritPerAgiMaxLevel[hunter.Class]*core.DodgeRatingPerDodgePercent)
 }
 
 func (hunter *Hunter) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
@@ -351,7 +352,8 @@ const (
 	HunterSpellSummonHawk
 	HunterSpellWingClip
 
-	// TODO: Forever pet abilities the sim does not model yet; see the stub file named for each.
+	// Forever's new pet abilities. The pets cast them under HunterPetDamage (pet_abilities.go), so these
+	// masks stay unused; Enchanted Flare is the one left unmodelled, see enchanted_flare.go.
 	HunterSpellDismember
 	HunterSpellDustCloud
 	HunterSpellEnchantedFlare

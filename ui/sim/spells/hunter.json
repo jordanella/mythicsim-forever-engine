@@ -13,12 +13,68 @@
 		"source": "forever",
 		"tooltip": "30 sec duration\n50% of your Mana regeneration continues while casting."
 	},
+	"1264455": {
+		"ability": "Thunderstomp",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "Gorilla only. Classic had ranks 1-3 (levels 30/40/50); rank 4 at level 60 is new in Forever. Client 70009: rank 4 132 Nature damage +-7% (122-142) to up to 4 enemies within 8 yards, 60 Focus, 1 min cooldown; Wowhead env 16 agrees. The gorilla casts it whenever it is ready, then Bites. Magic, so it rolls spell hit and crit and has no attack power share. No beta log has a gorilla yet (rank 1 needs level 30).",
+		"source": "forever",
+		"tooltip": "60 Focus\nInstant\n1 min cooldown\nShakes the ground with thundering force, doing 122 to 142 Nature damage to all enemies within 8 yards."
+	},
+	"1264502": {
+		"ability": "Swipe",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Bear only. Client 70009: rank 5 (level 60) 21 damage +-7% (20-22) to up to 3 enemies (ChainTargets 3), 20 Focus, 5 sec cooldown; Wowhead env 16 agrees. Rank 1 (level 12) is 4. The bear swipes whenever it is ready with 3 or more enemies up, else Bites and Claws: Claw's 43-59 for 25 Focus does more on one or two targets. No beta log has a bear Swipe yet.",
+		"source": "forever",
+		"tooltip": "20 Focus\nMelee Range\nInstant\n5 sec cooldown\nSwipe 3 nearby enemies, inflicting 20 to 22 damage."
+	},
+	"1264742": {
+		"ability": "Pinch",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Crab only (client SkillLineAbility, skill line 214). Client 70009: rank 5 (level 60) 95 damage +-7%, 50 Focus, 30 sec cooldown; the pet casts it whenever it is ready, then Claws. Beta logs (foreverlogs 2674, Consumer's crab) land rank 1 (20) 17 times at about 17 a hit through level 20 mob armor, so no attack power share. The 50% snare is left out.",
+		"source": "forever",
+		"tooltip": "50 Focus\nMelee Range\nInstant\n30 sec cooldown\nPinches an enemy's legs for 88 to 102 damage and reduces movement speed by 50% for 9 sec."
+	},
+	"1264933": {
+		"ability": "Dismember",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Crocolisk only (client SkillLineAbility, skill line 212). Client 70009: rank 5 (level 60) 54 damage +-7%, 35 Focus, 6 sec cooldown; the crocolisk Bites when Bite is ready and Dismembers with the focus left over. The 50% healing reduction is left out.",
+		"source": "forever",
+		"tooltip": "35 Focus\nMelee Range\nInstant\n6 sec cooldown\nViciously bites enemy appendages for 50 to 58 damage and reduces the effectiveness of any healing by 50% for 10 sec."
+	},
+	"1265042": {
+		"ability": "Tendon Rip",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Hyena only (client SkillLineAbility, skill line 654). Client 70009: rank 5 (level 60) bleeds 20 every 3 sec for 9 sec, 25 Focus, 30 sec cooldown; the hyena casts it whenever it is ready, then Bites. Same bleed code as Savage Rend, so no attack power share (Savage Rend's beta logs show none). Rank 1 (level 12) is 4 a tick. The 50% snare is left out. No beta log has a hyena yet.",
+		"source": "forever",
+		"tooltip": "25 Focus\nMelee Range\nInstant\n30 sec cooldown\nTears at an enemy's legs for 60 damage over 9 sec and reduces movement speed by 50% for 9 sec."
+	},
+	"1265058": {
+		"ability": "Mine!",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Owl only (client SkillLineAbility, skill line 655, Bird of Prey). Client 70009: rank 5 (level 50) 44 damage +-7%, 20 Focus, 1 min cooldown; the owl casts it whenever it is ready, then Claws. Same strike code as Pinch, so no attack power share (Pinch's beta logs show none). Rank 2 (level 20) is 15. The 4 sec disarm is left out. No beta log has an owl yet.",
+		"source": "forever",
+		"tooltip": "20 Focus\nMelee Range\nInstant\n1 min cooldown\nGrabs an enemy's weapon with its talons, causing 41 to 47 damage and disarming them for 4 sec."
+	},
 	"1265069": {
 		"ability": "Savage Rend",
 		"file": "sim/hunter/pet_abilities.go",
 		"note": "New in Forever, Raptor only (client SkillLineAbility, skill line 217). Client 70009: rank 5 (level 60) ticks 26 every 3 sec for 18 sec, 50 Focus, 1 min cooldown; ticks can crit. Beta logs (foreverlogs 2650/2669/2673/2674, two hunters' raptors) put rank 1's 5 a tick at 6.4-7.0, the pet's damage multipliers and no attack power share. The 5% more bleed damage taken is left out: nothing else of ours bleeds.",
 		"source": "forever",
 		"tooltip": "50 Focus\nMelee Range\nInstant\n1 min cooldown\nSlash an enemy with razor talons, causing the target to Bleed for 156 damage over 18 sec."
+	},
+	"1265883": {
+		"ability": "Web",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Spider only (client SkillLineAbility, skill line 203). Client 70094: rank 5 (level 60) deals 13 Nature every sec for 4 sec, 20 Focus, 40 sec cooldown, ranged defense, ticks can crit; the spider casts it whenever it is ready, then Bites. Same bleed code as Savage Rend. Beta logs (Consumer's spider, foreverlogs 2682/2683): rank 1's 3 a tick lands as 4, four ticks a cast, one crit in 28, so the pet's damage multipliers and no attack power share. The root is left out: bosses are immune. Wowhead Forever (env 16) agrees: 52 over 4 sec.",
+		"source": "forever",
+		"tooltip": "20 Focus\n20 yd range\nInstant\n40 sec cooldown\nEntangles an enemy in a corrosive web, immobilizing them and dealing 52 Nature damage over 4 sec."
+	},
+	"1265904": {
+		"ability": "Dust Cloud",
+		"file": "sim/hunter/pet_abilities.go",
+		"note": "New in Forever, Tallstrider only (client SkillLineAbility, skill line 218). Client 70009: rank 5 (level 60) takes 505 armor off the target for 30 sec, 10 Focus, no cooldown; the tallstrider recasts it when it falls off, then Bites. Rank 1 (level 12) is 65, rank 2 (level 24) 175. Whether it stacks with Faerie Fire or Sunder Armor is unknown: the sim lets it stack with both, one Dust Cloud at a time. No beta log has a tallstrider yet.",
+		"source": "assumed",
+		"tooltip": "10 Focus\nMelee Range\nInstant\nYour tallstrider kicks up an abrasive cloud of dust, reducing the target's Armor by 505 for 30 sec."
 	},
 	"1293527": {
 		"ability": "Summon Hawk",

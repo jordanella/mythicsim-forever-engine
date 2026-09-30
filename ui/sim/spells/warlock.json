@@ -44,14 +44,14 @@
 	"11700": {
 		"ability": "Drain Life",
 		"file": "sim/warlock/drain_life.go",
-		"note": "Forever lowered the damage from rank 2 up and gave rank 1 the full 0.1 coefficient; the sim registers rank 6 only. Values from the beta client 1.60.1.70009.",
+		"note": "Forever lowered the damage from rank 2 up and gave rank 1 the full 0.1 coefficient; the sim registers rank 6 only. Values from the beta client 1.60.1.70009. Beta logs agree (report 2683): rank 1 (689) ticks 18.6 with Curse of the Elements up (66 ticks), 10 + 0.1 x about 79 shadow spell power, the same power that fits this warlock's Bane of Agony and Corruption.",
 		"source": "forever",
 		"tooltip": "300 Mana\nChannelled, 5 sec\nTransfers 51 health every 1 sec from the target to the caster. Lasts 5 sec."
 	},
 	"11713": {
 		"ability": "Bane of Agony",
 		"file": "sim/warlock/agony.go",
-		"note": "Forever renames Curse of Agony to Bane of Agony, roughly halves the damage and raises the coefficient to 0.133 per tick; the sim registers rank 6 only. Values from the beta client 1.60.1.70009.",
+		"note": "Forever renames Curse of Agony to Bane of Agony, roughly halves the damage and raises the coefficient to 0.133 per tick; the sim registers rank 6 only. Values from the beta client 1.60.1.70009. Beta logs agree (foreverlogs report 2683, a level 20 warlock, rank 2 1014, 671 non-crit ticks): the tick steps up every 4 ticks by half the base, 16.0 / 21.2 / 26.4 with Curse of the Elements up, while the spell power part stays flat, which is how agony.go ramps it. A ramp on the whole tick would read 1:2:3.",
 		"source": "forever",
 		"tooltip": "215 Mana\nInstant\nBanes the target with agony, causing 552 Shadow damage over 24 sec. This damage is dealt slowly at first, and builds up as the Bane reaches its full duration. Only one Bane per Warlock can be active on any one target."
 	},
@@ -64,7 +64,7 @@
 	"11763": {
 		"ability": "Firebolt",
 		"file": "sim/warlock/pets.go",
-		"note": "Forever halved the damage. The pet spells are not in the sim's spell store, so pets.go carries rank 7 by hand (43 to 48, 0.571 coefficient, 115 mana) and no lower rank is registered. Values from the beta client 1.60.1.69893.",
+		"note": "Forever halved the damage. The pet spells are not in the sim's spell store, so pets.go carries rank 7's client row by hand (44 + 0.6 a level from 58, capped at 63, +-11.4%: 42 to 48 at 60, was a hand-typed 43 to 48; 0.571 coefficient, 115 mana) and no lower rank is registered. Values from the beta client 1.60.1.70094.",
 		"source": "forever",
 		"tooltip": "115 Mana\n2 sec cast\nDeals 43 to 48 Fire damage to a target."
 	},
@@ -74,6 +74,17 @@
 		"note": "Forever halved the damage. The pet spells are not in the sim's spell store, so pets.go carries rank 6 by hand (50, 0.429 coefficient, 160 mana, 12 sec cooldown) and no lower rank is registered. Values from the beta client 1.60.1.69893.",
 		"source": "forever",
 		"tooltip": "160 Mana\nInstant\n12 sec cooldown\nAn instant attack that lashes the target, causing 50 Shadow damage."
+	},
+	"1225228": {
+		"ability": "Bane of Havoc",
+		"assumptions": [
+			"The copied 15% is not modified again: no armor, resistance or damage-taken debuff on the baned target changes it",
+			"Only the warlock's own damage is copied, not the demon's"
+		],
+		"file": "sim/warlock/talents_destruction.go",
+		"note": "Destruction talent, new in Forever (beta client 1.60.1.70009): a 5 min bane, one target at a time, whose A_DUMMY 15 copies 15% of the warlock's damage to other targets onto the baned target. It shares the bane slot with Agony and Doom. The row has no global cooldown category, so the sim casts it off the GCD. Only matters with two or more targets; no default rotation casts it.",
+		"source": "assumed",
+		"tooltip": "5% of base mana\n30 yd range\nInstant\nAfflicts the target for 5 min, causing 15% of all damage done by the Warlock to other targets to also be dealt to the cursed target. Bane of Havoc is limited to 1 target, and only one Bane per Warlock can be active on any one target."
 	},
 	"1293696": {
 		"ability": "Demonic Brand",
@@ -223,14 +234,14 @@
 	"25309": {
 		"ability": "Immolate",
 		"file": "sim/warlock/immolate.go",
-		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty; the sim registers rank 8 only. Values from the beta client 1.60.1.70009.",
+		"note": "Forever roughly halved the damage and removed the low rank coefficient penalty; the sim registers rank 8 only. Values from the beta client 1.60.1.70009. Beta logs agree (report 2683): rank 3 (1094) at level 20 lands 41.7 on impact and 18.4 a tick with Curse of the Elements up (26 and 114 hits), 32 + 0.2 and 12 + 0.13 of about 42 fire spell power.",
 		"source": "forever",
 		"tooltip": "380 Mana\n2 sec cast\nBurns the enemy for 158 Fire damage and then an additional 275 Fire damage over 15 sec."
 	},
 	"25311": {
 		"ability": "Corruption",
 		"file": "sim/warlock/corruption.go",
-		"note": "Forever roughly halved the damage and raised the coefficient to 0.2 per tick at every rank; the sim registers rank 7 only. Values from the beta client 1.60.1.70009.",
+		"note": "Forever roughly halved the damage and raised the coefficient to 0.2 per tick at every rank; the sim registers rank 7 only. Values from the beta client 1.60.1.70009. Beta logs agree (report 2683): rank 2 (6222) ticks 32.8 non-crit with Curse of the Elements up (188 ticks), 13 + 0.2 x about 78 shadow spell power with Improved Corruption's 10% (the log has no talent detail, only 10 Affliction points). The same warlock's Bane of Agony, Drain Life and Shadow Bolt give 73 to 79, so the low rank carries the full coefficient.",
 		"source": "forever",
 		"tooltip": "340 Mana\n2 sec cast\nCorrupts the target, causing 438 Shadow damage over 18 sec."
 	},

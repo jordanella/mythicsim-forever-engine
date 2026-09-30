@@ -24,10 +24,10 @@ func init() {
 	// Idol of Ferocity
 	// https://www.wowhead.com/forever/item=22397/idol-of-ferocity
 	//
-	// Reduces the energy cost of Claw and Rake by 2 (27851); Classic's took 3. The sim has no Claw.
+	// Reduces the energy cost of Claw and Rake by 2 (27851); Classic's took 3.
 	core.NewItemEffect(22397, func(agent core.Agent) {
 		agent.GetCharacter().AddStaticMod(core.SpellModConfig{
-			ClassMask: DruidSpellRake,
+			ClassMask: DruidSpellClaw | DruidSpellRake,
 			Kind:      core.SpellMod_PowerCost_Flat,
 			IntValue:  -2,
 		})

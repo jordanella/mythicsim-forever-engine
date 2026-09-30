@@ -34,7 +34,7 @@ func (paladin *Paladin) registerRighteousFury() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskRighteousFury,
 
-		ManaCost: manaCost(rank),
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: rank.GCD(),

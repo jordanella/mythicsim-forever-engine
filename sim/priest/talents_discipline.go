@@ -304,10 +304,7 @@ func (priest *Priest) applyPowerInfusion() {
 		Flags:          core.SpellFlagHelpful | core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellPowerInfusion,
 
-		// 20% of base mana in the Forever beta client, as in Classic.
-		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 20,
-		},
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				NonEmpty: true,

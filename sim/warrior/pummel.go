@@ -23,6 +23,10 @@ func (warrior *Warrior) registerPummel() {
 		},
 
 		Cast: core.CastConfig{
+			DefaultCast: core.Cast{
+				GCD: pummelRank.GCD(),
+			},
+			IgnoreHaste: true,
 			CD: core.Cooldown{
 				Timer:    warrior.NewTimer(),
 				Duration: cooldownOf(pummelRank),

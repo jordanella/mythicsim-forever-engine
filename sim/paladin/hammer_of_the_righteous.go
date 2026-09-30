@@ -30,7 +30,7 @@ func (paladin *Paladin) registerHammerOfTheRighteous() {
 		ClassSpellMask: SpellMaskHammerOfTheRighteous,
 		MaxRange:       core.MaxMeleeRange,
 
-		ManaCost: manaCost(rank),
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: rank.GCD(),

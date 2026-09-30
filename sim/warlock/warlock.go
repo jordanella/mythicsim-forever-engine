@@ -123,11 +123,13 @@ func (warlock *Warlock) Initialize() {
 }
 
 func (warlock *Warlock) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
-	// TODO: the client-generated buff list has no Blood Pact yet, so the imp's raid buff is not
-	// handed out (upstream PR #39).
 }
 
+// A summoned Imp gives the party Blood Pact (11767). Forever's Improved Imp (18694) no longer raises it.
 func (warlock *Warlock) AddPartyBuffs(partyBuffs *proto.PartyBuffs) {
+	if warlock.Options.Summon == proto.WarlockOptions_Imp && !warlock.Options.SacrificeSummon {
+		partyBuffs.BloodPact = true
+	}
 }
 
 func (warlock *Warlock) Reset(sim *core.Simulation) {

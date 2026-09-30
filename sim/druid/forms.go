@@ -189,9 +189,7 @@ func (druid *Druid) registerCatFormSpell() {
 		ClassSpellMask: DruidSpellCatForm,
 		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
 
-		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 55,
-		},
+		ManaCost: spellData.CatForm.Highest().ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -341,9 +339,7 @@ func (druid *Druid) registerBearFormSpell() {
 		ClassSpellMask: DruidSpellBearForm,
 		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
 
-		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 55,
-		},
+		ManaCost: spellData.DireBearForm.Highest().ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,
@@ -408,9 +404,7 @@ func (druid *Druid) RegisterMoonkinFormSpell() {
 		ClassSpellMask: DruidSpellMoonkinForm,
 		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
 
-		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 35,
-		},
+		ManaCost: spellData.MoonkinForm.Highest().ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,

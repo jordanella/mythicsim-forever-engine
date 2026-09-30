@@ -256,7 +256,7 @@ func (spell *Spell) outcomeMeleeWhite(sim *Simulation, result *SpellResult, atta
 		if !result.applyAttackTableMiss(spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableDodge(spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableParry(spell, attackTable, roll, &chance) &&
-			!result.applyAttackTableGlance(spell, attackTable, roll, &chance) &&
+			!result.applyAttackTableGlance(sim, spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableBlock(spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableCrit(spell, attackTable, roll, &chance, countHits) {
 			result.applyAttackTableHit(spell, countHits)
@@ -264,30 +264,9 @@ func (spell *Spell) outcomeMeleeWhite(sim *Simulation, result *SpellResult, atta
 	} else {
 		if !result.applyAttackTableMiss(spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableDodge(spell, attackTable, roll, &chance) &&
-			!result.applyAttackTableGlance(spell, attackTable, roll, &chance) &&
+			!result.applyAttackTableGlance(sim, spell, attackTable, roll, &chance) &&
 			!result.applyAttackTableCrit(spell, attackTable, roll, &chance, countHits) {
 			result.applyAttackTableHit(spell, countHits)
-		}
-	}
-}
-
-func (spell *Spell) OutcomeMeleeWhiteNoGlance(sim *Simulation, result *SpellResult, attackTable *AttackTable) {
-	unit := spell.Unit
-	roll := sim.RandomFloat("White Hit Table")
-	chance := 0.0
-	if unit.PseudoStats.InFrontOfTarget {
-		if !result.applyAttackTableMiss(spell, attackTable, roll, &chance) &&
-			!result.applyAttackTableDodge(spell, attackTable, roll, &chance) &&
-			!result.applyAttackTableParry(spell, attackTable, roll, &chance) &&
-			!result.applyAttackTableBlock(spell, attackTable, roll, &chance) &&
-			!result.applyAttackTableCrit(spell, attackTable, roll, &chance, true) {
-			result.applyAttackTableHit(spell, true)
-		} else {
-			if !result.applyAttackTableMiss(spell, attackTable, roll, &chance) &&
-				!result.applyAttackTableDodge(spell, attackTable, roll, &chance) &&
-				!result.applyAttackTableCrit(spell, attackTable, roll, &chance, true) {
-				result.applyAttackTableHit(spell, true)
-			}
 		}
 	}
 }
@@ -682,14 +661,13 @@ func (result *SpellResult) applyAttackTableParry(spell *Spell, attackTable *Atta
 	return false
 }
 
-func (result *SpellResult) applyAttackTableGlance(spell *Spell, attackTable *AttackTable, roll float64, chance *float64) bool {
+func (result *SpellResult) applyAttackTableGlance(sim *Simulation, spell *Spell, attackTable *AttackTable, roll float64, chance *float64) bool {
 	*chance += attackTable.BaseGlanceChance
 
 	if roll < *chance {
 		result.Outcome = OutcomeGlance
 		spell.SpellMetrics[result.Target.UnitIndex].Glances++
-		// TODO glancing blow damage reduction is actually a range ([65%, 85%] vs. +3, [80%, 90%] vs. +2, [91%, 99%] vs. +1 and +0)
-		result.Damage *= attackTable.GlanceMultiplier
+		result.Damage *= attackTable.GlanceMultiplier + attackTable.GlanceSpread*(2*sim.RandomFloat("Glance Damage")-1)
 		return true
 	}
 	return false

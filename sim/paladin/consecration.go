@@ -62,7 +62,7 @@ func (paladin *Paladin) registerConsecration(n int32, rank *spelldata.Spell) {
 
 		MaxRange: 8,
 
-		ManaCost: manaCost(rank),
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: rank.GCD(),

@@ -22,7 +22,9 @@ var sealOfRighteousnessProcIDs = map[int32]int32{1: 25742, 2: 25740, 3: 25739, 4
 // The judgement's dummy, its second effect, is what the seal's tooltip renders each hit from: the
 // number and the coefficient the per-hit damage scales on. The hit itself is a function of weapon
 // speed: the value per hundred, times the swing speed, times 0.85 for a one-hander or 1.2 for a
-// two-hander, the formula the Classic sim settled on from testing.
+// two-hander, the formula the Classic sim settled on from testing. The beta's public combat logs
+// agree at level 20 with one-handers of 1.7 and 2.4 speed and a ~3.4 two-hander, within half a
+// point a hit, and they want the dummy's coefficient rather than the proc row's 0.1.
 func (paladin *Paladin) registerSealOfRighteousness(_ int32, rank *spelldata.Spell) {
 	judgeRank := spellData.JudgementOfRighteousness.ByID(int32(rank.EffectN(2).BaseValue()))
 	judgeDamage := judgeRank.DamageEffect()

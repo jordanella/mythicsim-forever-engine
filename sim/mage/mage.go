@@ -122,8 +122,8 @@ func NewMage(character *core.Character, options *proto.Player) *Mage {
 	mage.EnableManaBar()
 	mage.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
 
-	// TODO: Forever drops Summon Water Elemental; the pet is never created until we know
-	// whether the talent moved elsewhere.
+	// Forever has no Water Elemental: client 70009 carries no Summon Water Elemental (31687) at all,
+	// so the pet is never created.
 
 	return mage
 }
@@ -186,6 +186,7 @@ const (
 	FireSpellIgnitable      = MageSpellFrostfireBolt | MageSpellFireball | MageSpellScorch | MageSpellPyroblast
 	MageSpellArcaneMissiles = MageSpellArcaneMissilesCast | MageSpellArcaneMissilesTick
 
-	// The landed direct chill effects Fingers of Frost rolls on.
-	MageSpellChill = MageSpellFrostfireBolt | MageSpellFrostbolt | MageSpellConeOfCold | MageSpellImprovedBlizzard
+	// The chill effects Fingers of Frost rolls on: Frostbolt's slow, Cone of Cold's, Frostfire Bolt's
+	// (all three carry the client's chill bit, 0x100000) and Improved Blizzard's.
+	MageSpellChill = MageSpellFrostbolt | MageSpellConeOfCold | MageSpellFrostfireBolt | MageSpellImprovedBlizzard
 )

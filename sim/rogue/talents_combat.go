@@ -363,7 +363,7 @@ func (rogue *Rogue) registerRiposte() {
 		MaxRange:       core.MaxMeleeRange,
 
 		EnergyCost: core.EnergyCostOptions{
-			Cost: 10,
+			Cost: int32(riposteRank.Cost()),
 		},
 		Cast: core.CastConfig{
 			CD: core.Cooldown{

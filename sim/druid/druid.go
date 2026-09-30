@@ -27,6 +27,7 @@ type Druid struct {
 	MHAutoSpell *core.Spell
 
 	Barkskin             *DruidSpell
+	Claw                 *DruidSpell
 	Dash                 *DruidSpell
 	DemoralizingRoar     *DruidSpell
 	FaerieFire           *DruidSpell
@@ -93,6 +94,7 @@ type Druid struct {
 const (
 	DruidSpellFlagNone        int64 = 0
 	DruidSpellEntanglingRoots int64 = 1 << iota
+	DruidSpellClaw
 	DruidSpellDemoralizingRoar
 	DruidSpellFaerieFire
 	DruidSpellFaerieFireFeral
@@ -139,7 +141,7 @@ const (
 	DruidSpellDoT                = DruidSpellMoonfireDoT | DruidSpellInsectSwarm
 	DruidSpellHoT                = DruidSpellRejuvenation | DruidSpellLifebloom | DruidSpellRegrowth
 	DruidSpellInstant            = DruidSpellMoonfire | DruidSpellFaerieFire
-	DruidSpellBuilder            = DruidSpellPrimalBite | DruidSpellShred | DruidSpellRake | DruidSpellRavage
+	DruidSpellBuilder            = DruidSpellClaw | DruidSpellPrimalBite | DruidSpellShred | DruidSpellRake | DruidSpellRavage
 	DruidSpellFinisher           = DruidSpellFerociousBite | DruidSpellRip
 	DruidArcaneSpells            = DruidSpellMoonfire | DruidSpellMoonfireDoT | DruidSpellStarfire
 	DruidNatureSpells            = DruidSpellWrath | DruidSpellHurricane | DruidSpellInsectSwarm
@@ -266,6 +268,9 @@ func (druid *Druid) RegisterFeralCatSpells() {
 	// Forever drops Faerie Fire (Feral); the Balance version is the only one.
 	druid.registerFaerieFireSpell()
 	druid.registerShredSpell()
+	druid.registerClawSpell()
+	druid.registerProwlSpell()
+	druid.registerRavageSpell()
 	druid.registerTigersFurySpell()
 }
 

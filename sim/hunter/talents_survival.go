@@ -46,9 +46,10 @@ func (hunter *Hunter) registerSavageStrikes() {
 		return
 	}
 
+	// 19159's mask (word 1, 4096) also names the Lacerating Strikes bleed (1310536), whose ticks crit.
 	hunter.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		ClassMask:  HunterSpellsMelee,
+		ClassMask:  HunterSpellsMelee | HunterSpellLaceratingStrikes,
 		FloatValue: spellData.SavageStrikes.ValueAt(hunter.Talents.SavageStrikes),
 	})
 }
@@ -181,10 +182,11 @@ func (hunter *Hunter) registerPredatorsEdge() {
 		return
 	}
 
-	// 1310627's crit damage mask is the melee abilities only: no auto attacks, no hawks.
+	// 1310627's crit damage mask is the melee abilities and the Lacerating Strikes bleed (word 1, 4096):
+	// no auto attacks, no hawks.
 	hunter.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_CritMultiplier_Flat,
-		ClassMask:  HunterSpellsMelee,
+		ClassMask:  HunterSpellsMelee | HunterSpellLaceratingStrikes,
 		FloatValue: spellData.PredatorsEdge.Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_CRIT_DAMAGE_BONUS)).FractionAt(hunter.Talents.PredatorsEdge),
 	})
 

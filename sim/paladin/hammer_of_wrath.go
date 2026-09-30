@@ -26,7 +26,7 @@ func (paladin *Paladin) registerHammerOfWrath(_ int32, rank *spelldata.Spell) {
 		MaxRange:       float64(rank.MaxRange),
 		MissileSpeed:   float64(rank.Speed),
 
-		ManaCost: manaCost(rank),
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				// The client's 1s GCD sits at core's floor, so it is named as the floor too or

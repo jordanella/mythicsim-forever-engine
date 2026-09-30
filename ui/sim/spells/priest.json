@@ -69,6 +69,20 @@
 		"source": "forever",
 		"tooltip": "350 Mana\n1.5 sec cast\n8 sec cooldown\nBlasts the target for 477 to 503 Shadow damage."
 	},
+	"1277328": {
+		"ability": "Dark Sacrifice",
+		"file": "sim/priest/dark_sacrifice.go",
+		"note": "New in Forever: five ranks (1277324-1277328, trained 20 to 60), free, 10 min cooldown. Beta client 1.60.1.70009 gives the base (rank 5: 320 every 3 sec, five ticks); the Spirit share is from a beta combat log (foreverlogs report 40, rank 1, Spirit 72: 94.4 mana a tick = 80 + Spirit / 5). The health cost is not modelled; the cooldown manager casts it once the whole gain fits.",
+		"source": "forever",
+		"tooltip": "Instant\n10 min cooldown\nCannibalize 1600 of your own Health over 15 sec to gain (1600 + Spirit) Mana."
+	},
+	"1277335": {
+		"ability": "Chastise",
+		"file": "sim/priest/chastise.go",
+		"note": "New in Forever: five ranks (1277331-1277335, trained 20 to 60) sharing one 2 min cooldown (category 2491). Beta client 1.60.1.70009: coefficient .143; humanoids only; not castable in Shadowform. The root is not modelled and no default rotation casts it.",
+		"source": "forever",
+		"tooltip": "225 Mana\n20 yd range\nInstant\n2 min cooldown\nChastise the target, causing 272 to 306 Holy damage and Immobilizing them for up to 2 sec. Only works against Humanoids."
+	},
 	"1284536": {
 		"ability": "Holy Purpose (Searing Light)",
 		"file": "sim/priest/talents_holy.go",

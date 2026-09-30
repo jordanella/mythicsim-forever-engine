@@ -206,14 +206,14 @@
 	"16353": {
 		"ability": "Frostbrand Weapon",
 		"file": "sim/shaman/weapon_imbues.go",
-		"note": "Rank 5's Frostbrand Attack, the only one the sim casts. Beta client 1.60.1.70009 (sim/core/spelldata), damage scaled to level 60 by the client's per-level points: 169 Frost damage, lower than Classic, coefficient 0.1 unchanged; the enchant now lasts 1 hour. The 9 procs per minute are Classic's.",
+		"note": "Rank 5's Frostbrand Attack, the only one the sim casts. Beta client 1.60.1.70009 (sim/core/spelldata), damage scaled to level 60 by the client's per-level points: 169 Frost damage, lower than Classic, coefficient 0.1 unchanged; the enchant now lasts 1 hour. 8 procs per minute, not Classic's 9 (the client stores no rate): a beta log has 636 procs from 1,601 landed swings of a 3.0 speed axe, 0.397 a hit = 7.95 +- 0.24 (foreverlogs.gg report 2681); rank 1's 32 lands as 33-34 (avg 33.6 = 32 x 1.05, one Elemental Weapons point), crits 50-51.",
 		"source": "forever",
 		"tooltip": "Imbue the Shaman's weapon with frost. Each hit has a chance of causing 169 additional Frost damage and slowing the target's movement speed by 25% for 8 sec. Lasts 1 hour."
 	},
 	"25505": {
 		"ability": "Windfury Weapon",
 		"file": "sim/shaman/weapon_imbues.go",
-		"note": "Not a Forever spell id: the Burning Crusade Windfury Attack id, kept as the label for the imbue's extra attacks and absent from the beta client. The numbers are Windfury Weapon rank 4's (16361), identical in beta client 1.60.1.70009 and Classic Era: 333 bonus attack power and 2 extra attacks, on the 20% enchant proc.",
+		"note": "Not a Forever spell id: the Burning Crusade Windfury Attack id, kept as the imbue's label and absent from the beta client. Beta client 1.60.1.70009: every rank's enchant (283/284/525/1669) equips 439431, which rolls 20% on landed melee autos and abilities (ProcTypeMask 20) with a 1.5 sec ProcCategoryRecovery and casts rank 4's 16361: +333 melee attack power for 1.5 sec (SpellDuration 65) and 3 charges spent by landed auto attacks (ProcTypeMask 4), plus 2 extra attacks (SPELL_EFFECT_ADD_EXTRA_ATTACKS). The sim swings the main hand twice as ordinary white attacks (glancing, white hit table, timer reset, the third charge lifts the next swing if it lands within 1.5 sec), not two special hits. An off-hand proc swings the off hand twice; the client may give main-hand attacks there, unmeasured.",
 		"source": "classic"
 	},
 	"26121": {
@@ -225,7 +225,7 @@
 	"26363": {
 		"ability": "Lightning Shield",
 		"file": "sim/shaman/shields.go",
-		"note": "Rank 7 orb, the only orb the sim fires. Beta client 1.60.1.70009 (sim/core/spelldata), damage scaled to level 60 by the client's per-level points. Coefficient 0.267.",
+		"note": "Rank 7 orb, the only orb the sim fires. Beta client 1.60.1.70009 (sim/core/spelldata), damage scaled to level 60 by the client's per-level points. Coefficient 0.267. Cannot crit (client attribute on every orb rank; 0 crits in ~200 beta log hits).",
 		"source": "forever",
 		"tooltip": "Strikes the attacker for 178 Nature damage."
 	},

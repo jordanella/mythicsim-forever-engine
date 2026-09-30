@@ -172,20 +172,20 @@ func (shaman *Shaman) applyThunderingStrikes() {
 	})
 }
 
-// applyEarthsGrasp implements Earth's Grasp, new in Forever.
+// applyEarthsGrasp implements Earth's Grasp.
 //
-// TODO: To be implemented. Needs the Forever tooltip and a spellData ladder before
-// the effect can be modelled; there is no TBC equivalent to port.
+// Not modelled: 16043 raises Stoneclaw Totem's health 25% and Earthbind Totem's radius 10%; the sim
+// casts neither.
 func (shaman *Shaman) applyEarthsGrasp() {
 	if shaman.Talents.EarthsGrasp == 0 {
 		return
 	}
 }
 
-// applyGuardianTotems implements Guardian Totems, new in Forever.
+// applyGuardianTotems implements Guardian Totems.
 //
-// TODO: To be implemented. Needs the Forever tooltip and a spellData ladder before
-// the effect can be modelled; there is no TBC equivalent to port.
+// Not modelled: 16258 makes Stoneskin and Windwall Totem reduce 10% more damage and takes 1 sec off
+// Grounding Totem's cooldown; the sim casts none of them.
 func (shaman *Shaman) applyGuardianTotems() {
 	if shaman.Talents.GuardianTotems == 0 {
 		return
@@ -202,10 +202,10 @@ func (shaman *Shaman) applyMentalDexterity() {
 		spellData.MentalDexterity.EffectAt(1).FractionAt(shaman.Talents.MentalDexterity))
 }
 
-// applyImprovedGhostWolf implements Improved Ghost Wolf, new in Forever.
+// applyImprovedGhostWolf implements Improved Ghost Wolf.
 //
-// TODO: To be implemented. Needs the Forever tooltip and a spellData ladder before
-// the effect can be modelled; there is no TBC equivalent to port.
+// Not modelled: 16262 takes 3 sec off Ghost Wolf's cast and lets it be used indoors; the sim never
+// casts Ghost Wolf.
 func (shaman *Shaman) applyImprovedGhostWolf() {
 	if shaman.Talents.ImprovedGhostWolf == 0 {
 		return

@@ -5,8 +5,7 @@ import (
 )
 
 // The generator files Death Coil's damage under E_HEALTH_LEECH, which it has no Direct role for, so
-// the row's Direct is nil and the damage is read off the effect. The 0.214 coefficient is ours: the
-// client states none for a leech.
+// the row's Direct is nil and the damage and its 0.214 coefficient are read off the effect.
 func (warlock *Warlock) registerDeathCoil() {
 	rank := spellData.DeathCoil.Highest()
 	baseDamage := rank.EffectN(1).Average(core.CharacterLevel)
@@ -45,7 +44,7 @@ func (warlock *Warlock) registerDeathCoil() {
 		DamageMultiplierAdditive: 1,
 		DamageMultiplier:         1,
 		ThreatMultiplier:         1,
-		BonusCoefficient:         0.214,
+		BonusCoefficient:         rank.EffectN(1).Coeff(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)

@@ -8,14 +8,14 @@
 	"11275": {
 		"ability": "Rupture",
 		"file": "sim/rogue/rupture.go",
-		"note": "Rank 6, the rank the sim casts. Beta client 1.60.1.70009: every rank ticks for less (rank 6 60 + 8 a combo point -> 35 + 4.73 a tick). Cost, tick length and duration are Classic's. The attack power share is not in the client, so the sim keeps Classic's.",
+		"note": "Rank 6, the rank the sim casts. Beta client 1.60.1.70009: every rank ticks for less (rank 6 60 + 8 a combo point -> 35 + 4.73 a tick). Cost, tick length and duration are Classic's. The attack power share is not in the client; the sim uses TBC's 1% of attack power a tick per combo point, capped at 3. Beta logs agree (level 20, rank 1, 5 + 1.18 a combo point a tick): Salty's 1/2/3 point ticks 9/12.7/16.2 step about 3.6 each (1.18 + 1% of ~245 AP), and Ray's 3 and 5 point ticks, 17.3 and 19.5, carry the same share (uncapped, 5 points would tick about 25).",
 		"source": "forever",
 		"tooltip": "25 Energy\nMelee Range\nInstant\nFinishing move that causes damage over time, increased by your Attack Power. Lasts longer per combo point:\n1 point: 159 damage over 8 secs\n2 points: 222 damage over 10 secs\n3 points: 295 damage over 12 secs\n4 points: 377 damage over 14 secs\n5 points: 469 damage over 16 secs"
 	},
 	"11290": {
 		"ability": "Garrote",
 		"file": "sim/rogue/garrote.go",
-		"note": "Rank 6, the rank the sim casts. Beta client 1.60.1.70009 matches Classic Era: 6 ticks of 92 over 18 sec, 50 Energy.",
+		"note": "Rank 6, the rank the sim casts. Beta client 1.60.1.70009 matches Classic Era: 6 ticks of 92 over 18 sec, 50 Energy. The tooltip says increased by attack power but the client carries no number; the sim adds 3% of attack power a tick. Beta logs agree (foreverlogs report 2683, a level 20 rogue with no Subtlety points, rank 1 703 at 24 a tick, 143 non-crit ticks): about 227 attack power (40 + 63 Strength + 101 Agility - 20, 18 from gear, 25 from Blessing of Might) gives 30.8 a tick against 31.2 seen on undead, and 31.5 with Battle Shout against 31.7. 2% would read 28.5, 4% 33.1. Humanoids read 0.7 to 1.2 higher; the Defias set's 15 attack power against humanoids explains about half of that.",
 		"source": "classic"
 	},
 	"11294": {
@@ -211,6 +211,9 @@
 	},
 	"31016": {
 		"ability": "Eviscerate",
+		"assumptions": [
+			"3% of attack power per combo point, which Classic Era does not have and the client carries no number for; the client's tooltip now says the damage is 'increased by Attack Power'. The beta's combat logs agree if the rogue has Improved Eviscerate (7/13/20% in the client): Salty (11 Assassination points, 2026-09-26) lands 74 and 107 before armor at 2 and 3 combo points, where 3% gives 71 and 103. Sinthoras and Ray (3 and 6 Assassination points, talents unknown) land about 179 and 167 at 5 combo points, which fits 3% with Improved Eviscerate or 6% without it. Armor is read from each rogue's Sinister Strikes on the same mob."
+		],
 		"file": "sim/rogue/eviscerate.go",
 		"note": "Rank 9, the rank the sim casts since it reads the client spell store (#427). Beta client 1.60.1.70009 matches Classic Era: damage per combo point, range and 35 Energy are unchanged; the client adds the combo point cost as a second power row.",
 		"source": "classic"
@@ -219,6 +222,12 @@
 		"ability": "Slice and Dice",
 		"file": "sim/rogue/slice_and_dice.go",
 		"note": "Rank 2, the rank the sim casts. Beta client 1.60.1.70009 keeps 30% attack speed, 25 Energy and 6 sec plus 3 sec a combo point; only the aura type number changed.",
+		"source": "classic"
+	},
+	"8643": {
+		"ability": "Kidney Shot",
+		"file": "sim/rogue/kidney_shot.go",
+		"note": "Rank 2, the rank the sim casts. Beta client 1.60.1.70009 matches Classic Era: 25 Energy, 20 sec cooldown, stuns for 1 sec plus 1 sec a combo point (2 to 6 sec), 80% of the energy back on a miss. Its third effect is extra damage taken from the rogue, every school, which is 0 until Improved Kidney Shot (14174, new in Forever) raises it to 5/10% for as long as the stun holds. The stun also stops the target dodging, parrying and blocking. Castable from an APL; no default rotation casts it, and a stun-immune target takes neither the stun nor the bonus.",
 		"source": "classic"
 	}
 }

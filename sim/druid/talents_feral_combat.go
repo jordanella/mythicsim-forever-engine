@@ -140,7 +140,7 @@ func (druid *Druid) applyFerocity() {
 	}
 
 	druid.AddStaticMod(core.SpellModConfig{
-		ClassMask: DruidSpellRake | DruidSpellPrimalBite | DruidSpellMaul | DruidSpellSwipe,
+		ClassMask: DruidSpellClaw | DruidSpellRake | DruidSpellPrimalBite | DruidSpellMaul | DruidSpellSwipe,
 		Kind:      core.SpellMod_PowerCost_Flat,
 		IntValue:  -druid.Talents.Ferocity,
 	})
@@ -155,7 +155,7 @@ func (druid *Druid) applySavageFury() {
 	}
 
 	druid.AddStaticMod(core.SpellModConfig{
-		ClassMask:  DruidSpellRake | DruidSpellShred | DruidSpellMaul | DruidSpellSwipe,
+		ClassMask:  DruidSpellClaw | DruidSpellRake | DruidSpellShred | DruidSpellMaul | DruidSpellSwipe,
 		Kind:       core.SpellMod_DamageDone_Flat,
 		FloatValue: spellData.SavageFury.Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_DAMAGE)).FractionAt(druid.Talents.SavageFury),
 	})
@@ -325,7 +325,7 @@ func (druid *Druid) applyBerserk() {
 	// Effect 0's class mask is Claw/Rake, Shred, Ravage and Pounce (233472); Primal Bite is not in it.
 	critMod := druid.AddDynamicMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		ClassMask:  DruidSpellShred | DruidSpellRake | DruidSpellRavage,
+		ClassMask:  DruidSpellClaw | DruidSpellShred | DruidSpellRake | DruidSpellRavage,
 		FloatValue: 100,
 	})
 

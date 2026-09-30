@@ -32,7 +32,7 @@ func (rogue *Rogue) registerAssassinationTalents() {
 
 	// Tier 5
 	rogue.registerColdBlood()
-	rogue.registerImprovedKidneyShot()
+	// Improved Kidney Shot implemented in kidney_shot.go
 
 	// Tier 6
 	rogue.registerSealFate()
@@ -333,12 +333,6 @@ func (rogue *Rogue) newMutilateHitSpell(isMH bool) *core.Spell {
 		},
 	})
 }
-
-// registerImprovedKidneyShot implements Improved Kidney Shot, new in Forever.
-//
-// TODO: Not modelled. The talent adds 5/10% damage taken while Kidney Shot holds the target, and
-// Kidney Shot itself is not an ability our sim casts.
-func (rogue *Rogue) registerImprovedKidneyShot() {}
 
 // registerRemorselessAttacks implements Remorseless Attacks, new in Forever.
 //

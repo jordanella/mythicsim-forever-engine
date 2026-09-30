@@ -5,6 +5,7 @@ import (
 
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/dbcenums"
+	"github.com/wowsims/forever/sim/core/spelldata"
 	"github.com/wowsims/forever/sim/core/stats"
 )
 
@@ -271,10 +272,77 @@ func (warlock *Warlock) applyPyroclasm() {
 
 // applyBaneOfHavoc implements Bane of Havoc, new in Forever.
 //
-// TODO: 1225228 copies 15% of the warlock's damage onto a second target, which needs a multi-target
-// encounter to matter; the bane itself is not registered yet.
+// 1225228: a 5 min bane on one target (A_DUMMY 15) that copies 15% of the warlock's damage to other
+// targets onto the baned one. It takes the bane slot, so it replaces Agony or Doom there. The copy is
+// the share of the damage already dealt, so nothing on either side modifies it again. The row states
+// no GCD category, so the cast is off the GCD. Only the warlock's own damage copies, not the demon's.
 func (warlock *Warlock) applyBaneOfHavoc() {
 	if !warlock.Talents.BaneOfHavoc {
 		return
 	}
+
+	rank := spellData.BaneOfHavoc.Highest()
+	share := rank.Effect(dbcenums.A_DUMMY, 0).Percent()
+
+	var havocTarget *core.Unit
+	havocAuras := warlock.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
+		return target.RegisterAura(core.Aura{
+			Label:    "Bane of Havoc-" + warlock.Label,
+			ActionID: core.ActionID{SpellID: rank.ID},
+			Duration: rank.Duration(),
+			OnGain: func(aura *core.Aura, sim *core.Simulation) {
+				havocTarget = aura.Unit
+			},
+			OnExpire: func(aura *core.Aura, sim *core.Simulation) {
+				if havocTarget == aura.Unit {
+					havocTarget = nil
+				}
+			},
+		})
+	})
+
+	config := spelldata.SpellConfig(&warlock.Unit, rank, spelldata.Flags(core.SpellFlagAPL))
+	config.ProcMask = core.ProcMaskEmpty
+	config.ThreatMultiplier = 1
+	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
+		result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHitNoHitCounter)
+		if result.Landed() {
+			if havocTarget != nil && havocTarget != target {
+				havocAuras.Get(havocTarget).Deactivate(sim)
+			}
+			aura := havocAuras.Get(target)
+			warlock.takeBaneSlot(sim, target, aura)
+			aura.Activate(sim)
+		}
+		spell.DealOutcome(sim, result)
+	}
+	config.RelatedAuraArrays = havocAuras.ToMap()
+	warlock.RegisterSpell(config)
+
+	copySpell := warlock.RegisterSpell(core.SpellConfig{
+		ActionID:    core.ActionID{SpellID: rank.ID, Tag: 1},
+		SpellSchool: rank.SpellSchool(),
+		ProcMask:    core.ProcMaskEmpty,
+		Flags: core.SpellFlagIgnoreModifiers | core.SpellFlagIgnoreResists | core.SpellFlagNoOnDamageDealt |
+			core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
+
+		DamageMultiplierAdditive: 1,
+		DamageMultiplier:         1,
+		ThreatMultiplier:         1,
+	})
+
+	copyDamage := func(sim *core.Simulation, result *core.SpellResult) {
+		if havocTarget != nil && result.Target != havocTarget && result.Damage > 0 {
+			copySpell.CalcAndDealDamage(sim, havocTarget, result.Damage*share, copySpell.OutcomeAlwaysHit)
+		}
+	}
+	core.MakePermanent(warlock.RegisterAura(core.Aura{
+		Label: "Bane of Havoc - Copy",
+		OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			copyDamage(sim, result)
+		},
+		OnPeriodicDamageDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			copyDamage(sim, result)
+		},
+	}))
 }

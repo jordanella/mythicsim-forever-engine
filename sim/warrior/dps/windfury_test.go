@@ -2,18 +2,19 @@ package dps
 
 import (
 	"testing"
+	"time"
 
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/proto"
 	"github.com/wowsims/forever/sim/core/simsignals"
 )
 
-// Windfury Totem's proc is a combat enchant on the main hand: a main-hand hit
-// that lands can fire it, auto or special, whether or not it deals damage, and
-// no other hit can. A main-hand auto that
-// procs it has spent the first charge itself and leaves one for the extra
-// attack; a special leaves both.
-func TestWindfuryTotemProcsOffMainHandHitsWithTheChargesTheTriggerLeaves(t *testing.T) {
+// Windfury Totem's proc is a party aura since build 70009 (10612): any melee
+// hit that lands and deals damage can fire it, auto or special, either hand,
+// and nothing ranged or magic can. An auto that procs it has spent the first
+// charge itself and leaves one for the extra attack; a special leaves both.
+// Its internal cooldown is the row's 100 ms, not Era's 1.5 sec.
+func TestWindfuryTotemProcsOffMeleeHitsWithTheChargesTheTriggerLeaves(t *testing.T) {
 	setup := func(t *testing.T) (*core.Simulation, *core.Unit, *core.Aura, *[]int32) {
 		t.Helper()
 
@@ -65,16 +66,16 @@ func TestWindfuryTotemProcsOffMainHandHitsWithTheChargesTheTriggerLeaves(t *test
 	for _, row := range []struct {
 		name     string
 		procMask core.ProcMask
-		damage   float64
 		charges  int32
 	}{
-		{"a main-hand auto leaves one charge", core.ProcMaskMeleeMHAuto, 100, 1},
-		{"a main-hand special leaves both charges", core.ProcMaskMeleeMHSpecial, 100, 2},
-		{"a main-hand special that deals no damage leaves both charges", core.ProcMaskMeleeMHSpecial, 0, 2},
+		{"a main-hand auto leaves one charge", core.ProcMaskMeleeMHAuto, 1},
+		{"an off-hand auto leaves one charge", core.ProcMaskMeleeOHAuto, 1},
+		{"a main-hand special leaves both charges", core.ProcMaskMeleeMHSpecial, 2},
+		{"an off-hand special leaves both charges", core.ProcMaskMeleeOHSpecial, 2},
 	} {
 		t.Run(row.name, func(t *testing.T) {
 			sim, target, trigger, started := setup(t)
-			if !offer(sim, target, trigger, started, row.procMask, row.damage) {
+			if !offer(sim, target, trigger, started, row.procMask, 100) {
 				t.Fatal("200 landed hits never procced the totem")
 			}
 			if got := (*started)[0]; got != row.charges {
@@ -87,8 +88,6 @@ func TestWindfuryTotemProcsOffMainHandHitsWithTheChargesTheTriggerLeaves(t *test
 		name     string
 		procMask core.ProcMask
 	}{
-		{"an off-hand auto", core.ProcMaskMeleeOHAuto},
-		{"an off-hand special", core.ProcMaskMeleeOHSpecial},
 		{"a ranged auto", core.ProcMaskRangedAuto},
 		{"a ranged special", core.ProcMaskRangedSpecial},
 		{"a spell", core.ProcMaskSpellDamage},
@@ -100,4 +99,11 @@ func TestWindfuryTotemProcsOffMainHandHitsWithTheChargesTheTriggerLeaves(t *test
 			}
 		})
 	}
+
+	t.Run("the internal cooldown is 100 ms", func(t *testing.T) {
+		_, _, trigger, _ := setup(t)
+		if trigger.Icd == nil || trigger.Icd.Duration != 100*time.Millisecond {
+			t.Errorf("the trigger's internal cooldown is %v, want 100ms", trigger.Icd)
+		}
+	})
 }

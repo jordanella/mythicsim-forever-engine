@@ -74,7 +74,7 @@ func (paladin *Paladin) registerHolyShield(_ int32, rank *spelldata.Spell) {
 		ClassSpellMask: SpellMaskHolyShield,
 		Rank:           rank.RankNumber(),
 
-		ManaCost: manaCost(rank),
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: rank.GCD(),

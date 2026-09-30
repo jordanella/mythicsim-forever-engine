@@ -86,7 +86,7 @@ func (paladin *Paladin) registerSealSpell(cfg *sealConfig) *core.Spell {
 		ClassSpellMask: cfg.classMask,
 		Rank:           cfg.rank.RankNumber(),
 
-		ManaCost: manaCost(cfg.rank),
+		ManaCost: cfg.rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: cfg.rank.GCD(),

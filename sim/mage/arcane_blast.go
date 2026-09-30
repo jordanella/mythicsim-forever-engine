@@ -19,11 +19,7 @@ func (mage *Mage) registerArcaneBlastSpell() {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: MageSpellArcaneBlast,
 
-		// The generated row carries no cost: Forever prices it at 15% of base mana (beta client
-		// 1.60.1.69893), a PowerCostPct the generator does not read yet.
-		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 15,
-		},
+		ManaCost: arcaneBlastRank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      arcaneBlastRank.GCD(),

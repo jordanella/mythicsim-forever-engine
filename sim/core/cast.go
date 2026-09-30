@@ -154,6 +154,9 @@ func (spell *Spell) makeCastFunc(config CastConfig) CastSuccessFunc {
 			return spell.castFailureHelper(sim, "not enough charges")
 		}
 
+		// Forever hastes the spell GCD (as TBC, unlike Classic 1.12, which classic-legacy followed).
+		// Beta logs (foreverlogs 2667): troll shaman Toma's instants under Berserking's 10% came
+		// 1344-1421 ms apart (5 of 5), against a 1475-1525 ms mode for shaman instants without it.
 		if !config.IgnoreHaste {
 			spell.CurCast.GCD = max(0, spell.Unit.ApplyCastSpeed(spell.CurCast.GCD)).Round(time.Millisecond)
 			spell.CurCast.CastTime = spell.Unit.ApplyCastSpeedForSpell(spell.CurCast.CastTime, spell).Round(time.Millisecond)

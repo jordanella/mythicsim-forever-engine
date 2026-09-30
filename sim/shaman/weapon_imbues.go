@@ -50,44 +50,33 @@ func (shaman *Shaman) setupItemSwapImbue(imbue proto.ShamanImbue, imbueID int32)
 	}
 }
 
-func (shaman *Shaman) newWindfuryImbueSpell(isMH bool) *core.Spell {
-	tag := 1
-	procMask := core.ProcMaskMeleeMHSpecial
-	weaponDamageFunc := shaman.MHWeaponDamage
-	if !isMH {
-		tag = 2
-		procMask = core.ProcMaskMeleeOHSpecial
-		weaponDamageFunc = shaman.OHWeaponDamage
-	}
-
-	spellConfig := core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 25505, Tag: int32(tag)},
-		SpellSchool:    core.SpellSchoolPhysical,
-		DefenseType:    core.DefenseTypeMelee, // Windfury Attack (25504)
-		ProcMask:       procMask,
-		ClassSpellMask: SpellMaskWindfuryWeapon,
-		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell,
-
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-		BonusCoefficient: 1,
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			apBonus := shaman.WindfuryAPBonus * (1 + spellData.ElementalWeapons.EffectAt(3).FractionAt(shaman.Talents.ElementalWeapons))
-			mAP := spell.MeleeAttackPower(target) + apBonus
-
-			baseDamage1 := weaponDamageFunc(sim, mAP)
-			baseDamage2 := weaponDamageFunc(sim, mAP)
-			result1 := spell.CalcDamage(sim, target, baseDamage1, spell.OutcomeMeleeSpecialHitAndCrit)
-			result2 := spell.CalcDamage(sim, target, baseDamage2, spell.OutcomeMeleeSpecialHitAndCrit)
-			spell.DealDamage(sim, result1)
-			spell.DealDamage(sim, result2)
+// newWindfuryAttackPowerAura is Windfury Weapon rank 4's triggered spell (16361): +333 melee attack
+// power for 1.5 sec, held for 3 charges spent by landed melee auto attacks (ProcTypeMask 4), so the
+// two extra attacks use two and the third lifts the next swing if it comes in time.
+func (shaman *Shaman) newWindfuryAttackPowerAura() *core.Aura {
+	apBonus := shaman.WindfuryAPBonus * (1 + spellData.ElementalWeapons.EffectAt(3).FractionAt(shaman.Talents.ElementalWeapons))
+	aura := shaman.NewTemporaryStatsAura("Windfury Weapon Attack Power", core.ActionID{SpellID: windfuryImbue.ID}, stats.Stats{stats.AttackPower: apBonus}, windfuryImbue.Duration())
+	aura.MaxStacks = int32(windfuryImbue.ProcCharges)
+	aura.AttachProcTrigger(core.ProcTrigger{
+		Name:     "Windfury Weapon Attack Power Charges",
+		Callback: core.CallbackOnSpellHitDealt,
+		ProcMask: core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto,
+		Outcome:  core.OutcomeLanded,
+		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
+			aura.RemoveStack(sim)
+			if aura.GetStacks() == 0 {
+				aura.Deactivate(sim)
+			}
 		},
-	}
-
-	return shaman.RegisterSpell(spellConfig)
+	})
+	return aura.Aura
 }
 
-func (shaman *Shaman) makeWFProcTriggerAura(dpm *core.DynamicProcManager, procMask *core.ProcMask, mhSpell *core.Spell, ohSpell *core.Spell) *core.Aura {
+// The enchant's equip aura (439431 in every rank's SpellItemEnchantment) rolls 20% on landed melee
+// autos and abilities (ProcTypeMask 20) with a 1.5 sec ProcCategoryRecovery, then casts 16361:
+// A_MOD_ATTACK_POWER plus SPELL_EFFECT_ADD_EXTRA_ATTACKS 2. The extra attacks are ordinary white
+// swings (white hit table, glancing blows, other weapon procs), not two special hits.
+func (shaman *Shaman) makeWFProcTriggerAura(dpm *core.DynamicProcManager, procMask *core.ProcMask, apAura *core.Aura) *core.Aura {
 	aura := shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Windfury Imbue",
 		Callback:           core.CallbackOnSpellHitDealt,
@@ -98,10 +87,16 @@ func (shaman *Shaman) makeWFProcTriggerAura(dpm *core.DynamicProcManager, procMa
 		DPM:                dpm,
 		TriggerImmediately: true,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			apAura.Activate(sim)
+			apAura.SetStacks(sim, apAura.MaxStacks)
 			if spell.IsMH() {
-				mhSpell.Cast(sim, result.Target)
+				// Classic extra attacks: the main-hand swing is pulled to now (resets the timer).
+				shaman.AutoAttacks.ExtraMHAttacks(sim, 2)
 			} else {
-				ohSpell.Cast(sim, result.Target)
+				// ponytail: an off-hand proc swings the off hand twice; whether the client gives
+				// main-hand attacks instead is unmeasured.
+				shaman.AutoAttacks.OHAuto().Cast(sim, result.Target)
+				shaman.AutoAttacks.OHAuto().Cast(sim, result.Target)
 			}
 		},
 	})
@@ -112,7 +107,6 @@ func (shaman *Shaman) getWindfuryFixedProcChance(procMask core.ProcMask) float64
 	return 0.2
 }
 
-// TODO: To be implemented. Not verified against Forever.
 func (shaman *Shaman) RegisterWindfuryImbue(procMask core.ProcMask) {
 	if procMask == core.ProcMaskUnknown && !shaman.ItemSwap.IsEnabled() {
 		return
@@ -141,10 +135,7 @@ func (shaman *Shaman) RegisterWindfuryImbue(procMask core.ProcMask) {
 
 	dpm := shaman.NewDynamicLegacyProcForTempEnchant(windfuryEnchantID, 0, shaman.getWindfuryFixedProcChance)
 
-	mhSpell := shaman.newWindfuryImbueSpell(true)
-	ohSpell := shaman.newWindfuryImbueSpell(false)
-
-	aura := shaman.makeWFProcTriggerAura(dpm, &mask, mhSpell, ohSpell)
+	aura := shaman.makeWFProcTriggerAura(dpm, &mask, shaman.newWindfuryAttackPowerAura())
 
 	if mask.Matches(core.ProcMaskMeleeMH) {
 		aura.NewExclusiveEffect(buffs.WindfuryTotemCategory, false, core.ExclusiveEffect{
@@ -155,6 +146,7 @@ func (shaman *Shaman) RegisterWindfuryImbue(procMask core.ProcMask) {
 	shaman.RegisterOnItemSwapWithImbue(windfuryEnchantID, &mask, aura)
 }
 
+var windfuryImbue = spellData.WindfuryWeaponTriggered.Highest()
 var flametongueImbue = spellData.FlametongueWeaponTriggered.Highest()
 var frostbrandImbue = spellData.FrostbrandWeaponTriggered.Highest()
 
@@ -235,7 +227,6 @@ func (shaman *Shaman) makeFTProcTriggerAura(itemSlot proto.ItemSlot, triggerProc
 	return aura
 }
 
-// TODO: To be implemented. Not verified against Forever.
 func (shaman *Shaman) RegisterFlametongueImbue(procMask core.ProcMask) {
 	if procMask == core.ProcMaskUnknown && !shaman.ItemSwap.IsEnabled() {
 		return
@@ -292,7 +283,6 @@ func (shaman *Shaman) newFrostbrandImbueSpell() *core.Spell {
 	})
 }
 
-// TODO: To be implemented. Not verified against Forever.
 func (shaman *Shaman) RegisterFrostbrandImbue(procMask core.ProcMask) {
 	if procMask == core.ProcMaskUnknown && !shaman.ItemSwap.IsEnabled() {
 		return
@@ -315,7 +305,9 @@ func (shaman *Shaman) RegisterFrostbrandImbue(procMask core.ProcMask) {
 
 	shaman.setupItemSwapImbue(proto.ShamanImbue_FrostbrandWeapon, frostbrandEnchantID)
 
-	dpm := shaman.NewDynamicLegacyProcForTempEnchant(frostbrandEnchantID, 9.0, func(pm core.ProcMask) float64 { return 0 })
+	// 8 procs a minute, not Classic's 9 (the client stores no rate): a beta log gives 636 procs from 1,601
+	// landed swings of a 3.0 speed axe, 0.397 a hit = 7.95 +- 0.24 PPM (foreverlogs.gg report 2681, Cihan).
+	dpm := shaman.NewDynamicLegacyProcForTempEnchant(frostbrandEnchantID, 8.0, func(pm core.ProcMask) float64 { return 0 })
 
 	fbSpell := shaman.newFrostbrandImbueSpell()
 

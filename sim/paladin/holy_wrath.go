@@ -27,7 +27,7 @@ func (paladin *Paladin) registerHolyWrath(_ int32, rank *spelldata.Spell) {
 		MaxRange:       20,
 		MissileSpeed:   float64(rank.Speed),
 
-		ManaCost: manaCost(rank),
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      rank.GCD(),

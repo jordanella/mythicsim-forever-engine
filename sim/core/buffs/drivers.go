@@ -23,6 +23,9 @@ import (
 // (aura 110); neither is a stat or a pseudo-stat, so the regen is the driver's.
 const innervateSpiritRegenMultiplier = 5.0
 
+// Metrics tag for the regen Innervate adds, apart from the druid's cast cost.
+const innervateRegenTag = -2
+
 // Three pieces of Battlegear of Wrath are worth 30 more attack power on Battle
 // Shout: item set 218's ItemSetSpell at three pieces is 23563, which adds a flat
 // 30 to every effect of the Battle Shout family. The resolver reads no
@@ -42,7 +45,8 @@ func driveBattleShout(char *core.Character, party *proto.PartyBuffs) {
 
 // A druid innervates a character who is nearly out of mana, so that every other
 // mana cooldown is spent first. The aura forces full spirit regen while it is
-// up and the metrics record what the character gains from it.
+// up. Its mana is regen (29166 has no energize effect), so it lands in the regen
+// metrics and makes no threat.
 func driveInnervates(char *core.Character, individual *proto.IndividualBuffs) {
 	aura := InnervatesAura(&char.Unit, false, 0)
 	AttachInnervateRegen(char, aura)
@@ -64,7 +68,11 @@ func driveInnervates(char *core.Character, individual *proto.IndividualBuffs) {
 // AttachInnervateRegen is shared by player casts and external cooldowns. Actual
 // mana still arrives on the normal regen ticks; reporting splits its bonus out.
 func AttachInnervateRegen(char *core.Character, aura *core.Aura) *core.Aura {
-	manaMetrics := char.NewManaMetrics(aura.ActionID)
+	// The druid's own cast spends mana under {29166, druid index}, and the result serializer merges
+	// rows that share an ActionID, so the bonus regen gets a tag no druid index can take.
+	regenID := aura.ActionID
+	regenID.Tag = innervateRegenTag
+	manaMetrics := char.NewManaMetrics(regenID)
 	return aura.ApplyOnGain(func(_ *core.Aura, _ *core.Simulation) {
 		char.StartSpiritRegenAttribution(manaMetrics)
 		char.PseudoStats.ForceFullSpiritRegen = true
@@ -114,11 +122,14 @@ func driveManaTideTotems(char *core.Character, party *proto.PartyBuffs) {
 	})
 }
 
-// The totem's aura is the attack power a windfury proc grants. The totem hands
-// the proc out as a combat enchant on the main hand (SpellItemEnchantment 564:
-// 10610 at 20%), whose chance the store carries in 10610's ProcChance column.
-// The driver keeps the 1.5 second internal cooldown and the extra attack the
-// proc lands, and the totem aura that holds the category.
+// The totem's aura is the attack power a windfury proc grants. Since build
+// 70009 the totem hands the proc out as a party aura (10612, an area
+// A_PROC_TRIGGER_SPELL) rather than Era's main-hand enchant 564, which nothing
+// in the client applies any more; its row states the 20%, the 100 ms internal
+// cooldown and what hears it: every melee auto and special, off-hand included.
+// The extra attack 10610 grants is always a main-hand one.
+var windfuryTotemPartyAura = spelldata.MustFind(10612)
+
 func driveWindfuryTotem(char *core.Character, _ *proto.PartyBuffs) {
 	procAura := WindfuryTotemAura(&char.Unit, false, 0)
 	// The attack power is only there for a moment after a proc, so it is not
@@ -126,8 +137,8 @@ func driveWindfuryTotem(char *core.Character, _ *proto.PartyBuffs) {
 	procAura.BuildPhase = core.CharacterBuildPhaseNone
 
 	// The row's own proc flags say what spends a charge: every auto attack that
-	// lands, since the column's chance is the enchantment's roll. The attack
-	// power stays until the charges are gone or the row's duration runs out.
+	// lands. The attack power stays until the charges are gone or the row's
+	// duration runs out.
 	procAura.MaxStacks = int32(windfuryTotemSpell.ProcCharges)
 	spender := spelldata.ProcTrigger(char, windfuryTotemSpell, func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 		procAura.RemoveStack(sim)
@@ -136,31 +147,24 @@ func driveWindfuryTotem(char *core.Character, _ *proto.PartyBuffs) {
 	spender.TriggerImmediately = true
 	procAura.AttachProcTriggerCallback(&char.Unit, spender)
 
-	// A combat enchant hears every hit of the weapon it sits on, specials
-	// included. A main-hand auto that procs it has spent the first charge
-	// itself, so the extra attack is the only one buffed; a special hands both
-	// charges to the extra attack and the auto after it.
+	// An auto that procs it has spent the first charge itself, so the extra
+	// attack is the only one buffed; a special hands both charges to the extra
+	// attack and the auto after it.
 	var windfurySpell *core.Spell
-	trigger := core.ProcTrigger{
-		Name:               "Windfury Totem Trigger",
-		MetricsActionID:    core.ActionID{SpellID: 25580, Tag: -1},
-		ProcChance:         windfuryTotemSpell.StatedChance(),
-		Duration:           core.NeverExpires,
-		Outcome:            core.OutcomeLanded,
-		ICD:                time.Millisecond * 1500,
-		TriggerImmediately: true,
-		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			procAura.Activate(sim)
-			charges := procAura.MaxStacks
-			if spell.ProcMask.Matches(core.ProcMaskMeleeMHAuto) {
-				charges--
-			}
-			procAura.SetStacks(sim, charges)
-			char.AutoAttacks.MaybeReplaceMHSwing(sim, windfurySpell).Cast(sim, result.Target)
-		},
-	}
-	spelldata.WeaponProc()(char, &trigger)
-	trigger.ProcMask = core.ProcMaskMeleeMH
+	trigger := spelldata.ProcTrigger(char, windfuryTotemPartyAura, func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+		procAura.Activate(sim)
+		charges := procAura.MaxStacks
+		if spell.ProcMask.Matches(core.ProcMaskMeleeWhiteHit) {
+			charges--
+		}
+		procAura.SetStacks(sim, charges)
+		char.AutoAttacks.MaybeReplaceMHSwing(sim, windfurySpell).Cast(sim, result.Target)
+	})
+	trigger.Name = "Windfury Totem Trigger"
+	trigger.ActionID = core.ActionID{}
+	trigger.MetricsActionID = core.ActionID{SpellID: 25580, Tag: -1}
+	trigger.Duration = core.NeverExpires
+	trigger.TriggerImmediately = true
 	procTrigger := char.MakeProcTriggerAura(trigger)
 
 	// The totem stands for 10 seconds and the shaman drops a new one every 5,
@@ -193,10 +197,6 @@ func driveWindfuryTotem(char *core.Character, _ *proto.PartyBuffs) {
 			procTrigger.Deactivate(sim)
 			totemAura.Deactivate(sim)
 		},
-	})
-
-	char.RegisterItemSwapCallback([]proto.ItemSlot{proto.ItemSlot_ItemSlotMainHand}, func(sim *core.Simulation, slot proto.ItemSlot) {
-		totemAura.Deactivate(sim)
 	})
 }
 

@@ -26,6 +26,7 @@ func (druid *Druid) registerInnervateCD() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		MaxRange:       float64(innervateRank.MaxRange),
 
+		ManaCost: innervateRank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: innervateRank.GCD(),
@@ -57,6 +58,7 @@ func (druid *Druid) registerInnervateCD() {
 // The generated Innervate aura states no regen (auras 134 and 110 are left out), so the druid's own
 // cast attaches it: full spirit regen while casting at 5x rate, as core's raid-config driver does.
 // A second druid innervating the same target reuses the first one's aura and its hooks.
+// Its mana is regen (no energize effect), so it lands in the regen metrics and makes no threat.
 func (druid *Druid) innervateAura(char *core.Character) *core.Aura {
 	if aura := char.GetAura("Innervates (Player)"); aura != nil {
 		return aura

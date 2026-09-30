@@ -8,7 +8,7 @@ import (
 )
 
 // Summon Hawk keeps two hawks out at once (1293527's third effect), each assaulting on its own, and
-// their hits can crit so Ferocity reaches them.
+// their hits can crit so Ferocity reaches them. The dive bomb always hits (client always-hit attribute).
 func TestSummonHawkTwoHawks(t *testing.T) {
 	player := &proto.Player{
 		Name: "bm", Class: proto.Class_ClassHunter, Race: proto.Race_RaceOrc, TalentsString: BeastMasteryTalents,
@@ -25,18 +25,24 @@ func TestSummonHawkTwoHawks(t *testing.T) {
 	}
 
 	ticks := map[int32]int32{}
-	var critTicks int32
+	var critTicks, diveBombMisses int32
 	for _, action := range res.RaidMetrics.Parties[0].Players[0].Actions {
 		if action.Id.GetSpellId() != spellData.SummonHawk.Highest().ID {
 			continue
 		}
 		for _, target := range action.Targets {
+			if action.Id.GetTag() == 0 {
+				diveBombMisses += target.Misses + target.Dodges + target.Parries + target.Blocks
+			}
 			ticks[action.Id.GetTag()] += target.Ticks + target.CritTicks
 			critTicks += target.CritTicks
 		}
 	}
 	if ticks[1] == 0 || ticks[2] == 0 || ticks[3] != 0 {
 		t.Fatalf("hawk ticks by hawk: %v, want two hawks both assaulting", ticks)
+	}
+	if diveBombMisses != 0 {
+		t.Fatalf("%d dive bombs missed, were dodged, parried or blocked; the client says they always hit", diveBombMisses)
 	}
 	if critTicks == 0 {
 		t.Fatal("no hawk hit crit")

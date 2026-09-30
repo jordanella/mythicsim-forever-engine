@@ -213,12 +213,14 @@ func applyRaceEffects(agent Agent) {
 			},
 		})
 
+		// Client 1.60.1.70058: Read Ley Line has a 2 sec cast (SpellMisc CastingTimeIndex).
 		character.RegisterSpell(SpellConfig{
 			ActionID: ActionID{SpellID: 1259705},
 			Flags:    SpellFlagAPL | SpellFlagNoOnCastComplete,
 			Cast: CastConfig{
 				DefaultCast: Cast{
 					GCD: GCDDefault,
+					CastTime: time.Second * 2,
 				},
 				CD: Cooldown{
 					Timer:    character.NewTimer(),
@@ -246,12 +248,14 @@ func applyRaceEffects(agent Agent) {
 			},
 		})
 
+		// Client 1.60.1.70058: Skysight has a 0.5 sec cast (SpellMisc CastingTimeIndex).
 		character.RegisterSpell(SpellConfig{
 			ActionID: ActionID{SpellID: 1259686},
 			Flags:    SpellFlagAPL | SpellFlagNoOnCastComplete,
 			Cast: CastConfig{
 				DefaultCast: Cast{
 					GCD: GCDDefault,
+					CastTime: time.Millisecond * 500,
 				},
 				CD: Cooldown{
 					Timer:    character.NewTimer(),
@@ -274,12 +278,14 @@ func applySkyborneSharedRacials(character *Character) {
 	character.PseudoStats.CastSpeedMultiplier *= 1.01
 }
 
+// Beast Slaying (troll 20557), Big Game Hunter (dwarf 1259721) and Elemental Insight (Skyborne
+// 1259707) are one A_MOD_DAMAGE_DONE_VERSUS 5 each in client 1.60.1.70009, with no crit damage
+// effect; the hunter's Humanoid/Monster Slaying carry that as a second aura (547), these don't.
 func applyCreatureTypeSlaying(character *Character, mobType proto.MobType) {
 	character.Env.RegisterPostFinalizeEffect(func() {
 		for _, at := range character.AttackTables {
 			if at.Defender.MobType == mobType {
 				at.DamageDealtMultiplier *= 1.05
-				at.CritMultiplier *= 1.05
 			}
 		}
 	})

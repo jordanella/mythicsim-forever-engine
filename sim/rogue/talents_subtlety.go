@@ -119,9 +119,8 @@ func (rogue *Rogue) registerGhostlyStrike() {
 			},
 			IgnoreHaste: true,
 		},
-		// The table reads zero for the cost, a generator gap; the client charges 40.
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   40,
+			Cost:   int32(ghostlyStrikeRank.Cost()),
 			Refund: ghostlyStrikeRank.MissRefund(),
 		},
 

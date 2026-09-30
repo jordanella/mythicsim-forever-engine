@@ -505,10 +505,6 @@ func (unit *Unit) IsChanneling() bool {
 	return unit.ChanneledDot != nil
 }
 
-func (unit *Unit) SpellGCD() time.Duration {
-	return max(GCDMin, unit.ApplyCastSpeed(GCDDefault))
-}
-
 func (unit *Unit) TotalSpellHasteMultiplier() float64 {
 	return unit.PseudoStats.CastSpeedMultiplier * (1 + unit.stats[stats.SpellHasteRating]/(SpellHasteRatingPerHastePercent*100))
 }

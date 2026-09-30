@@ -122,15 +122,6 @@ func (paladin *Paladin) sharedTimer(timer **core.Timer) *core.Timer {
 	return *timer
 }
 
-// The cost a row states: a flat number, or a share of base mana for the spells the client prices
-// that way (Judgement, Righteous Fury, Seal of Justice).
-func manaCost(rank *spelldata.Spell) core.ManaCostOptions {
-	if len(rank.Powers) > 0 && rank.Powers[0].CostPct > 0 {
-		return core.ManaCostOptions{BaseCostPercent: float64(rank.Powers[0].CostPct)}
-	}
-	return core.ManaCostOptions{FlatCost: int32(rank.Cost())}
-}
-
 // A rank's own cooldown, or the one it shares with its category: the client keeps every paladin
 // ability cooldown but Judgement's and the talent cooldowns on the category.
 func cooldown(rank *spelldata.Spell) time.Duration {

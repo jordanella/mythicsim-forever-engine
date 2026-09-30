@@ -104,7 +104,108 @@ export const WOWHEAD_DOMAIN = WOWHEAD_EXPANSIONS[WOWHEAD_EXPANSION_ENV];
 // 404s on what Forever added (items past 25000, spells past 100000, a few reused Classic ids).
 // So Classic Era for what Classic had, Forever for the rest. Checked 2026-09-23 against every
 // tooltip the 19 spec pages ask for on load: the only 404s left are TBC ids neither one has.
-const FOREVER_ONLY_SPELLS = new Set([14084]); // Improved Distract
+// Classic ids Forever reused or renamed: Classic Era shows the old name and tooltip, or 404s.
+// Every id under 100000 the sim or talent trees use whose Forever client name (1.60.1.70009)
+// differs from Classic Era's (1.15.9.69722); Wowhead Forever serves each under its Forever name.
+const FOREVER_ONLY_SPELLS = new Set([
+	87, // Windwalk (not in Classic Era)
+	132, // Detect Invisibility (Classic Era: Detect Lesser Invisibility)
+	424, // Earthquake (not in Classic Era)
+	603, // Bane of Doom (Classic Era: Curse of Doom)
+	// Holy Strike (not in Classic Era)
+	678,
+	679,
+	680,
+	1866,
+	2495,
+	5569,
+	10332,
+	10333,
+	// Bane of Agony (Classic Era: Curse of Agony)
+	980,
+	1014,
+	6217,
+	11711,
+	11712,
+	11713,
+	11078, // Wake of Fire (Classic Era: Improved Fire Blast)
+	11237, // Improved Channeling (Classic Era: Improved Arcane Missiles)
+	11242, // Arcane Impact (Classic Era: Improved Arcane Explosion)
+	11247, // Arcane Geometry (Classic Era: Magic Attunement)
+	11252, // Arcane Shielding (Classic Era: Improved Mana Shield)
+	11743, // Detect Invisibility (Classic Era: Detect Greater Invisibility)
+	12281, // Weaponmaster (Classic Era: Sword Specialization)
+	12295, // Improved Tactical Mastery (Classic Era: Tactical Mastery)
+	13960, // Hack and Slash (Classic Era: Sword Specialization)
+	14084, // Improved Distract (not in Classic Era)
+	14913, // Twilight Focus (Classic Era: Healing Focus)
+	15258, // Shadow Weaving (Classic Era: Shadow Vulnerability)
+	16086, // Improved Fire Nova (Classic Era: Improved Fire Totems)
+	16268, // Spirit Weapons (Classic Era: Parry)
+	16538, // Bastion (Classic Era: One-Handed Weapon Specialization)
+	16578, // Elemental Alacrity (Classic Era: Lightning Mastery)
+	// Blood Frenzy (Classic Era: Primal Fury)
+	16958,
+	16959,
+	16966, // Shredding Attacks (Classic Era: Improved Shred)
+	17002, // Feral Swiftness (Classic Era: Feline Swiftness)
+	17069, // Naturalist (Classic Era: Improved Healing Touch)
+	17245, // Overgrowth (Classic Era: Improved Nature's Grasp)
+	17804, // Soul Siphon (Classic Era: Improved Drain Life)
+	17927, // Agonizing Flames (Classic Era: Improved Searing Pain)
+	18425, // Silenced - Kick (Classic Era: Kick - Silenced)
+	18459, // Incineration (Classic Era: Incinerate)
+	18498, // Silenced (Classic Era: Shield Bash - Silenced)
+	18662, // Bane of Doom Effect (Classic Era: Curse of Doom Effect)
+	18731, // Fel Vitality (Classic Era: Fel Intellect)
+	18789, // Burning Shadow (Classic Era: Burning Wish)
+	18791, // Touch of Fire (Classic Era: Touch of Shadow)
+	18827, // Improved Bane of Agony (Classic Era: Improved Curse of Agony)
+	19337, // Chastise (Classic Era: Fear Ward)
+	19376, // Survival Tactics (Classic Era: Trap Mastery)
+	19426, // Lethal Attacks (Classic Era: Lethal Shots)
+	19552, // Deadly Aspects (Classic Era: Improved Aspect of the Hawk)
+	// Seal of Fury (not in Classic Era)
+	20163,
+	20231,
+	20415,
+	20416,
+	20417,
+	20418,
+	20419,
+	20421,
+	20422,
+	20423,
+	// Judgement of Fury (not in Classic Era)
+	20183,
+	20232,
+	20411,
+	20412,
+	20413,
+	20414,
+	20224, // Improved Seals (Classic Era: Improved Seal of Righteousness)
+	23602, // Master of Defense (Classic Era: Shield Specialization, so its rage row read as a second Shield Specialization)
+	// Lacerate (not in Classic Era)
+	24118,
+	24119,
+	24120,
+	24293, // Improved Tracking (Classic Era: Monster Slaying)
+	// Demoralizing Screech (Classic Era: Screech)
+	24423,
+	24424,
+	24577,
+	24578,
+	24579,
+	24580,
+	24581,
+	24582,
+	28999, // Elemental Reach (Classic Era: Storm Reach)
+	29187, // Natural Grace (Classic Era: Healing Grace)
+	36936, // Totemic Recall (not in Classic Era)
+	66842, // Call of the Elements (not in Classic Era)
+	66843, // Call of the Ancestors (not in Classic Era)
+	66844, // Call of the Spirits (not in Classic Era)
+]);
 const wowheadEnvFor = (entity: WowheadEntity, id: number): WowheadExpansionEnv => {
 	if (entity === 'item') return id < 25000 ? 4 : WOWHEAD_EXPANSION_ENV;
 	if (entity === 'spell') return id < 100000 && !FOREVER_ONLY_SPELLS.has(id) ? 4 : WOWHEAD_EXPANSION_ENV;

@@ -40,7 +40,7 @@ func (paladin *Paladin) registerDivineFavor() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskDivineFavor,
 
-		ManaCost: manaCost(rank),
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				NonEmpty: true,

@@ -44,8 +44,7 @@ func (mage *Mage) registerArcaneTalents() {
 
 // registerWandSpecialization implements Wand Specialization, new in Forever.
 //
-// TODO: To be implemented. Needs the Forever tooltip and a spellData ladder before
-// the effect can be modelled; there is no TBC equivalent to port.
+// Not modelled: 6057 raises wand damage 13/25%, and the sim has no wand attack (see the priest's).
 func (mage *Mage) registerWandSpecialization() {
 	if mage.Talents.WandSpecialization == 0 {
 		return
@@ -62,8 +61,8 @@ func (mage *Mage) registerArcaneFocus() {
 
 // registerImprovedChanneling implements Improved Channeling, new in Forever.
 //
-// TODO: To be implemented. Needs the Forever tooltip and a spellData ladder before
-// the effect can be modelled; there is no TBC equivalent to port.
+// Client 11237 (row values): 20% to keep channeling Arcane Missiles through damage taken, 14% for Arcane
+// Blast. The sim's mage takes no damage, so it changes no number.
 func (mage *Mage) registerImprovedChanneling() {
 	if mage.Talents.ImprovedChanneling == 0 {
 		return
@@ -159,8 +158,7 @@ func (mage *Mage) registerArcaneResilience() {
 
 // registerArcaneGeometry implements Arcane Geometry, new in Forever.
 //
-// TODO: To be implemented. Needs the Forever tooltip and a spellData ladder before
-// the effect can be modelled; there is no TBC equivalent to port.
+// Not modelled: 11247 adds 3/6 yards to Arcane spell range; the sim has no range to extend.
 func (mage *Mage) registerArcaneGeometry() {
 	if mage.Talents.ArcaneGeometry == 0 {
 		return
@@ -183,8 +181,8 @@ func (mage *Mage) registerArcaneImpact() {
 
 // registerArcaneShielding implements Arcane Shielding, new in Forever.
 //
-// TODO: To be implemented. Needs the Forever tooltip and a spellData ladder before
-// the effect can be modelled; there is no TBC equivalent to port.
+// Not modelled: 11252 cuts Mana Shield's mana per damage 17/33% and raises Mage Armor's
+// resistances 25/50%; the sim casts neither.
 func (mage *Mage) registerArcaneShielding() {
 	if mage.Talents.ArcaneShielding == 0 {
 		return
@@ -193,8 +191,7 @@ func (mage *Mage) registerArcaneShielding() {
 
 // registerImprovedCounterspell implements Improved Counterspell, new in Forever.
 //
-// TODO: To be implemented. Needs the Forever tooltip and a spellData ladder before
-// the effect can be modelled; there is no TBC equivalent to port.
+// Not modelled: 11255 adds a 2/4 sec silence to Counterspell; the sim casts no interrupts.
 func (mage *Mage) registerImprovedCounterspell() {
 	if mage.Talents.ImprovedCounterspell == 0 {
 		return

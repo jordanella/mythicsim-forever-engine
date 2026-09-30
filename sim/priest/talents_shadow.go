@@ -436,6 +436,7 @@ func (priest *Priest) applyShadowform() {
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellShadowform,
 
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: core.GCDDefault,

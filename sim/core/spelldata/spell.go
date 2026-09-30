@@ -3,6 +3,7 @@ package spelldata
 import (
 	"fmt"
 	"slices"
+	"strconv"
 	"time"
 
 	"github.com/wowsims/forever/sim/core"
@@ -210,6 +211,15 @@ func (s *Spell) Cost() float64 {
 		return 0
 	}
 	return s.PowerCost(s.Powers[0].Type)
+}
+
+// The mana the cast takes: SpellPower's flat ManaCost, or its PowerCostPct of base mana. The client
+// states the percentage as a float32, read back here as the decimal it prints (13.9, not
+// 13.8999996): core truncates the cost, so a widened float would come out one short on a whole product.
+func (s *Spell) ManaCost() core.ManaCostOptions {
+	p := s.Power(dbcenums.POWER_MANA)
+	pct, _ := strconv.ParseFloat(strconv.FormatFloat(float64(p.CostPct), 'g', -1, 32), 64)
+	return core.ManaCostOptions{FlatCost: p.Cost, BaseCostPercent: pct}
 }
 
 // Spell.NameSubtext_lang's "Rank N" as a number; 0 for a spell the client shows no rank on, whose

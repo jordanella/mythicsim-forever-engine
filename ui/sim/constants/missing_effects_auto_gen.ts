@@ -52,12 +52,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		871, // Flurry Axe
-		[
-			"Grants 1 extra attack on your next swing.", // 18797 - https://www.wowhead.com/forever/spell=18797
-		]
-	],
-	[
 		880, // Staff of Horrors
 		[
 			"Damage caused by the target is reduced by 5 for 2min.", // 8552 - https://www.wowhead.com/forever/spell=8552
@@ -90,7 +84,7 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 	[
 		1168, // Skullflame Shield
 		[
-			"When struck in melee combat, has a 3% chance of stealing 270 life from target enemy.", // 18817 - https://www.wowhead.com/forever/spell=18817
+			"When struck in combat has a 2% chance of dealing 115 Fire damage to all targets around you.", // 18818 - https://www.wowhead.com/forever/spell=18818
 		]
 	],
 	[
@@ -481,18 +475,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		6331, // Howling Blade
 		[
 			"Reduces target's attack power by 30 for 30s.", // 13490 - https://www.wowhead.com/forever/spell=13490
-		]
-	],
-	[
-		6472, // Stinging Viper
-		[
-			"Poisons target for 7 Nature damage every 3.0 sec for 12s.", // 1291663 - https://www.wowhead.com/forever/spell=1291663
-		]
-	],
-	[
-		6622, // Sword of Zeal
-		[
-			"A burst of energy fills the caster, increasing his damage by 10 and armor by 150 for 15s.", // 8191 - https://www.wowhead.com/forever/spell=8191
 		]
 	],
 	[
@@ -948,12 +930,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		10761, // Coldrage Dagger
-		[
-			"Launches a bolt of frost at the enemy causing 42 Frost damage and slowing movement speed by 50% for 5s.", // 1293790 - https://www.wowhead.com/forever/spell=1293790
-		]
-	],
-	[
 		10772, // Glutton's Cleaver
 		[
 			"Wounds the target causing them to bleed for 70 damage over 7s.", // 18075 - https://www.wowhead.com/forever/spell=18075
@@ -1044,12 +1020,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		11744, // Bloodfist
-		[
-			"Wounds the target for 35 damage.", // 16433 - https://www.wowhead.com/forever/spell=16433
-		]
-	],
-	[
 		11750, // Kindling Stave
 		[
 			"Harmful spell casts have a chance to deal 70 Fire damage. Deals 3 times as much damage to Plants.", // 1300782 - https://www.wowhead.com/forever/spell=1300782
@@ -1065,12 +1035,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		11808, // Circle of Flame
 		[
 			"Channels 79 health into mana every 1.0 sec for 10s.", // 17447 - https://www.wowhead.com/forever/spell=17447
-		]
-	],
-	[
-		11809, // Flame Wrath
-		[
-			"Shoots a ring of fire dealing 154 Fire damage to all nearby enemies, and envelops the caster with a Fire Shield for 15s.", // 16559 - https://www.wowhead.com/forever/spell=16559
 		]
 	],
 	[
@@ -1218,12 +1182,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		12794, // Masterwork Stormhammer
-		[
-			"Blasts up to 3 targets for 125 Nature damage.", // 16921 - https://www.wowhead.com/forever/spell=16921
-		]
-	],
-	[
 		12795, // Blood Talon
 		[
 			"Wounds the target causing them to bleed for 100 damage over 30s.", // 13318 - https://www.wowhead.com/forever/spell=13318
@@ -1368,12 +1326,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		13246, // Argent Avenger
-		[
-			"Increases Attack Power by 100, and Attack Power against Undead by an additional 100 for 10s.", // 17352 - https://www.wowhead.com/forever/spell=17352
-		]
-	],
-	[
 		13262, // Ashbringer
 		[
 			"Blasts a target for 700 Fire damage.", // 18112 - https://www.wowhead.com/forever/spell=18112
@@ -1395,12 +1347,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		13353, // Book of the Dead
 		[
 			"", // 1298517 - https://www.wowhead.com/forever/spell=1298517
-		]
-	],
-	[
-		13361, // Skullforge Reaver
-		[
-			"Drains target for 21 Shadow damage every 1.0 sec and transfers it to the caster. Lasts for 10s.", // 17484 - https://www.wowhead.com/forever/spell=17484
 		]
 	],
 	[
@@ -1431,12 +1377,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		13399, // Gargoyle Shredder Talons
 		[
 			"Wounds the target causing them to bleed for 140 damage over 14s.", // 1320824 - https://www.wowhead.com/forever/spell=1320824
-		]
-	],
-	[
-		13401, // The Cruel Hand of Timmy
-		[
-			"Steals 85 life from target enemy.", // 17505 - https://www.wowhead.com/forever/spell=17505
 		]
 	],
 	[
@@ -1490,12 +1430,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		13984, // Darrowspike
-		[
-			"Blasts a target for 105 Frost damage.", // 18276 - https://www.wowhead.com/forever/spell=18276
-		]
-	],
-	[
 		14022, // Barov Peasant Caller
 		[
 			"", // 1298508 - https://www.wowhead.com/forever/spell=1298508
@@ -1538,12 +1472,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
-		14487, // Bonechill Hammer
-		[
-			"Blasts a target for 105 Frost damage.", // 18276 - https://www.wowhead.com/forever/spell=18276
-		]
-	],
-	[
 		14531, // Frightskull Shaft
 		[
 			"Deals 15 Shadow damage every 2.0 sec for 14s and lowers their attack power by 92 for 14s.", // 18633 - https://www.wowhead.com/forever/spell=18633
@@ -1553,12 +1481,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		14541, // Barovian Family Sword
 		[
 			"Deals 49 Shadow damage every 1.0 sec for 5s. All damage done is then transferred to the caster.", // 18652 - https://www.wowhead.com/forever/spell=18652
-		]
-	],
-	[
-		14555, // Alcor's Sunrazor
-		[
-			"Blasts a target for 90 Fire damage.", // 18833 - https://www.wowhead.com/forever/spell=18833
 		]
 	],
 	[
@@ -1715,12 +1637,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		17073, // Earthshaker
 		[
 			"Knocks down all nearby enemies for 3s.", // 21152 - https://www.wowhead.com/forever/spell=21152
-		]
-	],
-	[
-		17074, // Shadowstrike
-		[
-			"Steals 140 life from target enemy.", // 21170 - https://www.wowhead.com/forever/spell=21170
 		]
 	],
 	[
@@ -2076,18 +1992,6 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		19024, // Arena Grand Master
 		[
 			"Reduces your damage taken by 6% in the Battle Ring and The Maul.", // 1318318 - https://www.wowhead.com/forever/spell=1318318
-		]
-	],
-	[
-		19099, // Glacial Blade
-		[
-			"Blasts a target for 45 Frost damage.", // 18398 - https://www.wowhead.com/forever/spell=18398
-		]
-	],
-	[
-		19100, // Electrified Dagger
-		[
-			"Blasts a target for 45 Nature damage.", // 23592 - https://www.wowhead.com/forever/spell=23592
 		]
 	],
 	[
@@ -4776,6 +4680,12 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
+		282703, // Needletooth's Needletooth
+		[
+			"Puncture the target, inflicting 21 Physical damage.", // 1314305 - https://www.wowhead.com/forever/spell=1314305
+		]
+	],
+	[
 		284193, // Moongazer's Wand
 		[
 			"Increases intellect by 5 at night.", // 1315339 - https://www.wowhead.com/forever/spell=1315339
@@ -4791,6 +4701,12 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		284386, // Whipfang's Skinsearer
 		[
 			"Sear your target's flesh dealing 84 Fire damage.", // 1316039 - https://www.wowhead.com/forever/spell=1316039
+		]
+	],
+	[
+		284699, // Still Water Band
+		[
+			"Underwater breath lasts 50% longer than normal.", // 1316928 - https://www.wowhead.com/forever/spell=1316928
 		]
 	],
 	[
@@ -4811,6 +4727,12 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 			"Thunderstomp nearby enemies, inflicting 23 Nature damage.", // 1320498 - https://www.wowhead.com/forever/spell=1320498
 		]
 	],
+	[
+		286556, // Winds of Tanaris
+		[
+			"Slows nearby enemies by 50% for 10s, increased to 80% in Desert areas.", // 1320579 - https://www.wowhead.com/forever/spell=1320579
+		]
+	],
 ])
 
 export const MISSING_ENCHANT_EFFECTS = new Map<number, string[]>([
@@ -4824,12 +4746,6 @@ export const MISSING_ENCHANT_EFFECTS = new Map<number, string[]>([
 		463, // Mithril Shield Spike
 		[
 			"Attaches a Mithril Spike to your shield that deals damage every time you block with it.", // 9782 - https://www.wowhead.com/forever/spell=9782
-		]
-	],
-	[
-		803, // Enchant Weapon - Fiery Weapon
-		[
-			"Permanently enchant a melee weapon to often strike for 40 additional fire damage.", // 13897 - https://www.wowhead.com/forever/spell=13897
 		]
 	],
 	[
@@ -4848,12 +4764,6 @@ export const MISSING_ENCHANT_EFFECTS = new Map<number, string[]>([
 		1894, // Enchant Weapon - Icy Chill
 		[
 			"Permanently enchant a melee weapon to often chill the target reducing their movement and attack speed.", // 20005 - https://www.wowhead.com/forever/spell=20005
-		]
-	],
-	[
-		1898, // Enchant Weapon - Lifestealing
-		[
-			"Permanently enchant a melee weapon to often steal life from the enemy and give it to the wielder.", // 20004 - https://www.wowhead.com/forever/spell=20004
 		]
 	],
 	[

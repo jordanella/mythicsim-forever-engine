@@ -134,6 +134,7 @@ func (rogue *Rogue) Initialize() {
 	rogue.registerBackstabSpell()
 	rogue.registerEviscerate()
 	rogue.registerExposeArmorSpell()
+	rogue.registerKidneyShot()
 	rogue.registerGarrote()
 	rogue.registerDeadlyPoisonSpell()
 	rogue.registerInstantPoisonSpell()
@@ -219,7 +220,9 @@ func NewRogue(character *core.Character, options *proto.Player, talents string) 
 	rogue.AddStatDependency(stats.Strength, stats.AttackPower, 1)
 	rogue.AddStatDependency(stats.Agility, stats.AttackPower, 1)
 	rogue.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[character.Class])
-	rogue.AddStatDependency(stats.Agility, stats.DodgeRating, 1/20*core.DodgeRatingPerDodgePercent)
+	// Classic's rogue dodges at twice its crit rate per agility (14.5 agility a dodge at 60). The old
+	// 1/20 was TBC's, and as an integer division it gave no dodge at all.
+	rogue.AddStatDependency(stats.Agility, stats.DodgeRating, 2*core.CritPerAgiMaxLevel[character.Class]*core.DodgeRatingPerDodgePercent)
 
 	return rogue
 }
@@ -307,6 +310,7 @@ const (
 	RogueSpellDeadlyPoison
 	RogueSpellVenom
 	RogueSpellRiposte
+	RogueSpellKidneyShot
 
 	RogueSpellLast
 	RogueSpellsAll    = RogueSpellLast<<1 - 1
@@ -315,7 +319,7 @@ const (
 	RogueSpellPoisons        = RogueSpellWoundPoison | RogueSpellDeadlyPoison | RogueSpellInstantPoison
 	RogueSpellLethality      = RogueSpellSinisterStrike | RogueSpellGouge | RogueSpellBackstab | RogueSpellGhostlyStrike | RogueSpellMutilate | RogueSpellMutilateHit | RogueSpellHemorrhage
 	RogueSpellDirectFinisher = RogueSpellEviscerate
-	RogueSpellFinisher       = RogueSpellDirectFinisher | RogueSpellSliceAndDice | RogueSpellRupture | RogueSpellExposeArmor | RogueSpellVenom
+	RogueSpellFinisher       = RogueSpellDirectFinisher | RogueSpellSliceAndDice | RogueSpellRupture | RogueSpellExposeArmor | RogueSpellVenom | RogueSpellKidneyShot
 	// Quietus names only these three in its tooltip (1310728); its effects are dummies with no mask.
 	RogueSpellQuietus = RogueSpellSinisterStrike | RogueSpellGhostlyStrike | RogueSpellHemorrhage
 	// Cold Blood's class mask (14177): Mutilate's two hits, not the parent cast.

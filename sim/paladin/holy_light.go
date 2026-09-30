@@ -31,7 +31,7 @@ func (paladin *Paladin) registerHolyLight(_ int32, rank *spelldata.Spell) {
 		Rank:           rank.RankNumber(),
 		MaxRange:       float64(rank.MaxRange),
 
-		ManaCost: manaCost(rank),
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD:      rank.GCD(),

@@ -5,8 +5,7 @@ import (
 )
 
 // Strider Kick from the beta client (1317257): 100% normalized melee weapon damage, 8 sec cooldown,
-// 5.81% of base mana. The generated row states no cost, so the percentage is kept from our
-// client-verified sim.
+// 5.81% of base mana.
 func (hunter *Hunter) registerStriderKickSpell() {
 	if !hunter.Talents.StriderKick {
 		return
@@ -23,9 +22,7 @@ func (hunter *Hunter) registerStriderKickSpell() {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 		MaxRange:       float64(rank.MaxRange),
 
-		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 5.81,
-		},
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: rank.GCD(),

@@ -828,11 +828,15 @@ func (spell *Spell) CritDamageMultiplier(at *AttackTable) float64 {
 	return (base*spell.CritMultiplierPct*spell.Unit.PseudoStats.CritDamageMultiplier*tableMultiplier-1)*(spell.CritMultiplierAdditive+1) + 1
 }
 
-// Time until either the cast is finished or GCD is ready again, whichever is longer
+// Time until either the cast is finished or the spell's own GCD is ready again, whichever is
+// longer, hasted the way Cast hastes them (so a 1 sec totem GCD or an off-GCD spell reads right).
 func (spell *Spell) EffectiveCastTime() time.Duration {
-	// TODO: this is wrong for spells like shadowfury, that have a GCD of less than 1s
-	return max(spell.Unit.SpellGCD(),
-		spell.Unit.ApplyCastSpeedForSpell(spell.DefaultCast.EffectiveTime(), spell))
+	cast := spell.DefaultCast
+	if !spell.IgnoreHaste {
+		cast.GCD = spell.Unit.ApplyCastSpeed(cast.GCD)
+		cast.CastTime = spell.Unit.ApplyCastSpeedForSpell(cast.CastTime, spell)
+	}
+	return cast.EffectiveTime()
 }
 
 // Time until the cast is finished (ignoring GCD)

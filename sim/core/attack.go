@@ -44,31 +44,25 @@ func newWeaponFromUnarmed() Weapon {
 	}
 }
 
+// Client 1.60.1.70094 SpellRange: Auto Shot (75) 8-35, Throw (2764) 8-30, wand Shoot (5019) 0-30.
 func getWeaponMaxRange(item *Item) float64 {
 	switch item.RangedWeaponType {
 	case proto.RangedWeaponType_RangedWeaponTypeUnknown:
 		return MaxMeleeRange
-	case proto.RangedWeaponType_RangedWeaponTypeWand:
-	case proto.RangedWeaponType_RangedWeaponTypeThrown:
+	case proto.RangedWeaponType_RangedWeaponTypeWand, proto.RangedWeaponType_RangedWeaponTypeThrown:
 		return 30
 	default:
 		return 35
 	}
-
-	return 35
 }
 
 func getWeaponMinRange(item *Item) float64 {
 	switch item.RangedWeaponType {
-	case proto.RangedWeaponType_RangedWeaponTypeThrown:
-	case proto.RangedWeaponType_RangedWeaponTypeUnknown:
-	case proto.RangedWeaponType_RangedWeaponTypeWand:
-		return 0.
+	case proto.RangedWeaponType_RangedWeaponTypeUnknown, proto.RangedWeaponType_RangedWeaponTypeWand:
+		return 0
 	default:
 		return MinRangedRange
 	}
-
-	return 0
 }
 
 const TwoHandNormalizedSwingSpeed = 3.3

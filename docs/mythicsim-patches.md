@@ -3,7 +3,7 @@
 MythicSim runs this engine from its fork (`sage3648/mythicsim-forever-engine`, branch
 `codex/forever-frostfire-omen`). The branch is ElliotWood/Forever master, which is built on the
 official wowsims/forever, plus the patches below. The first base was `442076902` (Merge
-wowsims/forever master ea5412873). The current base is `8dc19a4241` (2026-09-27). It includes form-speed and actual spell cast-time Omen of Clarity proc corrections, life-drain weapon effects, Sword of Zeal, Argent Avenger, Fiery Weapon and Lifestealing enchants, Flurry Axe and Electrified Dagger, the 2026-09-27 client hotfix database, Stinging Viper and eight Classic weapon procs, Mage Scroll of Cryoblast, non-engineer explosives and SAF-T / EZ-Thro bombs, Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
+wowsims/forever master ea5412873). The current base is `d91d4afe40` (2026-10-01, client 1.60.1.70124). The 2026-10-01 sync merged 113 upstream commits; the decisions are in "Upstream sync 2026-10-01" at the end of this file. The previous base was `8dc19a4241` (2026-09-27). It includes form-speed and actual spell cast-time Omen of Clarity proc corrections, life-drain weapon effects, Sword of Zeal, Argent Avenger, Fiery Weapon and Lifestealing enchants, Flurry Axe and Electrified Dagger, the 2026-09-27 client hotfix database, Stinging Viper and eight Classic weapon procs, Mage Scroll of Cryoblast, non-engineer explosives and SAF-T / EZ-Thro bombs, Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
 
 Keep the set small. Each patch exists because MythicSim needs something upstream does not do
 yet. Drop a patch as soon as upstream covers it; do not keep ours alongside an upstream version.
@@ -583,3 +583,34 @@ Resource gains are applied at cast time while the item aura is active. The
 Cat and Bear regression tests verify both the cooldown gains and absence of
 shift gains, with and without the helm. Both fail on the previous pin. The
 Wolfshead Trophy enchant is a separate effect and has not been changed.
+
+## Upstream sync 2026-10-01
+
+Merged ElliotWood/Forever `d91d4afe40` (113 commits since `8dc19a4241`, client 1.60.1.70124) into the
+fork tip with a merge commit, so the patch history stays intact. Where upstream and a patch met:
+
+- **Database.** Upstream's 15 changed item rows, 10 new items and 13 new spell icons were merged
+  per field into our `db.json` (no conflicts inside a row), `db.bin` rebuilt with
+  `go run ./tools/sync_db_binary`, and the Forever planner armor re-applied to the 11 rows the new
+  planner file changes (what `fillPlannerArmor` does on a full regeneration).
+- **Frostfire Bolt (patch 8) kept.** Upstream #521 registers the spell and wires the talent masks, but
+  not the Frostfire school handling (lower resistance, no doubled school bonuses), binary resistance or
+  the hybrid rotation. Upstream's duplicate registration was dropped; its mask wiring is used. Upstream's
+  `TestFrostfireBolt` moved to seed 2, because binary resistance shifts which seeds hit.
+- **Innervate attribution (patch 10) kept.** Upstream #554 stops the double count but does not
+  attribute the regen to Innervate. Upstream #576 made the druid's own cast spend mana under
+  `{29166, Tag: druid.Index}`, which collides with the attribution row for the first druid (Index 0), and
+  the serializer merges rows sharing an ActionID. The attribution row now uses tag -2.
+- **Demonic Brand (PR #15) kept.** Upstream #535 makes the Imp's brand Fire and lets pet spells spend it,
+  but keeps one charge pool on the pet. Our per-target charges and `ProcMaskDirect` spending stay, and
+  upstream's `TestDemonicBrandImpSpendsWithFirebolt` was removed because `TestDemonicBrandPetHits`
+  covers the same two cases against the per-target model.
+- **Rupture** keeps `ruptureAttackPowerShare`; upstream's change there was a comment and the
+  `PointsPerResource` read, both taken.
+- **Test leak fixed.** Upstream's `TestPetStrikes` zeroed the shared default target's armor, which changed
+  every later sim in the hunter package (`TestSurvivalMelee` read 206 instead of 130 DPS). It clones the
+  target now.
+- **Goldens** were regenerated on the merged tree. Survival Melee moved 1.7% on average; the other specs
+  track upstream's own golden movement (glancing blow rolls, dodge from agility, client mana costs, pet
+  abilities).
+

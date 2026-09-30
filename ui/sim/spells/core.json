@@ -23,7 +23,7 @@
 		"file": "sim/core/buffs/buffs_auto_gen.go",
 		"source": "forever",
 		"tooltip": "Grants attacks an extra swing with 246 bonus attack power.",
-		"note": "Client 10610 (1.60.1.70009): 246 attack power where Era's is 315, for 1 sec where Era's is 1.5, on two charges. The raid buff procs it at 20% on main-hand hits (enchant 564) with a 1.5 sec internal cooldown, and the shaman's own totem (10614) procs the same 10610."
+		"note": "Client 10610 (1.60.1.70009): 246 attack power where Era's is 315, for 1 sec where Era's is 1.5, on two charges. Since 70009 the totem gives a party aura (10612, area A_PROC_TRIGGER_SPELL) instead of Era's main-hand enchant 564, which nothing in the client applies any more: 20% on any melee auto or special that deals damage, either hand (ProcTypeMask 0x14), 100 ms internal cooldown (ProcCategoryRecovery), not from other procs (no ATTR3 CAN_PROC_FROM_PROCS, so paladin seal hits do not roll it); the extra attack is always main-hand. The raid buff and the shaman's own totem (10614) both read that row."
 	},
 	"11198": {
 		"ability": "Expose Armor Rank 5",

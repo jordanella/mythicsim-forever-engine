@@ -14,7 +14,9 @@ import (
 // attack power, the mana cost, a 6 sec cooldown and the 18 sec hawk (1293248), and caps the hawks
 // out at once at its third effect, 2. The hawk that stays is a guardian whose swings the client does
 // not describe, so each hawk's assault is modelled as the rank's dive bomb base damage every 3 sec,
-// a melee hit that can crit. A cast past the cap replaces the hawk closest to leaving.
+// a melee hit that can crit. Every dive bomb rank carries the client's always-hit attribute, so it
+// never misses, and is never dodged or parried, and always leaves a hawk. A cast past the cap
+// replaces the hawk closest to leaving.
 func (hunter *Hunter) registerSummonHawkSpell(timer *core.Timer) {
 	if !hunter.Talents.SummonHawk {
 		return
@@ -83,7 +85,11 @@ func (hunter *Hunter) registerSummonHawkSpell(timer *core.Timer) {
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			damage := baseDamage + 0.05*spell.RangedAttackPower(target)
-			result := spell.CalcAndDealDamage(sim, target, damage, spell.OutcomeMeleeSpecialHitAndCrit)
+			outcome := spell.OutcomeMeleeSpecialHitAndCrit
+			if rank.AlwaysHits() {
+				outcome = spell.OutcomeMeleeSpecialCritOnly
+			}
+			result := spell.CalcAndDealDamage(sim, target, damage, outcome)
 			if !result.Landed() {
 				return
 			}

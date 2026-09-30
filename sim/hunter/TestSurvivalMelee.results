@@ -29,7 +29,7 @@ character_stats_results: {
   final_stats: 0
   final_stats: 0
   final_stats: 0
-  final_stats: 83.52
+  final_stats: 78.9264
   final_stats: 0
   final_stats: 1468
   final_stats: 0
@@ -49,7 +49,7 @@ character_stats_results: {
   final_stats: 0
   final_stats: 0
   final_stats: 0
-  final_stats: 6.96
+  final_stats: 6.5772
   final_stats: 0
   final_stats: 0
   final_stats: 0
@@ -58,1345 +58,1345 @@ character_stats_results: {
 dps_results: {
  key: "TestSurvivalMelee-AllItems-AccurateScope-33"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Alcor'sSunrazor-14555"
  value: {
-  dps: 467.60774
-  tps: 303.90926
+  dps: 520.30885
+  tps: 341.13776
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Annihilator-12798"
  value: {
-  dps: 452.91502
-  tps: 292.1951
+  dps: 481.4154
+  tps: 311.89125
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-ArenaGrandMaster-19024"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-ArgentAvenger-13246"
  value: {
-  dps: 448.73333
-  tps: 289.9179
+  dps: 479.99892
+  tps: 311.81416
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BadgeoftheSwarmguard-21670"
  value: {
-  dps: 384.28537
-  tps: 243.34363
+  dps: 388.30757
+  tps: 246.34602
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BarbaricBelt-4264"
  value: {
-  dps: 378.79564
-  tps: 239.50082
+  dps: 382.86395
+  tps: 242.53548
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BarbaricCrossbow-272999"
  value: {
-  dps: 373.49364
-  tps: 235.78942
+  dps: 377.94875
+  tps: 239.09484
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Beastmaster'sBoots-22061"
  value: {
-  dps: 384.23129
-  tps: 242.33279
+  dps: 389.77038
+  tps: 246.40559
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Beastmaster'sTreads-226881"
  value: {
-  dps: 385.2989
-  tps: 243.08012
+  dps: 390.86779
+  tps: 247.17377
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BeastmasterArmor"
  value: {
-  dps: 447.3647
-  tps: 286.49385
+  dps: 444.94297
+  tps: 284.86489
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BeaststalkerArmor"
  value: {
-  dps: 427.98137
-  tps: 273.76194
+  dps: 433.6492
+  tps: 277.99671
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BlackDragonMail"
  value: {
-  dps: 408.92934
-  tps: 260.58295
+  dps: 406.86011
+  tps: 259.12165
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BlazefuryMedallion-17111"
  value: {
-  dps: 381.57773
-  tps: 241.44056
+  dps: 385.88176
+  tps: 244.63483
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BlazingEmblem-2802"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BloodGuard'sChainGauntlets-16530"
  value: {
-  dps: 379.74843
-  tps: 240.16777
+  dps: 384.50371
+  tps: 243.68332
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BloodGuard'sChainVices-22862"
  value: {
-  dps: 381.62455
-  tps: 241.48106
+  dps: 386.92144
+  tps: 245.37573
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BloodTigerHarness"
  value: {
-  dps: 388.71633
-  tps: 246.32917
+  dps: 394.06395
+  tps: 250.31982
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Bloodfist-11744"
  value: {
-  dps: 452.91296
-  tps: 293.44587
+  dps: 497.42912
+  tps: 324.63985
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BloodmailRegalia"
  value: {
-  dps: 417.44366
-  tps: 266.47767
+  dps: 416.10867
+  tps: 265.5751
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BloodsoulEmbrace"
  value: {
-  dps: 397.07291
-  tps: 251.99874
+  dps: 401.52118
+  tps: 255.37591
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BloodvineGarb"
  value: {
-  dps: 397.05222
-  tps: 252.03894
+  dps: 404.32151
+  tps: 257.56716
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BlueDragonMail"
  value: {
-  dps: 387.28632
-  tps: 245.4443
+  dps: 391.54797
+  tps: 248.6143
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Bonereaver'sEdge-17076"
  value: {
-  dps: 473.91903
-  tps: 307.13793
+  dps: 500.96139
+  tps: 326.08356
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-BurstofKnowledge-11832"
  value: {
-  dps: 377.20364
-  tps: 238.11711
+  dps: 381.2357
+  tps: 241.12696
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-CadaverousGarb"
  value: {
-  dps: 422.26851
-  tps: 270.05771
+  dps: 423.98048
+  tps: 271.16708
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Champion'sPursuance"
  value: {
-  dps: 435.58758
-  tps: 279.12043
+  dps: 438.26054
+  tps: 281.25043
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Champion'sPursuit"
  value: {
-  dps: 411.26741
-  tps: 262.14022
+  dps: 416.79968
+  tps: 266.25319
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-ColdrageDagger-10761"
  value: {
-  dps: 455.26691
-  tps: 295.43275
+  dps: 494.51389
+  tps: 322.96509
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-CrudeScope-30"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-CryptstalkerArmor"
  value: {
-  dps: 527.93666
-  tps: 341.04727
+  dps: 534.20417
+  tps: 345.49029
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-CursedMurlocEye-273840"
  value: {
-  dps: 383.05388
-  tps: 242.45526
+  dps: 386.42622
+  tps: 245.01763
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Dal'Rend'sArms"
  value: {
-  dps: 397.26422
-  tps: 255.23412
+  dps: 421.55092
+  tps: 272.2528
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-DarkmoonCard:BlueDragon-19288"
  value: {
-  dps: 377.20364
-  tps: 238.33446
+  dps: 381.2357
+  tps: 241.37836
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-DarkmoonCard:Heroism-19287"
  value: {
-  dps: 377.16225
-  tps: 238.38642
+  dps: 381.19978
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-DarkmoonCard:Maelstrom-19289"
  value: {
-  dps: 388.99107
-  tps: 246.61976
+  dps: 394.33776
+  tps: 250.55779
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Darrowspike-13984"
  value: {
-  dps: 462.24566
-  tps: 300.33309
+  dps: 500.94158
+  tps: 327.43201
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-DeadlyScope-663"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-DefiasLeather"
  value: {
-  dps: 385.57151
-  tps: 244.09634
+  dps: 390.44407
+  tps: 247.83555
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Defiler'sTalisman-20072"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Defiler'sTalisman-21115"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Defiler'sTalisman-21116"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Defiler'sTalisman-21120"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-DevilsaurArmor"
  value: {
-  dps: 404.27488
-  tps: 257.46217
+  dps: 405.0604
+  tps: 257.92302
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-DraconicInfusedEmblem-22268"
  value: {
-  dps: 377.78647
-  tps: 238.82346
+  dps: 381.11239
+  tps: 241.3049
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Dragon'sCall-10847"
  value: {
-  dps: 465.42773
-  tps: 287.59408
+  dps: 486.55927
+  tps: 300.94221
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-DragonscaleBreastplate-8367"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-DreadmistRaiment"
  value: {
-  dps: 401.0601
-  tps: 254.7751
+  dps: 399.47945
+  tps: 253.65656
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EarthenSigil-20525"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Earthstrike-21180"
  value: {
-  dps: 386.86667
-  tps: 245.15054
+  dps: 390.95049
+  tps: 248.19606
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EbonHiltofMarduk-14576"
  value: {
-  dps: 316.03107
-  tps: 193.91033
+  dps: 319.79976
+  tps: 197.09489
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EidolonTalisman-18340"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-ElectrifiedDagger-19100"
  value: {
-  dps: 461.37506
-  tps: 298.93866
+  dps: 491.35773
+  tps: 320.6351
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Enchant2HWeapon-GrandArcanist-7941"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Enchant:FieryBlaze-36"
  value: {
-  dps: 378.11521
-  tps: 239.10727
+  dps: 381.82468
+  tps: 241.83816
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantChest-Absorption-8220"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantChest-LesserAbsorption-63"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantChest-MinorAbsorption-44"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantCloak-Subtlety-2621"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantGloves-Threat-2613"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantWeapon-Crusader-1900"
  value: {
-  dps: 385.29097
-  tps: 244.08549
+  dps: 389.28421
+  tps: 247.04493
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantWeapon-FieryWeapon-803"
  value: {
-  dps: 389.39135
-  tps: 246.92482
+  dps: 392.8057
+  tps: 249.48787
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantWeapon-GrandSorcerer-7942"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantWeapon-Insight-8216"
  value: {
-  dps: 377.20364
-  tps: 238.14775
+  dps: 381.2357
+  tps: 241.24007
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantWeapon-Lifestealing-1898"
  value: {
-  dps: 387.09834
-  tps: 245.29935
+  dps: 390.76368
+  tps: 248.03321
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantWeapon-Recovery-8721"
  value: {
-  dps: 377.20364
-  tps: 238.38642
-  hps: 8.98747
+  dps: 381.2357
+  tps: 241.39571
+  hps: 8.57762
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnergyCloak-9397"
  value: {
-  dps: 377.20364
-  tps: 238.35971
+  dps: 381.2357
+  tps: 241.37122
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EssenceofthePureFlame-18815"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EverlookPathcarver-274759"
  value: {
-  dps: 378.35598
-  tps: 238.94518
+  dps: 380.37355
+  tps: 240.40808
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EyeofMoam-21473"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EyeoftheDead-23047"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-FieldMarshal'sPursuit"
  value: {
-  dps: 425.59565
-  tps: 272.16999
+  dps: 432.10791
+  tps: 276.96895
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-FlameWalkers-18047"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-FlameWrath-11809"
  value: {
-  dps: 443.09178
-  tps: 285.80371
+  dps: 467.62563
+  tps: 302.90633
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-FlurryAxe-871"
  value: {
-  dps: 463.94978
-  tps: 301.26162
+  dps: 508.09646
+  tps: 332.47081
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-ForceofWill-11810"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-FreezingBand-942"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-FrozenHeartoftheMountain-249469"
  value: {
-  dps: 383.86473
-  tps: 243.04842
+  dps: 381.71274
+  tps: 241.48452
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-GarboftheUndeadSlayer"
  value: {
-  dps: 381.18364
-  tps: 241.17242
+  dps: 385.30633
+  tps: 244.24515
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Gem-studdedLeatherBelt-4262"
  value: {
-  dps: 377.99964
-  tps: 238.94362
+  dps: 382.04982
+  tps: 241.9656
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-General'sChainGloves-16571"
  value: {
-  dps: 385.75138
-  tps: 244.279
+  dps: 390.37068
+  tps: 247.75289
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-GiantstalkerArmor"
  value: {
-  dps: 461.65328
-  tps: 297.38845
+  dps: 466.02539
+  tps: 300.65883
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-GirdleofReprisal-11861"
  value: {
-  dps: 378.92831
-  tps: 239.59368
+  dps: 382.99964
+  tps: 242.63047
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-GlacialBlade-19099"
  value: {
-  dps: 460.9252
-  tps: 298.62904
+  dps: 490.93199
+  tps: 320.33139
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-GnomishHarmPreventionBelt-10721"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-GoblinConstructionHelmet-10543"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-GoldenBanana-270226"
  value: {
-  dps: 378.05831
-  tps: 239.03161
+  dps: 382.25712
+  tps: 242.16751
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-GreenDragonMail"
  value: {
-  dps: 377.20364
-  tps: 238.04224
+  dps: 381.2357
+  tps: 241.09481
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-HandofJustice-11815"
  value: {
-  dps: 383.02744
-  tps: 242.5458
+  dps: 386.30293
+  tps: 244.97529
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Headmaster'sCharge-13937"
  value: {
-  dps: 451.2437
-  tps: 292.16799
+  dps: 477.01033
+  tps: 310.06498
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-HeartofWyrmthalak-22321"
  value: {
-  dps: 379.87053
-  tps: 240.27738
+  dps: 383.96104
+  tps: 243.25746
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-HeartoftheScale-13164"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-HelmofFire-8348"
  value: {
-  dps: 381.82401
-  tps: 241.3597
+  dps: 384.89616
+  tps: 243.50339
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-HibernationCrystal-20636"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Hurricane-2824"
  value: {
-  dps: 373.49364
-  tps: 235.78942
+  dps: 377.94875
+  tps: 239.09484
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-IcebladeHacker-13952"
  value: {
-  dps: 363.83417
-  tps: 230.41756
+  dps: 370.48443
+  tps: 235.32104
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-InfernalLasso-219345"
  value: {
-  dps: 378.47408
-  tps: 239.02785
+  dps: 380.49165
+  tps: 240.49075
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-IronfeatherArmor"
  value: {
-  dps: 381.97965
-  tps: 241.63796
+  dps: 386.12046
+  tps: 244.73434
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-JomGabbar-23570"
  value: {
-  dps: 388.77832
-  tps: 246.4887
+  dps: 392.78712
+  tps: 249.4817
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-KissoftheSpider-22954"
  value: {
-  dps: 390.03789
-  tps: 247.64637
+  dps: 389.76135
+  tps: 246.98259
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Knight-Lieutenant'sChainGauntlets-16403"
  value: {
-  dps: 379.74843
-  tps: 240.16777
+  dps: 384.50371
+  tps: 243.68332
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Knight-Lieutenant'sChainVices-23279"
  value: {
-  dps: 381.62455
-  tps: 241.48106
+  dps: 386.92144
+  tps: 245.37573
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-LieutenantCommander'sPursuance"
  value: {
-  dps: 435.58758
-  tps: 279.12043
+  dps: 438.26054
+  tps: 281.25043
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-LieutenantCommander'sPursuit"
  value: {
-  dps: 411.26741
-  tps: 262.14022
+  dps: 416.79968
+  tps: 266.25319
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Lifestone-833"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Linken'sBoomerang-11905"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Loatheb'sReflection-23042"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Magister'sRegalia"
  value: {
-  dps: 407.32428
-  tps: 259.28964
+  dps: 405.06331
+  tps: 257.66445
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-MarkofResolution-17759"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-MarkofTyranny-13966"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-MarkoftheChampion-23206"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-MarkoftheChampion-23207"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-MarkoftheDragonLord-13143"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-MarkoftheRedFlight-282778"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Marshal'sChainGrips-16463"
  value: {
-  dps: 385.75138
-  tps: 244.279
+  dps: 390.37068
+  tps: 247.75289
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-MindtapTalisman-18371"
  value: {
-  dps: 377.20364
-  tps: 238.18686
+  dps: 381.2357
+  tps: 241.21812
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-MoltenHeartoftheMountain-249470"
  value: {
-  dps: 379.59558
-  tps: 240.06077
+  dps: 383.65837
+  tps: 243.09158
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Naglering-11669"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-NecropileRaiment"
  value: {
-  dps: 388.61851
-  tps: 246.29654
+  dps: 392.95099
+  tps: 249.43068
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-ObsidianMailTunic-22191"
  value: {
-  dps: 390.32524
-  tps: 247.52171
+  dps: 395.71556
+  tps: 251.53161
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-OrbofFire-12805"
  value: {
-  dps: 377.37958
-  tps: 238.51193
+  dps: 381.41201
+  tps: 241.50163
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-PetrolspillLeggings-9509"
  value: {
-  dps: 380.5712
-  tps: 240.74371
+  dps: 385.36153
+  tps: 244.28379
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Plaguefang-279876"
  value: {
-  dps: 432.83831
-  tps: 278.89033
+  dps: 470.36454
+  tps: 304.80047
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Predator'sArmor"
  value: {
-  dps: 406.62822
-  tps: 258.82009
+  dps: 404.30759
+  tps: 257.18886
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Prismcharm-15867"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-RaggedJohn'sNeverendingCup-15873"
  value: {
-  dps: 374.83049
-  tps: 236.72521
+  dps: 378.62457
+  tps: 239.56792
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-RedWhelpGloves-7284"
  value: {
-  dps: 380.72574
-  tps: 240.85025
+  dps: 383.63996
+  tps: 243.08208
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-RegaliaofUndeadCleansing"
  value: {
-  dps: 381.58164
-  tps: 241.45102
+  dps: 385.71339
+  tps: 244.5301
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Renataki'sCharmofBeasts-19953"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-RingofSaviors-1447"
  value: {
-  dps: 377.20364
-  tps: 238.36451
+  dps: 381.2357
+  tps: 241.37575
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Rivenspike-13286"
  value: {
-  dps: 444.35733
-  tps: 286.1718
+  dps: 470.45971
+  tps: 304.27805
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-RunebladeofBaronRivendare-13505"
  value: {
-  dps: 445.82909
-  tps: 287.51402
+  dps: 464.75011
+  tps: 300.86935
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-SearingDagger-273003"
  value: {
-  dps: 259.54234
-  tps: 157.91138
+  dps: 265.68612
+  tps: 162.3575
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-SecondWind-11819"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-SerenityField-272439"
  value: {
-  dps: 377.20364
-  tps: 238.14997
+  dps: 381.2357
+  tps: 241.31476
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-ShadowcraftArmor"
  value: {
-  dps: 433.30442
-  tps: 277.43257
+  dps: 430.1603
+  tps: 275.10771
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Shadowstrike-17074"
  value: {
-  dps: 450.01325
-  tps: 290.33008
+  dps: 481.62678
+  tps: 312.65424
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-ShardoftheFallenStar-21891"
  value: {
-  dps: 378.02787
-  tps: 238.70241
+  dps: 380.03231
+  tps: 240.15562
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-ShardoftheGods"
  value: {
-  dps: 377.20364
-  tps: 238.09633
+  dps: 381.2357
+  tps: 241.14173
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-SkullforgeReaver-13361"
  value: {
-  dps: 450.26405
-  tps: 291.17473
+  dps: 478.85866
+  tps: 311.07279
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Slayer'sCrest-23041"
  value: {
-  dps: 394.66714
-  tps: 250.61087
+  dps: 398.9406
+  tps: 253.78914
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Smokey'sLighter-13171"
  value: {
-  dps: 377.58944
-  tps: 238.30925
+  dps: 378.92328
+  tps: 239.65453
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-SmokingHeartoftheMountain-11811"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-SniperScope-664"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-SpireoftheStoneshaper-12532"
  value: {
-  dps: 442.37527
-  tps: 285.09889
+  dps: 468.33166
+  tps: 303.24275
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-SpiritofEskhandar"
  value: {
-  dps: 394.65416
-  tps: 254.44391
+  dps: 417.9493
+  tps: 271.22527
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-StandardScope-32"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-StormGauntlets-12632"
  value: {
-  dps: 386.22219
-  tps: 244.68106
+  dps: 383.72094
+  tps: 242.90812
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-StormshroudArmor"
  value: {
-  dps: 405.35171
-  tps: 258.05247
+  dps: 402.82537
+  tps: 256.30984
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Striker'sGarb"
  value: {
-  dps: 438.65407
-  tps: 281.20547
+  dps: 442.87555
+  tps: 284.42016
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-SwineFists-10760"
  value: {
-  dps: 382.41282
-  tps: 242.00651
+  dps: 386.18161
+  tps: 244.8464
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-SwordofZeal-6622"
  value: {
-  dps: 321.72763
-  tps: 199.49001
+  dps: 328.75854
+  tps: 204.72379
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TalismanofArathor-20071"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TalismanofArathor-21117"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TalismanofArathor-21118"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TalismanofArathor-21119"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TalismanofAscendance-22678"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TalismanofEphemeralPower-18820"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TheBurrower'sShell-23558"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TheElements"
  value: {
-  dps: 406.61533
-  tps: 258.7461
+  dps: 405.69018
+  tps: 257.90831
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TheHighlander'sFortitude"
  value: {
-  dps: 393.86988
-  tps: 249.8877
+  dps: 398.79207
+  tps: 253.58194
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TheLionHornofStormwind-14557"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TheLobotomizer-19324"
  value: {
-  dps: 460.48644
-  tps: 298.32726
+  dps: 489.56011
+  tps: 319.37148
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-ThePostmaster"
  value: {
-  dps: 396.44986
-  tps: 251.70913
+  dps: 394.86861
+  tps: 250.58441
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TheRestrainedEssenceofSapphiron-23046"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-ThorncursedGrips-274159"
  value: {
-  dps: 380.87577
-  tps: 240.94919
+  dps: 384.50106
+  tps: 243.66834
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Thunderfury,BlessedBladeoftheWindseeker-19019"
  value: {
-  dps: 477.89514
-  tps: 303.35479
+  dps: 517.35432
+  tps: 331.37719
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-TortoiseArmor-6907"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-UndeadSlayer'sArmor"
  value: {
-  dps: 381.18364
-  tps: 241.17242
+  dps: 385.30633
+  tps: 244.24515
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Uther'sStrength-11302"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Venomstrike-6469"
  value: {
-  dps: 373.49364
-  tps: 235.78942
+  dps: 377.94875
+  tps: 239.09484
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-VestmentsoftheDevout"
  value: {
-  dps: 396.57301
-  tps: 251.63976
+  dps: 401.04611
+  tps: 255.01118
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-VolcanicArmor"
  value: {
-  dps: 380.42615
-  tps: 240.68794
+  dps: 384.55201
+  tps: 243.75299
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-WarbladeofCaerDarrow-13982"
  value: {
-  dps: 457.36741
-  tps: 295.64534
+  dps: 476.87477
+  tps: 309.17326
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Warlord'sPursuit"
  value: {
-  dps: 425.59565
-  tps: 272.16999
+  dps: 432.10791
+  tps: 276.96895
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-WarmthofForgiveness-23027"
  value: {
-  dps: 377.20364
-  tps: 238.20436
+  dps: 381.2357
+  tps: 241.23323
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-WildheartRaiment"
  value: {
-  dps: 402.54302
-  tps: 255.75432
+  dps: 407.15206
+  tps: 259.19804
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-AllItems-WrathofCenarius-21190"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Average-Default"
  value: {
-  dps: 372.39852
-  tps: 234.80027
+  dps: 377.12914
+  tps: 238.15337
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Settings-NightElf-Weapons-Cat-sv_melee-FullBuffs-5.0yards-LongMultiTarget"
  value: {
-  dps: 375.45294
-  tps: 449.50698
+  dps: 379.51668
+  tps: 449.92334
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Settings-NightElf-Weapons-Cat-sv_melee-FullBuffs-5.0yards-LongSingleTarget"
  value: {
-  dps: 375.45294
-  tps: 237.16826
+  dps: 379.51668
+  tps: 240.19897
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Settings-NightElf-Weapons-Cat-sv_melee-FullBuffs-5.0yards-ShortSingleTarget"
  value: {
-  dps: 391.00116
-  tps: 247.53954
+  dps: 392.67398
+  tps: 248.40562
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Settings-NightElf-Weapons-Cat-sv_melee-NoBuffs-5.0yards-LongMultiTarget"
  value: {
-  dps: 130.17785
-  tps: 97.48358
+  dps: 130.28442
+  tps: 97.58511
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Settings-NightElf-Weapons-Cat-sv_melee-NoBuffs-5.0yards-LongSingleTarget"
  value: {
-  dps: 130.17785
-  tps: 97.48358
+  dps: 130.28442
+  tps: 97.58511
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Settings-NightElf-Weapons-Cat-sv_melee-NoBuffs-5.0yards-ShortSingleTarget"
  value: {
-  dps: 193.95381
-  tps: 159.51797
+  dps: 194.12289
+  tps: 159.65755
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Settings-Orc-Weapons-Cat-sv_melee-FullBuffs-5.0yards-LongMultiTarget"
  value: {
-  dps: 377.20364
-  tps: 450.5858
+  dps: 381.2357
+  tps: 450.99526
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Settings-Orc-Weapons-Cat-sv_melee-FullBuffs-5.0yards-LongSingleTarget"
  value: {
-  dps: 377.20364
-  tps: 238.38642
+  dps: 381.2357
+  tps: 241.39571
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Settings-Orc-Weapons-Cat-sv_melee-FullBuffs-5.0yards-ShortSingleTarget"
  value: {
-  dps: 389.89123
-  tps: 246.76058
+  dps: 391.06461
+  tps: 247.27756
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Settings-Orc-Weapons-Cat-sv_melee-NoBuffs-5.0yards-LongMultiTarget"
  value: {
-  dps: 130.89624
-  tps: 98.41074
+  dps: 131.00141
+  tps: 98.51891
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Settings-Orc-Weapons-Cat-sv_melee-NoBuffs-5.0yards-LongSingleTarget"
  value: {
-  dps: 130.89624
-  tps: 98.41074
+  dps: 131.00141
+  tps: 98.51891
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-Settings-Orc-Weapons-Cat-sv_melee-NoBuffs-5.0yards-ShortSingleTarget"
  value: {
-  dps: 192.29431
-  tps: 157.85847
+  dps: 192.47214
+  tps: 158.0068
  }
 }
 dps_results: {
  key: "TestSurvivalMelee-SwitchInFrontOfTarget-Default"
  value: {
-  dps: 301.95393
-  tps: 194.64712
+  dps: 303.84727
+  tps: 196.08887
  }
 }

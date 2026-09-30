@@ -94,10 +94,11 @@ func TestDualWieldSpecializationLeavesTheShieldAlone(t *testing.T) {
 	}
 }
 
-// A shield's hit is an off-hand hit: it never procs Windfury Totem or the main-hand weapon's
-// enchant, which a main-hand special does.
+// A shield's hit is an off-hand hit: it never procs the main-hand weapon's enchant, which a
+// main-hand special does. (Windfury Totem is a party aura since build 70009, not a main-hand
+// enchant, so a shield's hit procs it like any other melee special.)
 func TestShieldHitsNeverProcMainHandWeaponEffects(t *testing.T) {
-	sim, war, target := shieldTestSim(t, DefaultProtectionTalents, 0)
+	sim, war, _ := shieldTestSim(t, DefaultProtectionTalents, 0)
 	mainHandSpecial := &core.Spell{ProcMask: core.ProcMaskMeleeMHSpecial}
 
 	crusaderTrigger := war.GetAura("Enchant Weapon - Crusader")
@@ -108,29 +109,10 @@ func TestShieldHitsNeverProcMainHandWeaponEffects(t *testing.T) {
 		t.Fatal("a main-hand special never rolls Crusader, so the check below proves nothing")
 	}
 
-	windfuryTrigger := war.GetAura("Windfury Totem Trigger")
-	windfury := war.GetAura("Windfury Totem (External)")
-	if windfuryTrigger == nil || windfury == nil {
-		t.Fatal("Windfury Totem registered no trigger or proc")
-	}
-
 	for name, spell := range shieldSpells(t, war) {
 		if got := crusaderTrigger.Dpm.Chance(spell.ProcMask, sim); got != 0 {
 			t.Errorf("%s rolls the main hand's Crusader at %v, want never", name, got)
 		}
-		for i := 0; i < 200 && !windfury.IsActive(); i++ {
-			windfuryTrigger.OnSpellHitDealt(windfuryTrigger, sim, spell, &core.SpellResult{Target: target, Outcome: core.OutcomeHit, Damage: 100})
-		}
-		if windfury.IsActive() {
-			t.Errorf("%s procced Windfury Totem", name)
-		}
-	}
-
-	for i := 0; i < 200 && !windfury.IsActive(); i++ {
-		windfuryTrigger.OnSpellHitDealt(windfuryTrigger, sim, mainHandSpecial, &core.SpellResult{Target: target, Outcome: core.OutcomeHit, Damage: 100})
-	}
-	if !windfury.IsActive() {
-		t.Error("200 main-hand specials never procced Windfury Totem, so the check above proves nothing")
 	}
 }
 

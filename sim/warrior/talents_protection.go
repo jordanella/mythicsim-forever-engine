@@ -256,9 +256,8 @@ func (warrior *Warrior) registerShieldSlam() {
 		FlatThreatBonus: 254 * 2,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			// Rank 4 rolls 640-670; the generator stores the centre of the range (655), so the range
-			// stays ours.
-			baseDamage := sim.Roll(640, 670) + warrior.BlockDamageReduction()
+			// Rank 4 rolls 655 +-2.3% (640-670) off the row.
+			baseDamage := shieldSlamRank.DamageEffect().Roll(sim, core.CharacterLevel) + warrior.BlockDamageReduction()
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 
 			if !result.Landed() {

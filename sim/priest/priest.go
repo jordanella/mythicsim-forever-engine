@@ -48,9 +48,10 @@ func (priest *Priest) GetPriest() *Priest {
 func (priest *Priest) AddPartyBuffs(_ *proto.PartyBuffs) {
 }
 
-// Divine Spirit and Improved Power Word: Fortitude are gone from the Forever trees. Both are raid
-// buffs the rest of the raid is built around, so they are assumed to have become baseline.
-// TODO: beta will confirm whether they were made baseline or removed outright.
+// Divine Spirit is baseline in Forever: it left the tree, and Wowhead Forever lists Divine Spirit
+// rank 4 (27841) and Prayer of Spirit (27681) on the priest trainers at level 60. Improved Power
+// Word: Fortitude (14767) is only an orphan row there, in no tree and taught by no trainer, so the
+// raid gets plain Prayer of Fortitude, as below.
 func (priest *Priest) AddRaidBuffs(raidBuffs *proto.RaidBuffs) {
 	raidBuffs.PrayerOfShadowProtection = true
 	raidBuffs.PrayerOfSpirit = true
@@ -70,7 +71,9 @@ func (priest *Priest) Initialize() {
 	})
 	SmiteRankMap.Each(func(_ int32, rank *spelldata.Spell) { priest.registerSmiteSpell(rank) })
 	HolyFireRankMap.Each(func(_ int32, rank *spelldata.Spell) { priest.registerHolyFireSpell(rank) })
+	ChastiseRankMap.Each(func(_ int32, rank *spelldata.Spell) { priest.registerChastiseSpell(rank) })
 	priest.registerShadowfiendSpell()
+	priest.registerDarkSacrificeSpell()
 
 	if priest.Race == proto.Race_RaceNightElf && !priest.RacialsDisabled() {
 		starshardsCDTimer := priest.NewTimer()

@@ -365,7 +365,8 @@ type AttackTable struct {
 	BaseGlanceChance    float64
 	BaseCrushChance     float64
 
-	GlanceMultiplier     float64
+	GlanceMultiplier     float64 // average damage a glance keeps
+	GlanceSpread         float64 // a glance keeps GlanceMultiplier +- this, uniformly
 	MeleeCritSuppression float64
 	SpellCritSuppression float64
 	HitSuppression       float64
@@ -414,11 +415,13 @@ func NewAttackTable(attacker *Unit, defender *Unit) *AttackTable {
 		table.BaseDodgeChance = UnitLevelFloat64(defender.Level, 0.04, 0.05, 0.055, 0.06, 0.065)
 		table.BaseParryChance = UnitLevelFloat64(defender.Level, 0.04, 0.05, 0.055, 0.06, 0.14)
 		// Level 60 glancing blows at a full 300 weapon skill: 10% + 2% per point of the
-		// target's defense above it, so 40% against a boss, for 55-75% (average 65%) damage.
-		// The 24% / 75% this engine had are TBC's.
+		// target's defense above it, so 40% against a boss. The 24% / 75% this engine had are TBC's.
 		table.BaseGlanceChance = UnitLevelFloat64(defender.Level, 0, 0.10, 0.20, 0.30, 0.40)
-
+		// A glance keeps a uniform roll between min(1.3 - 0.05 x gap, 0.91) and
+		// max(min(1.2 - 0.03 x gap, 0.99), 0.2) of the damage, gap = defense - weapon skill (5 a level):
+		// 91-99% against +0 and +1, 80-90% against +2, 55-75% against a boss.
 		table.GlanceMultiplier = UnitLevelFloat64(defender.Level, 0.95, 0.95, 0.95, 0.85, 0.65)
+		table.GlanceSpread = UnitLevelFloat64(defender.Level, 0.04, 0.04, 0.04, 0.05, 0.10)
 		table.HitSuppression = UnitLevelFloat64(defender.Level, 0, 0, 0, 0, 0.01)
 		table.MeleeCritSuppression = UnitLevelFloat64(defender.Level, 0, 0, 0.01, 0.02, 0.048)
 		// No spell crit suppression against a higher level target: that is TBC's (0.3%/2.1%). A

@@ -5,6 +5,7 @@ import (
 
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/proto"
+	"github.com/wowsims/forever/sim/core/spelldata"
 	"github.com/wowsims/forever/sim/core/stats"
 )
 
@@ -192,6 +193,11 @@ func (pet *WarlockPet) ExecuteCustomRotation(sim *core.Simulation) {
 // client-verified beta 1.60.1 values (Firebolt rank 7, Lash of Pain rank 6). The 200 ms gap on
 // Firebolt stands in for the imp's real cast delay. Improved Imp and Improved Sayaad ride on their
 // talents as SpellMods.
+// Firebolt rank 7's damage effect, client 1.60.1.70094 11763: 44 + 0.6 a level from 58 (capped at 63),
+// +-11.4%, so 45 (42.4 to 47.6) at 60. Beta logs agree on the row: level 20 imps' rank 2 (7799, 7 + 0.2 a
+// level to 13) hit for 8 (126 of 138 non-crits; 6 each of 7 and 9), foreverlogs 2674.
+var impFireboltEffect = spelldata.Effect{BasePoints: 44, PPL: 0.6000000238418579, Variance: 0.11363636702, SpellLevel: 58, MaxLevel: 63}
+
 func (pet *WarlockPet) registerFireboltSpell() {
 	pet.MinMana = 115
 
@@ -220,7 +226,7 @@ func (pet *WarlockPet) registerFireboltSpell() {
 		BonusCoefficient:         0.571,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealDamage(sim, target, sim.Roll(43, 48), spell.OutcomeMagicHitAndCrit)
+			spell.CalcAndDealDamage(sim, target, impFireboltEffect.Roll(sim, core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
 		},
 	}))
 }

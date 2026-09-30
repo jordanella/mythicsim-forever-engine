@@ -31,7 +31,7 @@ func (paladin *Paladin) registerHolyStrike(_ int32, rank *spelldata.Spell) {
 		Rank:           rank.RankNumber(),
 		MaxRange:       core.MaxMeleeRange,
 
-		ManaCost: manaCost(rank),
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				GCD: rank.GCD(),

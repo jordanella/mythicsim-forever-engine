@@ -51,6 +51,11 @@ func (s *Spell) ClassSpellsOnly() bool {
 	return s.HasAttr(dbcenums.ATTR_INDEX_EX_12, dbcenums.ATTR_EX_12_ONLY_PROC_FROM_CLASS_ABILITIES)
 }
 
+// Whether the client bars the spell from missing (and from being dodged, parried or blocked).
+func (s *Spell) AlwaysHits() bool {
+	return s.HasAttr(dbcenums.ATTR_INDEX_EX_3, dbcenums.ATTR_EX_3_ALWAYS_HIT)
+}
+
 // Whether the client bars the spell from critting, which picks the no-crit hit table.
 func (s *Spell) CannotCrit() bool {
 	return s.HasAttr(dbcenums.ATTR_INDEX_EX_2, dbcenums.ATTR_EX_2_CANT_CRIT)

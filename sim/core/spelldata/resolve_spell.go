@@ -273,10 +273,7 @@ func applyCost(config *core.SpellConfig, s *Spell) {
 
 	switch powerType {
 	case dbcenums.POWER_MANA:
-		config.ManaCost = core.ManaCostOptions{FlatCost: cost}
-		if costPct > 0 {
-			config.ManaCost.BaseCostPercent = costPct
-		}
+		config.ManaCost = s.ManaCost()
 	case dbcenums.POWER_RAGE:
 		config.RageCost = core.RageCostOptions{Cost: cost, Refund: s.MissRefund()}
 	case dbcenums.POWER_ENERGY:

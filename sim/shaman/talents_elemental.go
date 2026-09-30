@@ -271,8 +271,8 @@ func (shaman *Shaman) applyImprovedFireNova() {
 
 // applyEarthbound implements Earthbound, new in Forever.
 //
-// TODO: To be implemented. The generated tables carry no Earthbound row, so there is nothing to read
-// its effect from yet.
+// Client 1222988: Earthbind Totem also roots nearby targets (1238289) when cast. The sim casts no
+// Earthbind Totem and a boss has nothing to root, so it changes no number.
 func (shaman *Shaman) applyEarthbound() {
 	if !shaman.Talents.Earthbound {
 		return

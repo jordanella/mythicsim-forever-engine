@@ -213,11 +213,11 @@ var DefaultPetConfigs = [...]PetConfig{
 		Health: 1.00, Armor: 1.00, Damage: 1.07,
 	},
 	proto.HunterOptions_Bear: {
-		Name: "Bear", SpecialAbility: Bite, FocusDump: Claw,
+		Name: "Bear", SpecialAbility: Bite, FocusDump: Claw, ExtraAbility: Swipe,
 		Health: 1.08, Armor: 1.05, Damage: 0.91,
 	},
 	proto.HunterOptions_Owl: {
-		Name: "Owl", FocusDump: Claw,
+		Name: "Owl", FocusDump: Claw, ExtraAbility: Mine,
 		Health: 1.00, Armor: 1.00, Damage: 1.07,
 	},
 	proto.HunterOptions_Boar: {
@@ -229,19 +229,19 @@ var DefaultPetConfigs = [...]PetConfig{
 		Health: 1.00, Armor: 1.05, Damage: 1.00,
 	},
 	proto.HunterOptions_Crab: {
-		Name: "Crab", FocusDump: Claw,
+		Name: "Crab", FocusDump: Claw, ExtraAbility: Pinch,
 		Health: 0.96, Armor: 1.13, Damage: 0.95,
 	},
 	proto.HunterOptions_Crocolisk: {
-		Name: "Crocolisk", FocusDump: Bite,
+		Name: "Crocolisk", SpecialAbility: Bite, FocusDump: Dismember,
 		Health: 0.95, Armor: 1.10, Damage: 1.00,
 	},
 	proto.HunterOptions_Gorilla: {
-		Name: "Gorilla", FocusDump: Bite,
+		Name: "Gorilla", FocusDump: Bite, ExtraAbility: Thunderstomp,
 		Health: 1.04, Armor: 1.00, Damage: 1.02,
 	},
 	proto.HunterOptions_Hyena: {
-		Name: "Hyena", FocusDump: Bite,
+		Name: "Hyena", FocusDump: Bite, ExtraAbility: TendonRip,
 		Health: 1.00, Armor: 1.05, Damage: 1.00,
 	},
 	proto.HunterOptions_Raptor: {
@@ -266,11 +266,11 @@ var DefaultPetConfigs = [...]PetConfig{
 		},
 	},
 	proto.HunterOptions_Spider: {
-		Name: "Spider", FocusDump: Bite,
+		Name: "Spider", FocusDump: Bite, ExtraAbility: Web,
 		Health: 1.00, Armor: 1.00, Damage: 1.07,
 	},
 	proto.HunterOptions_Tallstrider: {
-		Name: "Tallstrider", FocusDump: Bite,
+		Name: "Tallstrider", FocusDump: Bite, ExtraAbility: DustCloud,
 		Health: 1.05, Armor: 1.00, Damage: 1.00,
 	},
 	proto.HunterOptions_Turtle: {

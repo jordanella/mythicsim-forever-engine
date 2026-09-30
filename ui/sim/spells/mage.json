@@ -149,6 +149,20 @@
 		"note": "evocation.go reads 12051 from beta client 1.60.1.70009: 8 sec channel, 8 min cooldown, 15x Spirit regeneration running in full, the same as Classic.",
 		"source": "classic"
 	},
+	"1237312": {
+		"ability": "Frostfire Bolt",
+		"file": "sim/mage/frostfire_bolt.go",
+		"note": "Forever's trained spell at 40/50/60 (401502, 1237312, 1237313), a Season of Discovery rune in Classic, so the Classic database has no entry for these ranks. Beta client 1.60.1.70009: 3 sec cast, .814 spell power on the bolt, a 9 sec dot with no coefficient, and a 40% slow the sim ignores. School 20 is fire and frost at once: resisted by the lower of the two, and fire and frost talents both reach it (the client's masks carry it for Improved Fireball, Fire Power, Piercing Ice, Critical Mass, Ice Shards, Presence of Mind and the chill bit Fingers of Frost rolls on). Wowhead env 16 prints each rank at its max level (rank 3 at 68: 286 to 331, dot 57).",
+		"source": "forever",
+		"tooltip": "285 Mana\n35 yd range\n3 sec cast\nLaunches a bolt of frostfire at the enemy, causing 180 to 210 Frostfire damage, slowing movement speed by 40% and causing an additional 39 Frostfire damage over 9 sec. This spell will be checked against the lower of the target's Frost and Fire resists and counts as both Frost and Fire damage."
+	},
+	"1237313": {
+		"ability": "Frostfire Bolt",
+		"file": "sim/mage/frostfire_bolt.go",
+		"note": "Forever's trained spell at 40/50/60 (401502, 1237312, 1237313), a Season of Discovery rune in Classic, so the Classic database has no entry for these ranks. Beta client 1.60.1.70009: 3 sec cast, .814 spell power on the bolt, a 9 sec dot with no coefficient, and a 40% slow the sim ignores. School 20 is fire and frost at once: resisted by the lower of the two, and fire and frost talents both reach it (the client's masks carry it for Improved Fireball, Fire Power, Piercing Ice, Critical Mass, Ice Shards, Presence of Mind and the chill bit Fingers of Frost rolls on). Wowhead env 16 prints each rank at its max level (rank 3 at 68: 286 to 331, dot 57).",
+		"source": "forever",
+		"tooltip": "370 Mana\n35 yd range\n3 sec cast\nLaunches a bolt of frostfire at the enemy, causing 270 to 314 Frostfire damage, slowing movement speed by 40% and causing an additional 57 Frostfire damage over 9 sec. This spell will be checked against the lower of the target's Frost and Fire resists and counts as both Frost and Fire damage."
+	},
 	"1239700": {
 		"ability": "Arcane Blast",
 		"file": "sim/mage/arcane_blast.go",
@@ -316,7 +330,7 @@
 	"400625": {
 		"ability": "Hot Streak",
 		"file": "sim/mage/talents_fire.go",
-		"note": "Hot Streak's buff, Forever's own id; it is a later expansion spell, so the Classic database has no entry for it. Beta client 1.60.1.70009: 20 sec (15 before 70009), -25% Pyroblast cast time a stack, 3 stacks, spent by the next Pyroblast. Frostfire Bolt direct crits also grant a stack.",
+		"note": "Hot Streak's buff, Forever's own id; it is a later expansion spell, so the Classic database has no entry for it. Beta client 1.60.1.70009: 20 sec (15 before 70009), -25% Pyroblast cast time a stack, 3 stacks, spent by the next Pyroblast. Frostfire Bolt crits, which the Forever tooltip also names, grant a stack too.",
 		"source": "forever",
 		"tooltip": "Your non-periodic critical strikes with Fireball, Frostfire Bolt, Fire Blast and Scorch grant Hot Streak for 20 sec.\nEach stack reduces the cast time of Pyroblast by 25%, stacking up to 3 times."
 	},
@@ -331,6 +345,13 @@
 		"source": "assumed",
 		"tooltip": "Your Chill effects have a 15% chance to grant Fingers of Frost, which treats your next spell cast, or next 2 at rank 2, as though the target were frozen. Lasts 15 sec.\nWhile it is up your spells gain Shatter's critical strike chance, 17/33/50%, and Ice Lance deals its frozen damage."
 	},
+	"401502": {
+		"ability": "Frostfire Bolt",
+		"file": "sim/mage/frostfire_bolt.go",
+		"note": "Forever's trained spell at 40/50/60 (401502, 1237312, 1237313), a Season of Discovery rune in Classic, so the Classic database has no entry for these ranks. Beta client 1.60.1.70009: 3 sec cast, .814 spell power on the bolt, a 9 sec dot with no coefficient, and a 40% slow the sim ignores. School 20 is fire and frost at once: resisted by the lower of the two, and fire and frost talents both reach it (the client's masks carry it for Improved Fireball, Fire Power, Piercing Ice, Critical Mass, Ice Shards, Presence of Mind and the chill bit Fingers of Frost rolls on). Wowhead env 16 prints each rank at its max level (rank 3 at 68: 286 to 331, dot 57).",
+		"source": "forever",
+		"tooltip": "205 Mana\n35 yd range\n3 sec cast\nLaunches a bolt of frostfire at the enemy, causing 102 to 118 Frostfire damage, slowing movement speed by 40% and causing an additional 27 Frostfire damage over 9 sec. This spell will be checked against the lower of the target's Frost and Fire resists and counts as both Frost and Fire damage."
+	},
 	"412538": {
 		"ability": "Ignite",
 		"file": "sim/mage/talents_fire.go",
@@ -342,9 +363,9 @@
 		"ability": "Missile Barrage",
 		"file": "sim/mage/talents_arcane.go",
 		"foreverId": 400589,
-		"note": "Missile Barrage is a later expansion spell; the sim keeps 44404 as its action id, which the Forever client store does not carry. Beta client 1.60.1.70009 (400588, 400589): 40% on Arcane Blast, 15 sec, -50% channel with a missile every 0.5 sec, -100% cost. The 20% for Fireball and Frostbolt is from the 69893 read; 400588's second effect holds 5, which the sim does not read. Frostfire Bolt also triggers the existing proc chance.",
+		"note": "Missile Barrage is a later expansion spell; the sim keeps 44404 as its action id, which the Forever client store does not carry. Beta client 1.60.1.70009 (400588, 400589): 40% on Arcane Blast, 15 sec, -50% channel with a missile every 0.5 sec, -100% cost. The 20% for Fireball, Frostbolt and Frostfire Bolt is from the 69893 read; 400588's second effect holds 5, which the sim does not read.",
 		"source": "forever",
-		"tooltip": "Your Arcane Blast has a 40% chance, and your Fireball and Frostbolt a 20% chance, to grant Missile Barrage.\nYour next Arcane Missiles costs no mana and fires a missile every 0.5 sec instead of every second, halving the channel. Lasts 15 sec."
+		"tooltip": "Your Arcane Blast has a 40% chance, and your Fireball, Frostbolt and Frostfire Bolt a 20% chance, to grant Missile Barrage.\nYour next Arcane Missiles costs no mana and fires a missile every 0.5 sec instead of every second, halving the channel. Lasts 15 sec."
 	},
 	"5143": {
 		"ability": "Arcane Missiles",

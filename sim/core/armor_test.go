@@ -54,5 +54,11 @@ func TestGlancingBlowsAreLevel60(t *testing.T) {
 		if table.BaseGlanceChance != want[0] || table.GlanceMultiplier != want[1] {
 			t.Errorf("level %d: glance %.2f for %.2f damage, want %.2f for %.2f", level, table.BaseGlanceChance, table.GlanceMultiplier, want[0], want[1])
 		}
+		// The roll's ends, from Classic's formula at 300 weapon skill.
+		gap := 5 * float64(level-60)
+		low, high := min(1.3-0.05*gap, 0.91), max(min(1.2-0.03*gap, 0.99), 0.2)
+		if !WithinToleranceFloat64(low, table.GlanceMultiplier-table.GlanceSpread, 1e-9) || !WithinToleranceFloat64(high, table.GlanceMultiplier+table.GlanceSpread, 1e-9) {
+			t.Errorf("level %d: glance keeps %.2f-%.2f, want %.2f-%.2f", level, table.GlanceMultiplier-table.GlanceSpread, table.GlanceMultiplier+table.GlanceSpread, low, high)
+		}
 	}
 }

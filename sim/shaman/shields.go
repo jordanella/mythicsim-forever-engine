@@ -119,7 +119,13 @@ func (shaman *Shaman) registerLightningShieldSpell() {
 		BonusCoefficient: lightningShieldOrb.DamageEffect().Coeff(),
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := lightningShieldOrb.DamageEffect().Average(core.CharacterLevel)
-			spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
+			// Every orb rank carries the client's cannot-crit attribute; beta logs agree (0 crits in
+			// ~200 orb hits from 12 shamans, foreverlogs 2650-2680).
+			outcome := spell.OutcomeMagicHitAndCrit
+			if lightningShieldOrb.CannotCrit() {
+				outcome = spell.OutcomeMagicHit
+			}
+			spell.CalcAndDealDamage(sim, target, baseDamage, outcome)
 		},
 	})
 

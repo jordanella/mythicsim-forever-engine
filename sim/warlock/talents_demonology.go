@@ -429,8 +429,8 @@ func (warlock *Warlock) applyImprovedVoidwalker() {
 
 // applyDemonicEnergies implements Demonic Energies, new in Forever.
 //
-// The pet's share of Life Tap is in lifetap.go.
-// TODO: the talent's first effect (8/15) is unidentified.
+// The pet's share of Life Tap is in lifetap.go. The first effect (client 1225214, 8/15%) heals the
+// pet for that share of the warlock's spell damage; the sim's demon takes no damage, so it is left out.
 func (warlock *Warlock) applyDemonicEnergies() {
 	if warlock.Talents.DemonicEnergies == 0 {
 		return

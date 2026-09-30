@@ -35,12 +35,14 @@ func (warrior *Warrior) registerThunderClap() {
 		ActionID:    core.ActionID{SpellID: thunderClapRank.ID},
 		SpellSchool: thunderClapRank.SpellSchool(),
 		// Thunder Clap is Physical but Magic in SpellCategories: it rolls on the spell hit table
-		// (logs show full resists next to armor mitigation) and crits on spell crit chance for
-		// 1.5x. Warriors have no base spell crit, so logs without Totem of Wrath show none
-		// (0 of 799 landed hits from 6 prot warriors on fresh.warcraftlogs.com, 2026-09-14).
+		// (Classic logs show full resists) and crits on spell crit chance for 1.5x. Warriors have
+		// no base spell crit, so logs without Totem of Wrath show none (0 of 799 landed hits from
+		// 6 prot warriors on fresh.warcraftlogs.com, 2026-09-14). In Forever armor doesn't touch it:
+		// in the level 20 beta logs (foreverlogs 2677/2683) Chud and Skeefzy's white hits vary
+		// 2.3-3.6x across mobs while their claps vary 1.1x.
 		DefenseType:    thunderClapRank.DefenseTypeCore(),
 		ProcMask:       core.ProcMaskRangedSpecial,
-		Flags:          core.SpellFlagAPL | core.SpellFlagBinary,
+		Flags:          core.SpellFlagAPL | core.SpellFlagBinary | core.SpellFlagIgnoreResists,
 		ClassSpellMask: SpellMaskThunderClap,
 
 		RageCost: core.RageCostOptions{
@@ -58,8 +60,9 @@ func (warrior *Warrior) registerThunderClap() {
 		},
 
 		DamageMultiplier: 1,
-		// Not in the client table; our Classic value until measured in game.
-		ThreatMultiplier: 2.5,
+		// Measured in the level 20 beta (2026-09-28): threat equals damage before the stance modifier,
+		// 17 damage for 14 threat in Battle Stance (x0.8) and ~21 in Defensive (x1.3). Was 2.5.
+		ThreatMultiplier: 1,
 
 		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
 			return warrior.StanceMatches(BattleStance | DefensiveStance)

@@ -19,9 +19,7 @@ func (hunter *Hunter) registerMultiShotSpell(timer *core.Timer) {
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 		MissileSpeed:   float64(rank.Speed),
 
-		ManaCost: core.ManaCostOptions{
-			BaseCostPercent: 13.9, // client SpellPower 170887: PowerCostPct 13.9, no flat cost
-		},
+		ManaCost: rank.ManaCost(),
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
 				CastTime: rank.CastTime(),

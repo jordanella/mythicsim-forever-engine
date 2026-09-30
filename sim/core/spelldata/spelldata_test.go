@@ -139,6 +139,19 @@ func TestEffectAverageKeepsTheFraction(t *testing.T) {
 	}
 }
 
+// Multi-Shot's 13.9% of base mana is a float32 in the client (13.8999996). Widened as it stands, a
+// 1000 base mana hunter would pay int32(13899.9996)/100 = 138; the client's own number is 139.
+func TestManaCostReadsTheStatedPercent(t *testing.T) {
+	multiShot := &Spell{Powers: []Power{{Type: dbcenums.POWER_MANA, CostPct: 13.9}}}
+	if got := multiShot.ManaCost(); got.BaseCostPercent != 13.9 || got.FlatCost != 0 {
+		t.Errorf("ManaCost() = %+v, want 13.9%% of base mana and no flat cost", got)
+	}
+	flat := &Spell{Powers: []Power{{Type: dbcenums.POWER_MANA, Cost: 115}}}
+	if got := flat.ManaCost(); got.FlatCost != 115 || got.BaseCostPercent != 0 {
+		t.Errorf("ManaCost() = %+v, want a flat 115", got)
+	}
+}
+
 func TestEffectOutOfRange(t *testing.T) {
 	if Find(116).EffectN(3) != NilEffect {
 		t.Error("EffectN(3) of a two-effect spell is not NilEffect")

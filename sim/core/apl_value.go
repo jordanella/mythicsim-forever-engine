@@ -266,6 +266,8 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueChannelClipDelay(config.GetChannelClipDelay(), config.Uuid)
 	case *proto.APLValue_InputDelay:
 		value = rot.newValueInputDelay(config.GetInputDelay(), config.Uuid)
+	case *proto.APLValue_FrontOfTarget:
+		value = rot.newValueFrontOfTarget(config.GetFrontOfTarget(), config.Uuid)
 
 	case *proto.APLValue_VariableRef:
 		value = rot.newValueVariableRef(config.GetVariableRef(), config.Uuid)

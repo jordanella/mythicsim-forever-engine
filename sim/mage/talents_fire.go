@@ -73,7 +73,7 @@ func (mage *Mage) registerImprovedFireball() {
 	}
 
 	mage.AddStaticMod(core.SpellModConfig{
-		ClassMask: MageSpellFireball | MageSpellFrostfireBolt,
+		ClassMask: MageSpellFireball | MageSpellFrostfireBolt, // client mask 11069: Fireball and Frostfire Bolt
 		TimeValue: time.Millisecond * time.Duration(spellData.ImprovedFireball.Effect(dbcenums.A_ADD_FLAT_MODIFIER, int32(dbcenums.SPELLMOD_CASTING_TIME)).ValueAt(mage.Talents.ImprovedFireball)),
 		Kind:      core.SpellMod_CastTime_Flat,
 	})
@@ -144,8 +144,7 @@ func (mage *Mage) registerIgnite() {
 
 // registerFlameThrowing implements Flame Throwing, new in Forever.
 //
-// TODO: To be implemented. Needs the Forever tooltip and a spellData ladder before
-// the effect can be modelled; there is no TBC equivalent to port.
+// Not modelled: 11100 adds 3/6 yards to Fire spell range; the sim has no range to extend.
 func (mage *Mage) registerFlameThrowing() {
 	if mage.Talents.FlameThrowing == 0 {
 		return
@@ -154,8 +153,7 @@ func (mage *Mage) registerFlameThrowing() {
 
 // registerImpact implements Impact, new in Forever.
 //
-// TODO: To be implemented. Needs the Forever tooltip and a spellData ladder before
-// the effect can be modelled; there is no TBC equivalent to port.
+// Not modelled: 11103 gives Fire spells a chance to stun (12355); bosses are immune.
 func (mage *Mage) registerImpact() {
 	if mage.Talents.Impact == 0 {
 		return
@@ -190,8 +188,7 @@ func (mage *Mage) registerImprovedFlamestrike() {
 
 // registerImprovedFireWard implements Improved Fire Ward, new in Forever.
 //
-// TODO: To be implemented. Needs the Forever tooltip and a spellData ladder before
-// the effect can be modelled; there is no TBC equivalent to port.
+// Not modelled: 11094 gives Fire Ward a 10/20% chance to reflect Fire spells; the sim casts no wards.
 func (mage *Mage) registerImprovedFireWard() {
 	if mage.Talents.ImprovedFireWard == 0 {
 		return
@@ -200,7 +197,8 @@ func (mage *Mage) registerImprovedFireWard() {
 
 // Fireball, Frostfire Bolt, Fire Blast and Scorch crits each take 25% off Pyroblast's cast time, stacking 3 times,
 // so the stacks are worth holding rather than spending. The buff is 400625: its duration (20 sec since
-// build 70009), stack cap and per-stack cast time cut are read from the row.
+// build 70009), stack cap and per-stack cast time cut are read from the row. Frostfire Bolt, which
+// the tooltip also names, builds stacks too.
 func (mage *Mage) registerHotStreak() {
 	if !mage.Talents.HotStreak {
 		return

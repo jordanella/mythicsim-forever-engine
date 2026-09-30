@@ -51,7 +51,7 @@ func (kind *incapacitateKind) refreshImmunity(unit *Unit) {
 	kind.setImmune(unit, false)
 }
 
-func (kind *incapacitateKind) registerAura(unit *Unit, label string, actionID ActionID, baseDuration time.Duration) *Aura {
+func (kind *incapacitateKind) registerAura(unit *Unit, label string, actionID ActionID, baseDuration func() time.Duration) *Aura {
 	// Cache swing from just before the pause.
 	var mhAt, ohAt, rangedAt time.Duration
 	var pausedUntil time.Duration
@@ -60,13 +60,13 @@ func (kind *incapacitateKind) registerAura(unit *Unit, label string, actionID Ac
 		Label:    label,
 		ActionID: actionID,
 		Tag:      kind.tag,
-		Duration: baseDuration,
+		Duration: baseDuration(),
 
 		OnGain: func(aura *Aura, sim *Simulation) {
 			// The multiplier is read here rather than at registration, because
 			// encounter AIs register their crowd control on every ally before
 			// the players' talents have run.
-			aura.Duration = time.Duration(float64(baseDuration) * kind.durationMultiplier(aura.Unit))
+			aura.Duration = time.Duration(float64(baseDuration()) * kind.durationMultiplier(aura.Unit))
 			aura.Refresh(sim)
 
 			// Interrupt first: cancelling a hardcast drops the tank avoidance
@@ -150,7 +150,7 @@ var fearKind = &incapacitateKind{
 }
 
 func (unit *Unit) RegisterFearAura(label string, actionID ActionID, duration time.Duration) *Aura {
-	return fearKind.registerAura(unit, label, actionID, duration)
+	return fearKind.registerAura(unit, label, actionID, func() time.Duration { return duration })
 }
 
 func ApplyFear(sim *Simulation, fearAura *Aura) bool {
@@ -177,6 +177,12 @@ var stunKind = &incapacitateKind{
 }
 
 func (unit *Unit) RegisterStunAura(label string, actionID ActionID, duration time.Duration) *Aura {
+	return stunKind.registerAura(unit, label, actionID, func() time.Duration { return duration })
+}
+
+// RegisterVariableStunAura is for a stun whose length is set per cast, like Kidney Shot's combo
+// points: duration is read on every application.
+func (unit *Unit) RegisterVariableStunAura(label string, actionID ActionID, duration func() time.Duration) *Aura {
 	return stunKind.registerAura(unit, label, actionID, duration)
 }
 

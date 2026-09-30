@@ -233,8 +233,7 @@ func (druid *Druid) applyImprovedStarfire() {
 
 // applyOvergrowth implements Overgrowth, new in Forever.
 //
-// TODO: To be implemented. The client's ladder is a bare dummy (1/2) with no tooltip to read it
-// against, so there is nothing to model yet.
+// Not modelled: 17245 lets Entangling Roots hold 1/2 more targets; the sim casts no roots.
 func (druid *Druid) applyOvergrowth() {
 	if druid.Talents.Overgrowth == 0 {
 		return
