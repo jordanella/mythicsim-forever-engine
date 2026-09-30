@@ -1,6 +1,7 @@
 package warlock
 
 import (
+	"fmt"
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/dbcenums"
 	"github.com/wowsims/forever/sim/core/proto"
@@ -216,12 +217,10 @@ func (warlock *Warlock) applyDecimation() {
 	})
 }
 
-// Searing Pain sheds 17/33/50% of its threat and arms the demon with 2/4/6 branded attacks
-// (1293695 / 1293696).
-//
-// The branded hit is the client's SpellDescriptionVariables formula for 1293696/1293697 (beta
-// 1.60.1.69977, the same text Wowhead's Forever tooltip resolves): ((level-26)*1.5)+14 to +17, plus
-// 7.8% of the warlock's Shadow spell power, so 65 to 68 at level 60.
+// Searing Pain brands its target for 10 seconds with 2/4/6 charges. Client build
+// 70124 permits harmful magic as well as melee/ranged hits (proc mask 0x222a8).
+// The Imp uses Fire damage (1293698); the other demons use Shadow (1293697).
+// Both damage rows have CannotMiss. See docs/beta-pass/imp-brand-2026-09-30.md.
 func (warlock *Warlock) applyDemonicBrand() {
 	if warlock.Talents.DemonicBrand == 0 {
 		return
@@ -242,11 +241,28 @@ func (warlock *Warlock) applyDemonicBrand() {
 	}
 
 	charges := int32(spellData.DemonicBrand.Effect(dbcenums.A_ADD_FLAT_MODIFIER, int32(dbcenums.SPELLMOD_CHARGES)).ValueAt(points))
+	warlock.DemonicBrandAuras = warlock.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
+		return target.RegisterAura(core.Aura{
+			Label:     fmt.Sprintf("Demonic Brand-%d", warlock.UnitIndex),
+			ActionID:  actionID,
+			Duration:  triggered.Duration(),
+			MaxStacks: charges,
+		})
+	})
 
+	// Keep the old pet aura available to saved APLs, including auraIsKnown talent
+	// guards. Its stacks mirror the most recently branded target; actual charges
+	// are owned by each target and cannot be spent against a different enemy.
+	var latestTarget *core.Unit
+	warlock.RegisterResetEffect(func(_ *core.Simulation) { latestTarget = nil })
 	for _, pet := range warlock.BasePets {
+		brandID, school, powerStat := int32(1293697), core.SpellSchoolShadow, stats.ShadowDamage
+		if pet == warlock.Imp {
+			brandID, school, powerStat = 1293698, core.SpellSchoolFire, stats.FireDamage
+		}
 		brandSpell := pet.RegisterSpell(core.SpellConfig{
-			ActionID:    actionID,
-			SpellSchool: core.SpellSchoolShadow,
+			ActionID:    core.ActionID{SpellID: brandID},
+			SpellSchool: school,
 			DefenseType: core.DefenseTypeMagic,
 			ProcMask:    core.ProcMaskEmpty,
 			Flags:       core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
@@ -256,24 +272,34 @@ func (warlock *Warlock) applyDemonicBrand() {
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 				levelBonus := float64(core.CharacterLevel-26) * 1.5
-				spellPower := warlock.GetStat(stats.SpellDamage) + warlock.GetStat(stats.ShadowDamage)
+				spellPower := warlock.GetStat(stats.SpellDamage) + warlock.GetStat(powerStat)
 				damage := sim.Roll(levelBonus+14, levelBonus+17) + 0.078*spellPower
-				spell.CalcAndDealDamage(sim, target, damage, spell.OutcomeMagicHit)
+				spell.CalcAndDealDamage(sim, target, damage, spell.OutcomeAlwaysHit)
 			},
 		})
 
 		pet.DemonicBrandAura = pet.RegisterAura(core.Aura{
-			Label:     "Demonic Brand",
-			ActionID:  actionID,
-			Duration:  triggered.Duration(),
-			MaxStacks: charges,
-			OnSpellHitDealt: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				if result.Landed() && spell.ProcMask.Matches(core.ProcMaskMelee) {
-					brandSpell.Cast(sim, result.Target)
-					aura.RemoveStack(sim)
-				}
-			},
+			Label: "Demonic Brand", ActionID: actionID,
+			Duration: triggered.Duration(), MaxStacks: charges,
 		})
+		core.MakePermanent(pet.RegisterAura(core.Aura{
+			Label: "Demonic Brand consumer",
+			OnSpellHitDealt: func(_ *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+				if warlock.ActivePet != pet || !result.Landed() || !spell.ProcMask.Matches(core.ProcMaskDirect) {
+					return
+				}
+				aura := warlock.DemonicBrandAuras.Get(result.Target)
+				if aura == nil || !aura.IsActive() {
+					return
+				}
+				// Spend before dealing the extra hit, which has no trigger proc mask.
+				aura.RemoveStack(sim)
+				if result.Target == latestTarget {
+					pet.DemonicBrandAura.SetStacks(sim, aura.GetStacks())
+				}
+				brandSpell.Cast(sim, result.Target)
+			},
+		}))
 	}
 
 	warlock.MakeProcTriggerAura(core.ProcTrigger{
@@ -282,13 +308,17 @@ func (warlock *Warlock) applyDemonicBrand() {
 		ClassSpellMask:     WarlockSpellSearingPain,
 		Outcome:            core.OutcomeLanded,
 		TriggerImmediately: true,
-		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
+		Handler: func(sim *core.Simulation, _ *core.Spell, result *core.SpellResult) {
 			if warlock.ActivePet == nil {
 				return
 			}
-			brandAura := warlock.ActivePet.DemonicBrandAura
+			brandAura := warlock.DemonicBrandAuras.Get(result.Target)
 			brandAura.Activate(sim)
-			brandAura.SetStacks(sim, brandAura.MaxStacks)
+			brandAura.SetStacks(sim, charges)
+			latestTarget = result.Target
+			marker := warlock.ActivePet.DemonicBrandAura
+			marker.Activate(sim)
+			marker.SetStacks(sim, charges)
 		},
 	})
 }
