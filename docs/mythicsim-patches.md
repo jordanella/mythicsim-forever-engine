@@ -615,7 +615,7 @@ fork tip with a merge commit, so the patch history stays intact. Where upstream 
   abilities).
 
 
-## 25. A cast of an on-next-swing ability without its queue tag queues it
+## 26. A cast of an on-next-swing ability without its queue tag queues it
 
 Heroic Strike, Cleave and Maul register their hit untagged and the APL queue under tag 1; Raptor
 Strike's queue is tag 3. A rotation that names the spell without the tag, which is what a spell
@@ -637,7 +637,7 @@ the queue tags already.
 
 Drop this patch when upstream resolves untagged casts of queued abilities.
 
-## 26. Feral forms swing the equipped weapon's DPS
+## 27. Feral forms swing the equipped weapon's DPS
 
 Forever's Druid class deep dive (worldofwarcraft.blizzard.com/en-us/news/24301515, 30 September
 2026): "While Shapeshifted, the Druid's melee auto attack DPS ... in Bear Form, Cat Form, or Dire
@@ -655,7 +655,7 @@ October) agree with this to the sheet's whole-number rounding.
 Validation: `TestFormPawCarriesTheEquippedWeaponDPS` in `sim/druid/feralcat`. The Cat and Bear
 goldens move because their suite gear is naked: the unarmed paw now deals only attack power damage.
 
-## 27. Elemental preset casts Fire Nova
+## 28. Elemental preset casts Fire Nova
 
 `ui/specs/shaman/elemental/apls/forever.apl.json` casts Fire Nova (408345) above 30% mana, after
 Flame Shock and before the Lightning Bolt filler, as submitted by a MythicSim player on 1 October.
