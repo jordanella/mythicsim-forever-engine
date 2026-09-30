@@ -654,3 +654,12 @@ October) agree with this to the sheet's whole-number rounding.
 
 Validation: `TestFormPawCarriesTheEquippedWeaponDPS` in `sim/druid/feralcat`. The Cat and Bear
 goldens move because their suite gear is naked: the unarmed paw now deals only attack power damage.
+
+## 27. Elemental preset casts Fire Nova
+
+`ui/specs/shaman/elemental/apls/forever.apl.json` casts Fire Nova (408345) above 30% mana, after
+Flame Shock and before the Lightning Bolt filler, as submitted by a MythicSim player on 1 October.
+On the MythicSim Elemental reference (10,000 iterations): 393.18 to 396.33 DPS on the board encounter,
+393.06 to 394.50 at a fixed 120 seconds and 357.88 to 363.78 at 300 seconds. The Elemental golden
+moves with it. This is a preset change, not an engine one: drop it if upstream's preset adopts Fire
+Nova or measures it worse.
