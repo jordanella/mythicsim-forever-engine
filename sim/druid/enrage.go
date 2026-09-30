@@ -50,7 +50,7 @@ func (druid *Druid) registerEnrageSpell() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-			druid.AddRage(sim, instantRage+druid.IntensityEnrageRageBonus, rageMetrics)
+			druid.AddRage(sim, instantRage+druid.IntensityEnrageRageBonus+druid.WolfsheadEnrageRage, rageMetrics)
 			druid.EnrageAura.Activate(sim)
 
 			core.StartPeriodicAction(sim, core.PeriodicActionOptions{

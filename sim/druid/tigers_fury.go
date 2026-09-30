@@ -43,8 +43,8 @@ func (druid *Druid) registerTigersFurySpell() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-			if energyGain > 0 {
-				druid.AddEnergy(sim, energyGain, energyMetrics)
+			if gain := energyGain + druid.WolfsheadTigersFuryEnergy; gain > 0 {
+				druid.AddEnergy(sim, gain, energyMetrics)
 			}
 			druid.TigersFuryAura.Activate(sim)
 		},

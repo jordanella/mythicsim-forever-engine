@@ -205,7 +205,7 @@ func (druid *Druid) registerCatFormSpell() {
 			}
 
 			if sim.CurrentTime > 0 {
-				target := druid.furorShiftEnergy(sim) + druid.WolfsheadEnergyBonus
+				target := druid.furorShiftEnergy(sim)
 				if delta := target - druid.CurrentEnergy(); delta > 0 {
 					druid.AddEnergy(sim, delta, energyMetrics)
 				} else if delta < 0 {
@@ -357,8 +357,8 @@ func (druid *Druid) registerBearFormSpell() {
 				druid.SpendRage(sim, cur, rageMetrics)
 			}
 
-			// Wolfshead Helm gives 5 Rage; the Bear half of Furor is still a chance at 10.
-			rageGain := druid.WolfsheadRageBonus
+			// The Bear half of Furor is still a chance at 10 Rage.
+			rageGain := 0.0
 			if sim.Proc(druid.FurorProcChance, "Furor") {
 				rageGain += 10
 			}

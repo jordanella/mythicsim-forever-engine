@@ -21,8 +21,8 @@ type Druid struct {
 
 	CannotShredTarget bool
 
-	WolfsheadEnergyBonus float64 // Wolfshead Helm (8345): +20 energy on shift into Cat Form
-	WolfsheadRageBonus   float64 // Wolfshead Helm (8345): +5 rage on shift into Bear Form
+	WolfsheadTigersFuryEnergy float64 // Wolfshead Helm (8345): +20 energy from Tiger's Fury
+	WolfsheadEnrageRage       float64 // Wolfshead Helm (8345): +5 rage from Enrage
 
 	MHAutoSpell *core.Spell
 

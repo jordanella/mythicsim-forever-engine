@@ -570,3 +570,16 @@ Validation: `TestRainOfFireRainsOnEveryTarget` in `sim/warlock/rain_of_fire_test
 unpatched source the channel is never cast. No suite golden moves: no preset rotation casts it.
 
 Drop this patch when upstream registers Rain of Fire.
+
+### Patch 24: Wolfshead Helm cooldown resources
+
+Forever item 8345 (effect 17768) grants 20 extra Energy from Tiger's Fury and
+5 extra Rage from Enrage. It no longer grants resources on entering Cat or
+Bear Form. Verified against the current Forever item tooltip on 30 September
+2026: https://www.wowhead.com/forever/item=8345/wolfshead-helm . The in-game
+screenshot posted in the MythicSim Discord shows the same wording.
+
+Resource gains are applied at cast time while the item aura is active. The
+Cat and Bear regression tests verify both the cooldown gains and absence of
+shift gains, with and without the helm. Both fail on the previous pin. The
+Wolfshead Trophy enchant is a separate effect and has not been changed.
