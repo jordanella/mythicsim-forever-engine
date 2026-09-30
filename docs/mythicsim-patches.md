@@ -614,3 +614,43 @@ fork tip with a merge commit, so the patch history stays intact. Where upstream 
   track upstream's own golden movement (glancing blow rolls, dodge from agility, client mana costs, pet
   abilities).
 
+
+## 25. A cast of an on-next-swing ability without its queue tag queues it
+
+Heroic Strike, Cleave and Maul register their hit untagged and the APL queue under tag 1; Raptor
+Strike's queue is tag 3. A rotation that names the spell without the tag, which is what a spell
+picker produces, fell back to the untagged hit (`GetAPLSpell` prefers an APL-flagged spell, then takes
+any spell with the same ActionID). That hit fired instantly, off the global cooldown and on top of
+the white swing. A Heroic Strike only Fury rotation reported in the MythicSim Discord on 1 October
+read 1,253 DPS, against 799 for the reference preset on the same engine; 80 of the 145 Heroic
+Strikes in its first iteration landed within 250 ms of the previous one.
+
+`GetAPLCastSpell` resolves a cast action: when the named ActionID exists but is not APL-flagged and
+an APL-flagged spell shares its IDs under another tag, the cast presses that one. Only cast actions
+use it. Value lookups (`spellTimeToReady`, `spellIsReady`) keep `GetAPLSpell`, because they read the
+real spell's cooldown; redirecting those too changed the upstream Survival rotation's golden.
+
+Validation: `TestUntaggedHeroicStrikeQueuesOntoTheSwing` in `sim/warrior/dps`. Unpatched, a Heroic
+Strike only rotation records 83.4 white swings and 110.3 Heroic Strikes a fight against 83.7 swings
+with no rotation; patched, Heroic Strike replaces the swing. No suite golden moves: the presets name
+the queue tags already.
+
+Drop this patch when upstream resolves untagged casts of queued abilities.
+
+## 26. Feral forms swing the equipped weapon's DPS
+
+Forever's Druid class deep dive (worldofwarcraft.blizzard.com/en-us/news/24301515, 30 September
+2026): "While Shapeshifted, the Druid's melee auto attack DPS ... in Bear Form, Cat Form, or Dire
+Bear Form is now the same as the DPS of the Druid's equipped weapon. But the speed of attack is
+changed to 1.0 or 2.5 seconds, depending on the form. Abilities that deal weapon damage likewise use
+these damage values."
+
+The paw was a fixed level 60 weapon (Cat 43.84 to 65.76 at 1.0 s, Bear 109 to 165 at 2.5 s), so an
+equipped weapon's damage did nothing. `formWeapon` rescales the equipped main hand's damage range,
+weapon damage enchants and bonus DPS to the form's swing: the paw keeps the weapon's DPS and spread.
+With nothing equipped it is the unarmed fist. A player's paired character sheet measurements
+(unarmed, a 9.0 DPS mace and a 20.4 DPS mace in Cat Form, posted to the MythicSim Discord on 1
+October) agree with this to the sheet's whole-number rounding.
+
+Validation: `TestFormPawCarriesTheEquippedWeaponDPS` in `sim/druid/feralcat`. The Cat and Bear
+goldens move because their suite gear is naked: the unarmed paw now deals only attack power damage.

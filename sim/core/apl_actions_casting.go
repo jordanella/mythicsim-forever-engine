@@ -14,7 +14,7 @@ type APLActionCastSpell struct {
 }
 
 func (rot *APLRotation) newActionCastSpell(config *proto.APLActionCastSpell) APLActionImpl {
-	spell := rot.GetAPLSpell(config.SpellId)
+	spell := rot.GetAPLCastSpell(config.SpellId)
 	if spell == nil {
 		return nil
 	}

@@ -238,6 +238,25 @@ func (rot *APLRotation) GetAPLSpell(spellId *proto.ActionID) *Spell {
 	return spell
 }
 
+// GetAPLCastSpell resolves the spell a cast action presses. An on-next-swing ability (Heroic Strike,
+// Cleave, Maul, Raptor Strike) registers its hit under one tag and the APL queue under another. A
+// rotation that names the spell without the queue's tag, which is what a spell picker produces, has
+// to press the queue: the untagged hit fires instantly, off the global cooldown and on top of the
+// swing. Value lookups (cooldowns, time to ready) keep GetAPLSpell, since they read the real spell.
+func (rot *APLRotation) GetAPLCastSpell(spellId *proto.ActionID) *Spell {
+	if spellId != nil {
+		actionID := ProtoToActionID(spellId)
+		if spell := rot.unit.GetSpell(actionID); spell != nil && !spell.Flags.Matches(SpellFlagAPL) {
+			for _, s := range rot.unit.Spellbook {
+				if s.ActionID.SameActionIgnoreTag(actionID) && s.Flags.Matches(SpellFlagAPL) {
+					return s
+				}
+			}
+		}
+	}
+	return rot.GetAPLSpell(spellId)
+}
+
 func (rot *APLRotation) GetTargetAPLSpell(spellId *proto.ActionID, targetUnit UnitReference) *Spell {
 	if spellId == nil {
 		return nil

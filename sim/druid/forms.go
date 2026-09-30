@@ -49,28 +49,34 @@ func (druid *Druid) ClearForm(sim *core.Simulation) {
 	druid.SetCurrentPowerBar(core.ManaBar)
 }
 
-// The paw is a fixed weapon at level 60: gear reaches it through Feral Attack Power, not through
-// the equipped weapon's damage, so neither form reads the weapon's swing.
-func (druid *Druid) GetCatWeapon() core.Weapon {
+// Forever: "While Shapeshifted, the Druid's melee auto attack DPS while in Bear Form, Cat Form, or
+// Dire Bear Form is now the same as the DPS of the Druid's equipped weapon. But the speed of attack
+// is changed to 1.0 or 2.5 seconds, depending on the form. Abilities that deal weapon damage
+// likewise use these damage values." (Druid class deep dive, 30 September 2026.) The equipped
+// weapon's damage range, weapon-damage enchants and bonus DPS are rescaled to the form's swing, so
+// the paw keeps the weapon's DPS and its spread. With nothing equipped the paw is the unarmed fist.
+func (druid *Druid) formWeapon(swingSpeed float64) core.Weapon {
+	weapon := druid.WeaponFromMainHand()
+	scale := 1.0
+	if weapon.SwingSpeed > 0 {
+		scale = swingSpeed / weapon.SwingSpeed
+	}
 	return core.Weapon{
-		BaseDamageMin:        43.84,
-		BaseDamageMax:        65.76,
-		SwingSpeed:           1.0,
-		NormalizedSwingSpeed: 1.0,
+		BaseDamageMin:        weapon.BaseDamageMin * scale,
+		BaseDamageMax:        weapon.BaseDamageMax * scale,
+		SwingSpeed:           swingSpeed,
+		NormalizedSwingSpeed: swingSpeed,
 		AttackPowerPerDPS:    core.DefaultAttackPowerPerDPS,
 		MaxRange:             core.MaxMeleeRange,
 	}
 }
 
+func (druid *Druid) GetCatWeapon() core.Weapon {
+	return druid.formWeapon(1.0)
+}
+
 func (druid *Druid) GetBearWeapon() core.Weapon {
-	return core.Weapon{
-		BaseDamageMin:        109,
-		BaseDamageMax:        165,
-		SwingSpeed:           2.5,
-		NormalizedSwingSpeed: 2.5,
-		AttackPowerPerDPS:    core.DefaultAttackPowerPerDPS,
-		MaxRange:             core.MaxMeleeRange,
-	}
+	return druid.formWeapon(2.5)
 }
 
 // The stats both animal forms grant: Predatory Strikes' attack power off level and Sharpened Claws'
