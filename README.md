@@ -2,9 +2,6 @@
 
 The simulation engine behind [MythicSim](https://mythicsim.com/wow-forever), kept as an open fork of the WoW Forever sim. It models every class and spec for World of Warcraft: Forever, with the beta client data as the source of truth.
 
-Anyone is welcome to contribute. Found a spell that does the wrong damage, a missing item, a talent that doesn't work? Open an issue or send a PR. Questions or ideas, [come say hi on Discord](https://discord.gg/9c3EnKJcDK).
-
-[Sim your character on MythicSim](https://mythicsim.com/wow-forever) · [Join the Discord](https://discord.gg/9c3EnKJcDK)
 
 ## How it fits together
 
