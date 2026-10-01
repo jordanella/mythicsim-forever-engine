@@ -411,6 +411,13 @@ func (wa *WeaponAttack) addWeaponAttack(sim *Simulation, swingSpeed float64) {
 		return
 	}
 
+	// An empty slot is a zero-speed weapon. Scheduled, it would swing again at the same instant forever
+	// (a hunter with no bow, a Build Lab character before its gear is picked), so it never swings.
+	if wa.SwingSpeed <= 0 {
+		wa.enabled = false
+		return
+	}
+
 	wa.updateSwingDuration(swingSpeed)
 	sim.addWeaponAttack(wa)
 	sim.rescheduleWeaponAttack(wa.swingAt)

@@ -782,3 +782,18 @@ nothing named them.
   and the other caster spells (Wrath, Starfire, Insect Swarm without the talent) are still unknown to the feral
   agents.
 - **Drop it when** upstream registers Moonfire for the Feral Cat agent.
+
+## 33. `core: an empty weapon slot never swings`
+
+- **What it does.** `addWeaponAttack` skips a weapon whose swing speed is zero and leaves it disabled, so an
+  empty slot (`Weapon{}` from `WeaponFromRanged` and `WeaponFromOffHand`) never joins the sim's swing list.
+- **Why.** A hunter with no ranged weapon has `AutoSwingRanged` on and a zero-speed bow. Its auto shot scheduled
+  itself again at the same instant, `advanceWeaponAttacks` never moved the clock, and one iteration ran until the
+  process was killed (exit 137 at the worker's 1 GiB cap, in about 8 seconds). Two Quick sims of a Build Lab
+  Survival Hunter with an almost empty gear list failed this way on 2 October 2026, and a single iteration
+  reproduces it.
+- **Tests.** `TestHunterWithNoRangedWeaponFinishes` in `sim/hunter/no_weapon_test.go` (no gear, a two-hander and no
+  bow, a bow and no melee weapon); the first two hang on the unpatched source.
+- **Default.** Every build with a weapon in each swinging slot behaves exactly as before; the melee, ranged and
+  caster suites pass unchanged.
+- **Drop it when** upstream guards zero-speed weapons in the swing loop.
