@@ -272,6 +272,10 @@ func (druid *Druid) RegisterFeralCatSpells() {
 	druid.registerProwlSpell()
 	druid.registerRavageSpell()
 	druid.registerTigersFurySpell()
+	// A cat that leaves its form to refresh Moonfire (the Furor powershift with a Moonfire cast as
+	// the form drop). The spell is castable in caster form only, so casting it from Cat Form
+	// unshifts first, as every other caster spell does here.
+	druid.registerMoonfireSpell()
 }
 
 func (druid *Druid) RegisterFeralTankSpells() {

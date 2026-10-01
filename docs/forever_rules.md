@@ -14,7 +14,7 @@ below is gated on `IsForever()` unless it says the class code is Forever-only.
 | Rule | Source | Here |
 |---|---|---|
 | Periodic damage can crit: dots and bleeds roll for critical strikes using the snapshot crit chance. Spells that must not (Ignite) carry `SpellFlagNoPeriodicCrit`. | Tooltip wording ("non-periodic" qualifiers on Nature's Grace, Primal Fury; Pandemic exists) | `sim/core/ruleset.go`, `sim/core/dot.go` |
-| Dots tick on the caster's current spell power, attack power and damage multipliers, not the ones in force when they landed. | Beta log (foreverlogs.gg report 2668, Eureka! on a running Shadow Word: Pain) | `sim/core/dot.go`, `sim/core/spell_result.go` |
+| Dots tick on the caster's current spell power, attack power and damage multipliers, not the ones in force when they landed. Flat damage, stack counts and combo point values stay with the application. Pinned per ability (Rake, Rip, Lacerate, Garrote, Rupture, Rend, Deep Wounds, Moonfire, Insect Swarm, Corruption, Serpent Sting) by `TestDotsReadStatsAtTheTick`. | Beta log (foreverlogs.gg report 2668, Eureka! on a running Shadow Word: Pain); Blizzard's class deep dives say nothing either way | `sim/core/dot.go`, `sim/core/spell_result.go`, `sim/dot_rules_test.go` |
 | Hit and crit from gear apply to every kind of attack: an item's melee/spell hit and crit are summed and paid into both pools. Attribute conversions unchanged. | Panel | `sim/core/ruleset.go` `unifyEquipHitAndCrit` |
 | Bonus healing on gear carries a damage component: `SpellDamage += HealingPower / 3`. | Panel | `sim/core/ruleset.go` `addHealingSpellDamage` |
 | Improved Shadow Bolt and Stormstrike are personal: they raise only their caster's damage and are no longer raid debuffs. | Panel, confirmed by search | `sim/core/debuffs.go`, `sim/shaman/stormstrike.go` |
@@ -103,6 +103,8 @@ below is gated on `IsForever()` unless it says the class code is Forever-only.
 |---|---|---|
 | Malice and Precision also add spell crit/hit, since poisons roll against spell stats. | Tooltip | `sim/rogue/talents.go` |
 | Venom rescales a Deadly Poison that is already ticking, not just the stacks applied while it is up. | Tooltip | `sim/rogue/poisons.go` |
+| Poisons scale with nothing: Instant Poison VI is 76 to 100 and Deadly Poison V 23 a tick a stack whatever the attack power or spell power. Both can crit (Instant Poison as a spell, Deadly Poison's ticks through Periodic Can Crit) and roll against the spell tables. | Client rows 11337 and 25349 (build 69893): no spell power or attack power coefficient, Periodic Can Crit on the dot | `sim/rogue/poisons.go`, `TestPoisonsIgnoreAttackPowerAndSpellPowerAndCrit` |
+| Mutilate rolls each hand on its own (hit, dodge, parry and crit), the parent strike awards 2 Combo Points, and Seal Fate's 0.5 sec internal cooldown lets only one of two crits in the same Mutilate add its extra point. | Client rows 1310707 to 1241584 and 14186 (ProcCategoryRecovery 500) | `sim/rogue/talents_assassination.go`, `TestMutilateRollsEachHandAndSealFateAddsOnePoint` |
 
 ## Shaman
 

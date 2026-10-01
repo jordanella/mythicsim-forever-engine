@@ -7,8 +7,12 @@ import (
 var rakeRank = spellData.Rake.Highest()
 var rakeTick = rakeRank.PeriodicEffect()
 
-// Forever's Rake no longer scales with attack power: the client states a flat hit and a flat tick,
-// and carries no BonusCoefficientFromAP on either.
+// The client rows at the pinned build state a flat hit and a flat tick and carry no
+// BonusCoefficientFromAP on either, so Rake scales with nothing here. Blizzard's Druid deep dive (30
+// September 2026, worldofwarcraft.blizzard.com/en-us/news/24301515) says "Rake: Now gains increased
+// damage from Attack Power" without a number. When the share is known (a newer client build or a fit
+// to beta logs), add it the way Rip does: fold it into the snapshot and call dot.SnapshotAttackPowerShare
+// so a tick reads it from the attack power it has then.
 func (druid *Druid) registerRakeSpell() {
 	druid.Rake = druid.RegisterSpell(Cat, core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rakeRank.ID},

@@ -762,3 +762,23 @@ nothing named them.
   unpatched source) and `TestWindfuryWeaponGrantsExtraSwings`, which now counts the Melee row and the new row
   together.
 - **Drop it when** upstream books the imbue's extra attacks under their own row.
+
+## 32. `druid: a Feral Cat knows Moonfire`
+
+- **What it does.** `RegisterFeralCatSpells` registers Moonfire (9835) and its dot, as `RegisterBalanceSpells` does for
+  Balance. The client row (Moonkin stance, castable in caster form, not castable while shapeshifted) makes it a
+  caster-form spell, so a cast from Cat Form leaves the form first, like every other caster spell in the form
+  masks of `sim/druid/druid.go`. An APL that cancels Cat Form, casts Moonfire and shifts back works the same way.
+- **Why.** A player's custom Cat APL weaves Moonfire to refresh the dot while powershifting. The Cat agent never
+  registered the spell, so the engine dropped every line naming it ("does not know spell"), and the report
+  adapter (`mythicsim-forever/cli/report_rotation.go`) then showed those lines as skipped and cut the Moonfire dot
+  out of the conditions that mentioned it. The cancel-form line lost its "no Moonfire dot" test and powershifted
+  every time Energy fell to 20: about 20 shifts a fight, 427 DPS for a character that makes 522 with no Moonfire
+  lines. With the spell registered the same weave makes 534 (10,000 iterations, seed 42, the bare Moonfire line
+  removed; 521.6 for the no-Moonfire rotation).
+- **Tests.** `TestCatCanCastMoonfireFromCatForm` and `TestMoonfireWeaveRunsFromAnAPL` in
+  `sim/druid/feralcat/moonfire_test.go`; both fail without the registration.
+- **Default.** No preset casts Moonfire, so no existing result moves (`TestFeralCat` golden unchanged). Feral Bear
+  and the other caster spells (Wrath, Starfire, Insect Swarm without the talent) are still unknown to the feral
+  agents.
+- **Drop it when** upstream registers Moonfire for the Feral Cat agent.
