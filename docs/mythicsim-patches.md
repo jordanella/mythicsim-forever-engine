@@ -677,3 +677,21 @@ were all clean text merges:
   #596) and two-handed Seal of Righteousness (#591); Protection Warrior with Thunder Clap (#584). The
   melee Survival golden (ours, no upstream equivalent) falls 6 to 8% with no buffs because Expose Prey
   now needs Hunter's Mark on the target (#594) and moves under 1% with full buffs.
+
+## 29. `core: player options for the race comparison's weapons`
+
+- **What it does.** Three `Player` fields. `disable_weapon_specialization` (60, JSON
+  `disableWeaponSpecialization`) withholds the race's weapon specialization (Human sword +2% crit,
+  Dwarf mace +1%, Orc axe +1%) even with its weapon equipped, in `applyWeaponSpecialization`.
+  `weapon_type_override` (61) retypes the melee weapons in the main hand and off hand, keeping
+  their stats, in `NewCharacter` (`Equipment.overrideWeaponTypes`); `weapon_type_override_off_hand_only`
+  (62) leaves the main hand alone. Shields, off-hand items and ranged weapons are untouched.
+- **Why.** The race comparison holds one gear set for every race, so a race's weapon
+  specialization was active or not by accident of the preset's weapons (Orc ranked 9th of 10 on
+  Fury, whose reference wields a mace and a sword). Retyping the weapons gives each race its own
+  weapon type, and the rules that key on weapon type follow it: the specialization, the warrior's
+  Weaponmaster, the rogue's Hack and Slash, Backstab and Ambush.
+- **Tests.** `TestWeaponTypeOverrideGivesTheRaceItsWeapon` in `sim/core/disable_racials_test.go`.
+- **Default.** All three are off, which changes no existing result.
+- **Drop it when** upstream has an equivalent option. Point the worker's fields
+  (`worker/cmd/refresh-forever-races`) at upstream's names first.

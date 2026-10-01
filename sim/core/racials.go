@@ -294,7 +294,7 @@ func applyCreatureTypeSlaying(character *Character, mobType proto.MobType) {
 func applyWeaponSpecialization(character *Character, label string, spellID int32, critPercent float64, weaponType proto.WeaponType) {
 	hasWeaponEquipped := func() bool {
 		mh, oh := character.MainHand(), character.OffHand()
-		return (mh != nil && mh.WeaponType == weaponType) || (oh != nil && oh.WeaponType == weaponType)
+		return !character.disableWeaponSpec && ((mh != nil && mh.WeaponType == weaponType) || (oh != nil && oh.WeaponType == weaponType))
 	}
 
 	aura := character.RegisterAura(Aura{

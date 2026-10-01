@@ -45,6 +45,8 @@ type Character struct {
 
 	// Racial effects are skipped, but the race's base stats are kept.
 	disableRacials bool
+	// Player.disable_weapon_specialization.
+	disableWeaponSpec bool
 
 	// Current gear.
 	Equipment
@@ -115,7 +117,8 @@ func NewCharacter(party *Party, partyIndex int, player *proto.Player) Character 
 		Class: player.Class,
 		Spec:  PlayerProtoToSpec(player),
 
-		disableRacials: player.DisableRacials,
+		disableRacials:    player.DisableRacials,
+		disableWeaponSpec: player.DisableWeaponSpecialization,
 
 		Equipment: ProtoToEquipment(player.Equipment).inArea(party.areaTypes()),
 
@@ -179,7 +182,28 @@ func NewCharacter(party *Party, partyIndex int, player *proto.Player) Character 
 
 	character.EquipScalingManager = character.NewEquipScalingManager()
 
+	if player.WeaponTypeOverride != proto.WeaponType_WeaponTypeUnknown {
+		character.Equipment.overrideWeaponTypes(player.WeaponTypeOverride, player.WeaponTypeOverrideOffHandOnly)
+	}
 	return character
+}
+
+// overrideWeaponTypes retypes the melee weapons in the main hand and off hand, keeping their
+// stats and hand type. A shield, an off-hand item or a ranged weapon is not a melee weapon
+// type and stays as it is.
+func (equipment *Equipment) overrideWeaponTypes(to proto.WeaponType, offHandOnly bool) {
+	retype := func(item *Item) {
+		switch item.WeaponType {
+		case proto.WeaponType_WeaponTypeAxe, proto.WeaponType_WeaponTypeDagger, proto.WeaponType_WeaponTypeFist,
+			proto.WeaponType_WeaponTypeMace, proto.WeaponType_WeaponTypePolearm, proto.WeaponType_WeaponTypeStaff,
+			proto.WeaponType_WeaponTypeSword:
+			item.WeaponType = to
+		}
+	}
+	if !offHandOnly {
+		retype(equipment.MainHand())
+	}
+	retype(equipment.OffHand())
 }
 
 type EquipScalingManager struct {

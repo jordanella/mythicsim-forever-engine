@@ -65,3 +65,54 @@ func TestDisableRacialsDropsRacialsButKeepsBaseStats(t *testing.T) {
 		t.Errorf("human spirit with racials disabled is %.1f, want the base %.1f", got, want)
 	}
 }
+
+// A warrior wielding a mace (Ironfoe) and a sword (Cho'Rush's Blade), the Fury reference's
+// weapons, with its racial weapon specialization read off the character's crit.
+func weaponWarrior(race proto.Race, mutate func(*proto.Player)) *Character {
+	return racialWarrior(race, func(player *proto.Player) {
+		player.Equipment = &proto.EquipmentSpec{Items: []*proto.ItemSpec{
+			{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {},
+			{Id: 11684}, {Id: 18484},
+		}}
+		if mutate != nil {
+			mutate(player)
+		}
+	})
+}
+
+func TestWeaponTypeOverrideGivesTheRaceItsWeapon(t *testing.T) {
+	crit := func(c *Character) float64 { return c.GetStat(stats.PhysicalCritPercent) }
+	orc := weaponWarrior(proto.Race_RaceOrc, nil)
+	orcAxes := weaponWarrior(proto.Race_RaceOrc, func(p *proto.Player) { p.WeaponTypeOverride = proto.WeaponType_WeaponTypeAxe })
+	if got := orc.MainHand().WeaponType; got != proto.WeaponType_WeaponTypeMace {
+		t.Fatalf("test setup: main hand is %v, want a mace", got)
+	}
+	if got := orcAxes.MainHand().WeaponType; got != proto.WeaponType_WeaponTypeAxe {
+		t.Errorf("override left the main hand a %v", got)
+	}
+	if got := orcAxes.OffHand().WeaponType; got != proto.WeaponType_WeaponTypeAxe {
+		t.Errorf("override left the off hand a %v", got)
+	}
+	if d := crit(orcAxes) - crit(orc); d != 1 {
+		t.Errorf("an orc with axes has %.2f more crit than with a mace and a sword, want 1 from Axe Specialization", d)
+	}
+	if orcAxes.MainHand().ID != orc.MainHand().ID {
+		t.Error("override changed the weapon itself")
+	}
+
+	// Off-hand only keeps the main hand.
+	offHand := weaponWarrior(proto.Race_RaceOrc, func(p *proto.Player) {
+		p.WeaponTypeOverride = proto.WeaponType_WeaponTypeAxe
+		p.WeaponTypeOverrideOffHandOnly = true
+	})
+	if offHand.MainHand().WeaponType != proto.WeaponType_WeaponTypeMace || offHand.OffHand().WeaponType != proto.WeaponType_WeaponTypeAxe {
+		t.Error("off-hand-only override changed the main hand or left the off hand")
+	}
+
+	// Withholding the specialization drops the crit even with the weapon equipped.
+	human := weaponWarrior(proto.Race_RaceHuman, nil)
+	humanWithheld := weaponWarrior(proto.Race_RaceHuman, func(p *proto.Player) { p.DisableWeaponSpecialization = true })
+	if d := crit(human) - crit(humanWithheld); d != 2 {
+		t.Errorf("withholding Sword Specialization changed a swordsman's crit by %.2f, want 2", d)
+	}
+}

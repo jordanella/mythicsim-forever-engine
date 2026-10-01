@@ -94,6 +94,19 @@ message Player {
 	// racials can be measured against the same character without them.
 	bool disable_racials = 59;
 
+	// Withhold the race's weapon specialization (Human sword, Dwarf mace, Orc axe) even while
+	// its weapon is equipped, so a race's weapon can be measured against the same character
+	// without it. Every other racial stays.
+	bool disable_weapon_specialization = 60;
+
+	// Treat the melee weapons in the main hand and off hand as this weapon type, keeping their
+	// stats, so the race comparison can give each race the weapon its specialization needs and
+	// let the class's own weapon-type rules (Weaponmaster, Hack and Slash, Backstab) follow.
+	// Off-hand only leaves the main hand alone. Shields, off-hand items and ranged weapons are
+	// untouched.
+	WeaponType weapon_type_override = 61;
+	bool weapon_type_override_off_hand_only = 62;
+
 	HealingModel healing_model = 49;
 
 	// Items/enchants/gems/etc to include in the database.
