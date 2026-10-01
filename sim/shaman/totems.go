@@ -115,6 +115,9 @@ func (shaman *Shaman) registerWindfuryTotemSpell() {
 		},
 	})
 
+	// The party holds one air totem, and a totem the shaman casts replaces the one the party assumes.
+	buffs.JoinAirTotemSlot(wfAura, buffs.AirTotemBidCastWindfury)
+
 	wfIntermediateAuraForExclusitivity.NewExclusiveEffect(buffs.WindfuryTotemCategory, false, core.ExclusiveEffect{
 		Priority: value,
 		OnGain: func(_ *core.ExclusiveEffect, sim *core.Simulation) {
@@ -181,6 +184,8 @@ func (shaman *Shaman) registerGraceOfAirTotemSpell() {
 		ActionID: config.ActionID,
 		Duration: duration,
 	})
+	// The party holds one air totem, and a totem the shaman casts replaces the one the party assumes.
+	buffs.JoinAirTotemSlot(buffAura, buffs.AirTotemBidCastGraceOfAir)
 	buffAura.NewExclusiveEffect(buffs.GraceOfAirTotemCategory+stats.Agility.StatName()+"Add", false, core.ExclusiveEffect{
 		Priority: value,
 		OnGain: func(ee *core.ExclusiveEffect, sim *core.Simulation) {

@@ -695,3 +695,49 @@ were all clean text merges:
 - **Default.** All three are off, which changes no existing result.
 - **Drop it when** upstream has an equivalent option. Point the worker's fields
   (`worker/cmd/refresh-forever-races`) at upstream's names first.
+
+## 30. One air totem per party
+
+Redfall and Kerani (Discord, 2 October 2026) found a Windfury Totem from the party buffs and a Grace of Air
+the rotation casts both up in one Enhancement sim. The engine had no air totem rule beyond the shaman's own
+slot: `Shaman.AirTotemAura` replaces the shaman's previous cast totem, but the party's Windfury Totem
+(`buffs.driveWindfuryTotem`, category `WindfuryTotem`), the party's Grace of Air (`buffs.driveGraceOfAirTotem`,
+category `GraceOfAirTotemAgilityAdd`) and the two cast totems (`sim/shaman/totems.go`) were four independent
+auras. On Redfall's build (sim a2f1441c) with a Rockbiter main hand, Windfury Totem from the party and Grace of Air
+cast: 641.7 DPS, both up all fight, against 620.0 for the Windfury Totem alone and 558.6 for the cast Grace of
+Air alone. Client build 70009 made Windfury Totem a party aura and its 2026-09-24 patch notes allow one air
+totem per party (the `fcea407ab9` commit already built the melee and ranged presets around it).
+
+- **What it does.** `buffs.AirTotemCategory` is a single-aura exclusive category (`sim/core/buffs/air_totem.go`).
+  The party's Windfury Totem, the party's Grace of Air and the shaman's two cast totems each join it with a
+  bid: party Grace of Air 1, party Windfury Totem 2, cast Grace of Air 3, cast Windfury Totem 4. The higher bid
+  replaces the air totem that is up and the lower one is refused, so exactly one stands.
+- **Precedence.** A totem the shaman casts replaces the one the party buffs assume. The cast is the later,
+  deliberate placement (the rotation spends a global and mana on it), the party buff is a standing assumption
+  that models someone else's totem, and the shaman's own slot already works the same way (a new air totem
+  replaces the old one). When both party buffs are set, Windfury Totem outbids Grace of Air; MythicSim's worker
+  never sends both. A party totem a cast has replaced is not restored if the cast totem later expires (the
+  rotation recasts at once, so the gap is under a global). Totem twisting (`PartyBuffs.TotemTwisting`) keeps
+  its own timing and stays out of the category, since it is by definition two air totems alternating; nothing
+  in MythicSim sets it.
+- **Windfury Weapon is not a member.** The beta describes it as disabling only "any benefit you personally
+  benefit from Windfury Totem", so it stays in `WindfuryTotemCategory` (patch 20 and `weapon_imbues.go`) and
+  leaves Grace of Air alone. A Windfury Weapon works under either air totem; the report that it "cannot be used
+  with Grace of Air" was not the engine (Windfury Weapon with a cast Grace of Air: 9.9 procs a fight and Grace
+  of Air up 119.9 s of 120 before this patch, the same after).
+- **Uptime.** `Aura.Deactivate` no longer books a negative uptime for an aura that ends before the pull. A party
+  totem that a pre-pull cast replaces ended at -3 s and reported an uptime of -3.0 s, as did any cast totem
+  replaced in the pre-pull.
+- **Tests.** `sim/shaman/enhancement/air_totem_test.go`: a cast Grace of Air replaces the party's Windfury Totem
+  (no extra attacks from it), a cast Windfury Totem replaces the party's Grace of Air, the two cast totems
+  replace each other, a request with both party totems holds Windfury Totem, and Windfury Weapon works beside a
+  party or cast Grace of Air and still disables the Windfury Totem. The replacement tests and the negative
+  uptime check fail on the unpatched source; the Windfury Weapon with Grace of Air test documents behaviour that
+  was already right.
+- **Default.** A request with at most one air totem is bit-identical: all 29 reference builds' default requests
+  (MythicSim's one-click requests, with Windfury Totem, Grace of Air or neither) give the same seeded DPS to the
+  last digit before and after, the Enhancement preset (Windfury Weapon, a cast Grace of Air, no party air totem)
+  included, and every other spec's golden passes unchanged. The Enhancement suite golden
+  (`TestEnhancement.results`) moves 168.69 to 153.42 (-9.0%) because upstream's Enhancement APL casts Grace of Air
+  while the suite's party carries Windfury Totem and the suite wields no weapon, so it used to hold both.
+- **Drop it when** upstream makes the air totems exclusive. Keep the uptime clamp either way.

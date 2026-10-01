@@ -188,6 +188,8 @@ func driveWindfuryTotem(char *core.Character, _ *proto.PartyBuffs) {
 		})
 	})
 
+	// The party holds one air totem: a totem the player casts replaces this one (patch 30).
+	JoinAirTotemSlot(totemAura, AirTotemBidPartyWindfury)
 	totemAura.NewExclusiveEffect(WindfuryTotemCategory, false, core.ExclusiveEffect{
 		Priority: WindfuryTotemValue(0),
 		OnGain: func(_ *core.ExclusiveEffect, sim *core.Simulation) {
@@ -207,6 +209,9 @@ func driveGraceOfAirTotem(char *core.Character, party *proto.PartyBuffs) {
 	aura := GraceOfAirTotemAura(&char.Unit, false, 0)
 
 	if !party.TotemTwisting {
+		// The party holds one air totem, so a Windfury Totem outbids this one (patch 30). A twisting
+		// shaman is by definition swapping air totems, so that case keeps its own timing and stays out.
+		JoinAirTotemSlot(aura, AirTotemBidPartyGraceOfAir)
 		core.MakePermanent(aura)
 		return
 	}

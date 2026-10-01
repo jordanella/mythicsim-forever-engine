@@ -786,10 +786,12 @@ func (aura *Aura) Deactivate(sim *Simulation) {
 	aura.active = false
 
 	if !aura.ActionID.IsEmptyAction() {
+		// An aura that ends before the pull (a party air totem a prepull cast replaces) has no
+		// uptime, not a negative one.
 		if sim.CurrentTime > aura.expires {
-			aura.metrics.Uptime += aura.expires - max(aura.startTime, 0)
+			aura.metrics.Uptime += max(aura.expires-max(aura.startTime, 0), 0)
 		} else {
-			aura.metrics.Uptime += sim.CurrentTime - max(aura.startTime, 0)
+			aura.metrics.Uptime += max(sim.CurrentTime-max(aura.startTime, 0), 0)
 		}
 	}
 
