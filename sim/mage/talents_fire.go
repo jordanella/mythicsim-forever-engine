@@ -255,11 +255,13 @@ func (mage *Mage) registerMasterOfElements() {
 	refundCoeff := spellData.MasterOfElements.FractionAt(mage.Talents.MasterOfElements)
 	manaMetrics := mage.NewManaMetrics(core.ActionID{SpellID: spellData.MasterOfElements.Highest().ID})
 
+	// 29074's 9 ms ProcCategoryRecovery: an area spell that crits several targets refunds once.
 	mage.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Master of Elements",
 		Callback:           core.CallbackOnSpellHitDealt,
 		ClassSpellMask:     MageSpellsAll,
 		Outcome:            core.OutcomeCrit,
+		ICD:                spellData.MasterOfElements.Highest().ICD(),
 		TriggerImmediately: true,
 		ExtraCondition: func(_ *core.Simulation, spell *core.Spell, _ *core.SpellResult) bool {
 			return spell.SpellSchool.Matches(core.SpellSchoolFire|core.SpellSchoolFrost) && spell.Cost != nil && spell.CurCast.Cost > 0

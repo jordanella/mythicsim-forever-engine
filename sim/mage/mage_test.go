@@ -11,6 +11,7 @@ import (
 	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/proto"
 	"github.com/wowsims/forever/sim/core/simsignals"
+	"github.com/wowsims/forever/sim/core/stats"
 )
 
 func init() {
@@ -192,5 +193,47 @@ func TestFrostboltRollsItsRow(t *testing.T) {
 	}
 	if len(seen) < 3 {
 		t.Errorf("Frostbolt non-crits dealt only %v; it should roll its row's spread", seen)
+	}
+}
+
+// Master of Elements (29074) refunds once per cast: its 9 ms ProcCategoryRecovery stops a Cone of
+// Cold that crits three targets from refunding three times.
+func TestMasterOfElementsRefundsOncePerCast(t *testing.T) {
+	encounter := core.MakeSingleTargetEncounter(0)
+	encounter.Targets = append(encounter.Targets, core.NewDefaultTarget(), core.NewDefaultTarget())
+	sim := core.NewSim(&proto.RaidSimRequest{
+		SimOptions: &proto.SimOptions{RandomSeed: 1},
+		Raid: &proto.Raid{Parties: []*proto.Party{{Buffs: &proto.PartyBuffs{}, Players: []*proto.Player{{
+			Name: "Mage", Class: proto.Class_ClassMage, Race: proto.Race_RaceGnome, TalentsString: FireTalents,
+			Equipment: &proto.EquipmentSpec{}, Buffs: &proto.IndividualBuffs{},
+			Spec:     &proto.Player_Mage{Mage: &proto.Mage{Options: &proto.Mage_Options{ClassOptions: &proto.MageOptions{}}}},
+			Rotation: &proto.APLRotation{Type: proto.APLRotation_TypeAPL},
+		}}}}},
+		Encounter: encounter,
+	}, simsignals.CreateSignals())
+	sim.Reset()
+
+	mage := sim.Raid.Parties[0].Players[0].(MageAgent).GetMage()
+	if mage.Talents.MasterOfElements == 0 {
+		t.Fatal("FireTalents no longer take Master of Elements; pick a build that does")
+	}
+	coneOfCold := mage.GetSpell(core.ActionID{SpellID: spellData.ConeOfCold.Highest().ID})
+	mage.AddStatDynamic(sim, stats.SpellCritPercent, 100)
+	mage.SpendMana(sim, mage.CurrentMana()/2, mage.NewManaMetrics(coneOfCold.ActionID))
+
+	before, crits := mage.CurrentMana(), coneOfCold.SpellMetrics
+	if !coneOfCold.Cast(sim, mage.CurrentTarget) {
+		t.Fatal("Cone of Cold did not cast")
+	}
+	totalCrits := int32(0)
+	for i := range crits {
+		totalCrits += crits[i].Crits
+	}
+	if totalCrits < 2 {
+		t.Fatalf("Cone of Cold crit %d targets; the test needs at least 2", totalCrits)
+	}
+	want := float64(coneOfCold.Cost.BaseCost) * spellData.MasterOfElements.FractionAt(mage.Talents.MasterOfElements)
+	if got := mage.CurrentMana() - before + coneOfCold.CurCast.Cost; math.Abs(got-want) > 0.01 {
+		t.Errorf("Master of Elements refunded %.1f mana off %d crits, want one refund of %.1f", got, totalCrits, want)
 	}
 }

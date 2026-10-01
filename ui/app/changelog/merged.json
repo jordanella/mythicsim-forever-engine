@@ -1,5 +1,23 @@
 [
 	{
+		"number": 601,
+		"title": "Warrior Dual Wield Specialization no longer raises off-hand rage (client 70170)",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/601"
+	},
+	{
+		"number": 600,
+		"title": "Wowhead Forever data changed (2026-10-01)",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/600"
+	},
+	{
+		"number": 599,
+		"title": "mage: Master of Elements refunds once per cast (client 9 ms proc cooldown)",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/599"
+	},
+	{
 		"number": 598,
 		"title": "rogue, druid: Eviscerate and Rip read their per-combo-point step from the client row",
 		"mergedAt": "2026-10-01",

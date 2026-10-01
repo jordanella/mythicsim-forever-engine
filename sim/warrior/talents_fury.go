@@ -92,8 +92,6 @@ func (warrior *Warrior) registerDualWieldSpecialization() {
 		Kind:       core.SpellMod_BonusHit_Percent,
 		FloatValue: spellData.DualWieldSpecialization.Effect(dbcenums.A_MOD_HIT_CHANCE, 0).ValueAt(warrior.Talents.DualWieldSpecialization),
 	})
-
-	warrior.SetOffHandRageMultiplier(spellData.DualWieldSpecialization.EffectAt(2).MultiplierAt(warrior.Talents.DualWieldSpecialization))
 }
 
 func (warrior *Warrior) registerIronWill() {
