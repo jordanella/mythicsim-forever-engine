@@ -76,7 +76,7 @@ func (shaman *Shaman) newWindfuryAttackPowerAura() *core.Aura {
 // autos and abilities (ProcTypeMask 20) with a 1.5 sec ProcCategoryRecovery, then casts 16361:
 // A_MOD_ATTACK_POWER plus SPELL_EFFECT_ADD_EXTRA_ATTACKS 2. The extra attacks are ordinary white
 // swings (white hit table, glancing blows, other weapon procs), not two special hits.
-func (shaman *Shaman) makeWFProcTriggerAura(dpm *core.DynamicProcManager, procMask *core.ProcMask, apAura *core.Aura) *core.Aura {
+func (shaman *Shaman) makeWFProcTriggerAura(dpm *core.DynamicProcManager, procMask *core.ProcMask, apAura *core.Aura, extraSwing *core.Spell) *core.Aura {
 	aura := shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Windfury Imbue",
 		Callback:           core.CallbackOnSpellHitDealt,
@@ -90,8 +90,9 @@ func (shaman *Shaman) makeWFProcTriggerAura(dpm *core.DynamicProcManager, procMa
 			apAura.Activate(sim)
 			apAura.SetStacks(sim, apAura.MaxStacks)
 			if spell.IsMH() {
-				// Classic extra attacks: the main-hand swing is pulled to now (resets the timer).
-				shaman.AutoAttacks.ExtraMHAttacks(sim, 2)
+				// Classic extra attacks: the main-hand swing is pulled to now (resets the timer). The two
+				// swings book to their own "Melee (Windfury Weapon)" row, as the totem's extra attack does.
+				shaman.AutoAttacks.ExtraMHAttacksFrom(sim, 2, extraSwing)
 			} else {
 				// ponytail: an off-hand proc swings the off hand twice; whether the client gives
 				// main-hand attacks instead is unmeasured.
@@ -135,7 +136,13 @@ func (shaman *Shaman) RegisterWindfuryImbue(procMask core.ProcMask) {
 
 	dpm := shaman.NewDynamicLegacyProcForTempEnchant(windfuryEnchantID, 0, shaman.getWindfuryFixedProcChance)
 
-	aura := shaman.makeWFProcTriggerAura(dpm, &mask, shaman.newWindfuryAttackPowerAura())
+	// The extra attacks are main-hand swings under Windfury Weapon's own tag, so the report lists them
+	// apart from the timer's swings (patch 31). The totem's extra attack does the same (buffs.driveWindfuryTotem).
+	extraConfig := *shaman.AutoAttacks.MHConfig()
+	extraConfig.ActionID = extraConfig.ActionID.WithTag(windfuryImbue.ID)
+	extraSwing := shaman.GetOrRegisterSpell(extraConfig)
+
+	aura := shaman.makeWFProcTriggerAura(dpm, &mask, shaman.newWindfuryAttackPowerAura(), extraSwing)
 
 	if mask.Matches(core.ProcMaskMeleeMH) {
 		aura.NewExclusiveEffect(buffs.WindfuryTotemCategory, false, core.ExclusiveEffect{

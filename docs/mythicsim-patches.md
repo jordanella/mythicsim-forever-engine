@@ -741,3 +741,24 @@ totem per party (the `fcea407ab9` commit already built the melee and ranged pres
   (`TestEnhancement.results`) moves 168.69 to 153.42 (-9.0%) because upstream's Enhancement APL casts Grace of Air
   while the suite's party carries Windfury Totem and the suite wields no weapon, so it used to hold both.
 - **Drop it when** upstream makes the air totems exclusive. Keep the uptime clamp either way.
+
+## 31. Windfury Weapon's extra attacks have their own row
+
+Kerani could not see Windfury Weapon proc: with the imbue the sim report had no "Melee (extra attack)" row, which
+the party's Windfury Totem has. The imbue did proc (8.5 to 9.9 times a fight on Redfall's build and the reference, the
+`16361` attack power aura), but its two extra attacks were main-hand swings booked under the plain Melee row, so
+nothing named them.
+
+- **What it does.** `AutoAttacks.ExtraMHAttacksFrom(sim, count, spell)` is `ExtraMHAttacks` with the swings
+  booked to `spell`, a copy of the main-hand swing under the granting spell's tag. Windfury Weapon grants its
+  two attacks through it with the copy tagged 16361, so the report lists "Melee (Windfury Weapon)" and the plain
+  Melee row counts only the swings of the timer. The totem's extra attack (tags 25584 party, 10610 cast) already
+  worked this way.
+- **No result moves.** The copy is the same swing: the same config, hit table, procs and timing. Seeded runs of
+  Redfall's build in all 24 combinations of imbue, party air totem and cast air totem give the same DPS
+  to the last digit as before the patch. Only the row the swings land in changes. `ExtraMHAttacks` itself is unchanged for its other
+  callers (Hand of Justice, Hack and Slash, Ironfoe).
+- **Tests.** `TestWindfuryWeaponExtraAttacksHaveTheirOwnRow` (two swings a proc under tag 16361; fails on the
+  unpatched source) and `TestWindfuryWeaponGrantsExtraSwings`, which now counts the Melee row and the new row
+  together.
+- **Drop it when** upstream books the imbue's extra attacks under their own row.

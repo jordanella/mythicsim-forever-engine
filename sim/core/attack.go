@@ -317,6 +317,11 @@ type WeaponAttack struct {
 
 	// Extra attacks still owed after the one ExtraMHAttacks pulled to now.
 	extraAttacks int32
+
+	// The next extraSwings swings are booked to extraSpell, a copy of the swing under the source's
+	// tag, so a source's extra attacks show as their own row (ExtraMHAttacksFrom).
+	extraSpell  *Spell
+	extraSwings int32
 }
 
 func (wa *WeaponAttack) getWeapon() *Weapon {
@@ -339,6 +344,13 @@ func (wa *WeaponAttack) trySwing(sim *Simulation) time.Duration {
 func (wa *WeaponAttack) swing(sim *Simulation) time.Duration {
 	attackSpell := wa.spell
 	isRanged := wa == &wa.unit.AutoAttacks.ranged
+
+	if wa.extraSwings > 0 {
+		wa.extraSwings--
+		if wa.extraSpell != nil {
+			attackSpell = wa.extraSpell
+		}
+	}
 
 	// A ranged auto can't fire while moving. The hidden retry timer then
 	// checks every 500ms, and the shot goes off at the first check after the
@@ -596,6 +608,7 @@ func (aa *AutoAttacks) reset(sim *Simulation) {
 	aa.mh.previousSwing = -NeverExpires
 	aa.mh.swingAt = NeverExpires
 	aa.mh.extraAttacks = 0
+	aa.mh.extraSwings = 0
 	aa.oh.previousSwing = -NeverExpires
 	aa.oh.swingAt = NeverExpires
 
@@ -966,6 +979,23 @@ func (aa *AutoAttacks) ExtraMHAttacks(sim *Simulation, count int32) {
 	}
 	aa.mh.extraAttacks += count - 1
 	aa.ExtraMHAttack(sim)
+}
+
+// ExtraMHAttacksFrom is ExtraMHAttacks with the swings booked to spell instead of the main-hand
+// auto: a copy of the swing's config under the granting spell's tag, so a source's extra attacks get
+// their own action row (Windfury's "Melee (extra attack)") and the plain Melee row counts only
+// swings of the timer. The swing is the same swing: the hit table, damage, procs and timing do not
+// change, only the row its damage and hits land in. Attacks granted while earlier ones are still owed
+// keep the first grant's spell.
+func (aa *AutoAttacks) ExtraMHAttacksFrom(sim *Simulation, count int32, spell *Spell) {
+	if count <= 0 || !aa.AutoSwingMelee || !aa.mh.enabled {
+		return
+	}
+	aa.ExtraMHAttacks(sim, count)
+	if aa.mh.extraSwings == 0 {
+		aa.mh.extraSpell = spell
+	}
+	aa.mh.extraSwings = aa.mh.extraAttacks + 1
 }
 
 // Delays all swing timers for the specified amount.
