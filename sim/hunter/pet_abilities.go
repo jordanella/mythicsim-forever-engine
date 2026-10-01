@@ -40,7 +40,9 @@ func (hp *HunterPet) NewPetAbility(abilityType PetAbilityType) *core.Spell {
 	case LightningBreath:
 		return hp.newLightningBreath()
 	case Screech:
-		return hp.newScreech()
+		// Demoralizing Screech: a single melee hit off the client row (rank 4 24579: 24-42, 20 focus,
+		// 10 sec cooldown). 24582 is the learn spell. The attack power reduction is left out.
+		return hp.newPetStrike(spellData.DemoralizingScreechTriggered.Highest())
 	case ScorpidPoison:
 		return hp.newScorpidPoison()
 	case SavageRend:
@@ -169,45 +171,6 @@ func (hp *HunterPet) newLightningBreath() *core.Spell {
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			spell.CalcAndDealDamage(sim, target, sim.Roll(86, 98), spell.OutcomeMagicHitAndCrit)
-		},
-	})
-}
-
-// Demoralizing Screech in the beta client: new damage, and a 10 sec cooldown Classic did not have.
-// The attack power reduction it also applies is left out.
-func (hp *HunterPet) newScreech() *core.Spell {
-	return hp.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 24582},
-		SpellSchool:    core.SpellSchoolPhysical,
-		DefenseType:    core.DefenseTypeMelee,
-		ClassSpellMask: HunterPetDamage,
-		ProcMask:       core.ProcMaskMeleeSpecial,
-		Flags:          core.SpellFlagMeleeMetrics,
-		MaxRange:       core.MaxMeleeRange,
-
-		FocusCost: core.FocusCostOptions{
-			Cost: 20,
-		},
-		Cast: core.CastConfig{
-			DefaultCast: core.Cast{
-				GCD: PetGCD,
-			},
-			IgnoreHaste: true,
-			CD: core.Cooldown{
-				Timer:    hp.NewTimer(),
-				Duration: time.Second * 10,
-			},
-		},
-
-		DamageMultiplier: 1,
-		ThreatMultiplier: 1,
-
-		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
-			return hp.IsEnabled()
-		},
-
-		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealDamage(sim, target, sim.Roll(24, 42), spell.OutcomeMeleeSpecialHitAndCrit)
 		},
 	})
 }

@@ -59,7 +59,7 @@ func (mage *Mage) registerFrostfireBoltRank(rank *spelldata.Spell) {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, rank.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, rank.DamageEffect().Roll(sim, core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
 				if result.Landed() {

@@ -35,7 +35,7 @@ func (druid *Druid) registerWrathSpell(wrathRank *spelldata.Spell) {
 		MaxRange:         float64(wrathRank.MaxRange),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, wrathRank.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, wrathRank.DamageEffect().Roll(sim, core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
 
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)

@@ -134,3 +134,37 @@ func TestImpFireboltRollsItsRow(t *testing.T) {
 		t.Errorf("average at 70 = %v, want 47 (capped at 63)", got)
 	}
 }
+
+// Searing Pain rolls the spread its client row states, as every warlock nuke now does, where it
+// used to deal the row's average on every cast.
+func TestSearingPainRollsItsRow(t *testing.T) {
+	player := core.WithSpec(&proto.Player{
+		Race:        proto.Race_RaceOrc,
+		Class:       proto.Class_ClassWarlock,
+		Equipment:   &proto.EquipmentSpec{},
+		Consumables: &proto.ConsumesSpec{},
+		Rotation:    &proto.APLRotation{Type: proto.APLRotation_TypeAPL},
+	}, &proto.Player_Warlock{Warlock: &proto.Warlock{Options: &proto.Warlock_Options{ClassOptions: &proto.WarlockOptions{
+		Summon: proto.WarlockOptions_NoSummon,
+	}}}})
+	sim := core.NewSim(&proto.RaidSimRequest{
+		SimOptions: &proto.SimOptions{RandomSeed: 1},
+		Raid:       core.SinglePlayerRaidProto(player, &proto.PartyBuffs{}, &proto.RaidBuffs{}, &proto.Debuffs{}),
+		Encounter:  core.MakeSingleTargetEncounter(0),
+	}, simsignals.CreateSignals())
+	sim.Reset()
+
+	warlock := sim.Raid.Parties[0].Players[0].(WarlockAgent).GetWarlock()
+	m := &warlock.SearingPain.SpellMetrics[0]
+	seen := map[float64]bool{}
+	for i := 0; i < 30; i++ {
+		damage, hits, crits, resisted := m.TotalDamage, m.Hits, m.Crits, m.ResistedHits
+		warlock.SearingPain.SkipCastAndApplyEffects(sim, warlock.CurrentTarget)
+		if m.Hits > hits && m.Crits == crits && m.ResistedHits == resisted {
+			seen[math.Round(m.TotalDamage-damage)] = true
+		}
+	}
+	if len(seen) < 3 {
+		t.Errorf("Searing Pain non-crits dealt only %v; it should roll its row's spread", seen)
+	}
+}

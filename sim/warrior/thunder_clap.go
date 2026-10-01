@@ -8,6 +8,11 @@ import (
 func (warrior *Warrior) registerThunderClap() {
 	thunderClapRank := spellData.ThunderClap.Highest()
 	thunderClapBaseDamage := thunderClapRank.DamageEffect().Average(core.CharacterLevel)
+	// The client row carries no attack power share, but Forever adds one, as it does for Rend: the level
+	// 20 beta claps (rank 2, 23) land 29-31 before Defensive Stance's -10% at 230-300 attack power
+	// (foreverlogs 2677/2680/2683), and 61 rank 1 hits from 20 warriors at 77-393 attack power fit
+	// 0.0255 of attack power (#583). Fitted below level 20; the same share at 60 is assumed.
+	const apShare = 0.0255
 	// The slow is -20 and adds to the time between attacks (1.2x); Conqueror's 5 piece (26110, all
 	// effects +50%) makes it 30%. The bid is how far from 1 the target's speed factor is.
 	thunderClapSlow := thunderClapRank.Effects[1].BaseValue()
@@ -69,7 +74,7 @@ func (warrior *Warrior) registerThunderClap() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			results := spell.CalcCleaveDamage(sim, target, int32(thunderClapRank.MaxTargets), thunderClapBaseDamage, spell.OutcomeMagicHitAndCrit)
+			results := spell.CalcCleaveDamage(sim, target, int32(thunderClapRank.MaxTargets), thunderClapBaseDamage+apShare*spell.MeleeAttackPower(target), spell.OutcomeMagicHitAndCrit)
 			warrior.CastNormalizedSweepingStrikesAttack(results, sim)
 
 			for _, result := range results {

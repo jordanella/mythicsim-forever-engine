@@ -38,7 +38,7 @@ func (mage *Mage) registerScorchRank(scorchRank *spelldata.Spell) {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcAndDealDamage(sim, target, scorchRank.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcAndDealDamage(sim, target, scorchRank.DamageEffect().Roll(sim, core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
 			if result.Landed() && mage.ImprovedScorchAura != nil && sim.Proc(procChance, "Improved Scorch") {
 				mage.ImprovedScorchAura.Activate(sim)
 				mage.ImprovedScorchAura.AddStack(sim)

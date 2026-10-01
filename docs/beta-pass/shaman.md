@@ -54,9 +54,9 @@ Devastation are `classic`. The Stormstrike entry in `ui/core/spells/core.json` n
 ## Checklist lines
 
 ### Shaman section
-- **Open** `sim/shaman/air_totems.go:50`, Windfury Totem's value is hard-coded in `sim/core/buffs.go`. The client
-  lowers it to 95/179/246 attack power (Classic 122/229/315); the shaman table now holds those, but the buff the sim
-  applies is core's 315 until `buffs.go` changes.
+- **Resolved** `sim/shaman/air_totems.go:50`, Windfury Totem's value: the party buff no longer lives in `buffs.go`.
+  `sim/core/buffs/buffs_auto_gen.go` reads rank 3 (10610) from the client, 246 attack power (Classic 315), and
+  `drivers.go` procs it from the client's party aura 10612.
 - **Resolved** `sim/shaman/lava_burst.go:11`: cast 2 -> 2.5 sec, cooldown 8 -> 10 sec, 10% base mana -> 265 flat, .5714
   -> .714, 158-187 -> 192-248 at rank 3, and the spell is three ranks.
 - **Resolved** `sim/shaman/lightning_overload.go:25`: client curve 3/7/10, as the sim had.
@@ -77,8 +77,8 @@ Devastation are `classic`. The Stormstrike entry in `ui/core/spells/core.json` n
   Strength of Earth is 53 (88 before).
 - **Resolved** `sim/shaman/water_shield.go:18`: 3.5 sec between globes (`ProcCategoryRecovery`), unchanged; cost 6% base
   mana -> free, and a 15 sec cooldown added.
-- **Open** `sim/shaman/water_totems.go:115`, Mana Spring's value is hard-coded in `sim/core/buffs.go`. The client leaves
-  it at 10 mana every 2 sec, so only the structural TODO remains.
+- **Resolved** `sim/shaman/water_totems.go:115`, Mana Spring's value: `sim/core/buffs/buffs_auto_gen.go` reads rank 4
+  (10494) from the client, 10 mana every 2 sec, so nothing is hard-coded any more.
 - **Open** `sim/shaman/windfury_weapon.go:78`: both clients give each imbued weapon its own 20% enchant proc (enchant
   1669 -> 439431), but which hand's attacks the extra swings use is server behaviour the data does not show.
 

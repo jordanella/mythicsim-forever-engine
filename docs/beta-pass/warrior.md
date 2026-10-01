@@ -113,8 +113,11 @@ Era); Devastate is not in the Forever talent tree, so it is left out.
 - Sunder Armor has an explicit threat effect (`Effect 63`): 1, 405, 608, 810, 1013 by rank, about 17.5 per level against
   Classic's server side 4.5 per level. Applied as 1013 flat threat before stance and talent multipliers.
 - Slam now has a 15 sec cooldown, which makes it a filler at best for Arms.
-- Overpower carries a second power cost: 1 of power type 4 with `OptionalCost` 4. Nothing in the sim or in the tooltip
-  explains it; left unmodelled.
+- Overpower carries a second power cost: 1 of power type 4 with `OptionalCost` 4. That is the dodge charge: the spell a
+  dodge triggers (1282733, from Offensive State 1282735 and from Bloodthrill) energizes 1 of power type 4, the pool
+  rogues keep combo points in, and Overpower spends it. Beta logs agree (#582): 38 of 39 Overpower casts from 21 warriors
+  log both costs, 1 point in 37, each 0.7-4.9 sec after a dodge. The sim's dodge window already models it (one cast per
+  window); a second dodge adding a second charge is not modelled.
 - Thunder Clap's slow moved from aura 138 to aura 319 (melee attack speed only) and doubled.
 - Recklessness moved from aura 52 to 290 (crit chance), same 100%.
 - Two definitions share the name Two-Handed Weapon Specialization in the trait tables (1/2/3 and 3/6/9); the warrior tree

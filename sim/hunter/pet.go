@@ -82,8 +82,8 @@ func (hunter *Hunter) NewHunterPet() *HunterPet {
 	hp.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[proto.Class_ClassWarrior])
 	hp.AddStatDependency(stats.Intellect, stats.SpellCritPercent, core.CritPerIntMaxLevel[proto.Class_ClassWarrior])
 
-	// Bestial Discipline buys the pet 10% focus regen a rank.
-	hp.EnableFocusBar(1.0 + 0.1*float64(hunter.Talents.BestialDiscipline))
+	// Bestial Discipline buys the pet 10% focus regen a rank (19590 effect 1).
+	hp.EnableFocusBar(spellData.BestialDiscipline.EffectAt(1).MultiplierAt(hunter.Talents.BestialDiscipline))
 
 	hp.EnableAutoAttacks(hp, core.AutoAttackOptions{
 		MainHand: core.Weapon{

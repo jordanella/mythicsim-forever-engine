@@ -59,7 +59,9 @@ func (mage *Mage) registerFlamestrike(rankConfig *spelldata.Spell) {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealAoeDamage(sim, rankConfig.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
+			spell.CalcAndDealAoeDamageWithVariance(sim, spell.OutcomeMagicHitAndCrit, func(sim *core.Simulation, _ *core.Spell) float64 {
+				return rankConfig.DamageEffect().Roll(sim, core.CharacterLevel)
+			})
 			spell.AOEDot().Apply(sim)
 		},
 	})

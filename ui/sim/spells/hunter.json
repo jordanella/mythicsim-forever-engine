@@ -125,7 +125,7 @@
 		"ability": "Arcane Shot",
 		"assumptions": [
 			"The client carries no spell power coefficient on Arcane Shot; Classic's (.204, .3, then .429) is kept.",
-			"0.11 of ranged attack power on Arcane Shot and 0.035 a Serpent Sting tick, fitted to the beta's own combat logs: four level 20 hunters whose agility and gear the logs carry (Emp, Consumer, Morsmordre, Sparkz) land at 0.10-0.12 and 0.033-0.038 with Aspect of the Hawk up, Hunter's Mark and talents unknown. The client carries no attack power share on either. Across 12 hunters in 20 public foreverlogs.gg reports (2026-09-26, level 20 dungeons), Arcane Shot's non-critical hits average 1.6-2.1x the client's base damage at every rank (rank 3: base 39, 67-82 seen) and Serpent Sting's ticks 1.4-2.0x (rank 2: base 12, 17-24 seen), from hunters with next to no spell power. One beta player reported the same (forum thread 2358919, 2026-09-23)."
+			"0.11 of ranged attack power on Arcane Shot and 0.035 a Serpent Sting tick, fitted to the beta's own combat logs: four level 20 hunters whose agility and gear the logs carry (Emp, Consumer, Morsmordre, Sparkz) land at 0.10-0.12 and 0.033-0.038 with Aspect of the Hawk up, Hunter's Mark and talents unknown. That they scale at all is settled by an aspect swap: Consumer (report 2673, level 20) traded Aspect of the Hawk rank 2 (14318, +35 ranged attack power in the client) for Cheetah for eight minutes on the same Wailing Caverns mobs and then went back. Arcane Shot's non-critical hits fell from 69.0 to 64.8 (0.120 +-0.011 a point) and Serpent Sting's ticks from 20.3 to 18.9 (0.041 +-0.006); against all of that run's Hawk hits, 0.100 and 0.037. The client carries no attack power share on either. Across 12 hunters in 20 public foreverlogs.gg reports (2026-09-26, level 20 dungeons), Arcane Shot's non-critical hits average 1.6-2.1x the client's base damage at every rank (rank 3: base 39, 67-82 seen) and Serpent Sting's ticks 1.4-2.0x (rank 2: base 12, 17-24 seen), from hunters with next to no spell power. One beta player reported the same (forum thread 2358919, 2026-09-23)."
 		],
 		"file": "sim/hunter/arcane_shot.go",
 		"note": "Client 70009: rank 8 deals 217, up from 183.",
@@ -195,10 +195,10 @@
 		"source": "forever",
 		"tooltip": "310 Mana\n8-35 yd range\n2 sec cast\n6 sec cooldown\nAn aimed shot that increases ranged damage by 166. Aimed Shot shares its cooldown with Multi-Shot."
 	},
-	"24582": {
+	"24579": {
 		"ability": "Screech",
 		"file": "sim/hunter/pet_abilities.go",
-		"note": "Client 70009: renamed Demoralizing Screech; 26-46 -> 24-42 damage (24579) and a new 10 sec cooldown. The attack power reduction is not modelled.",
+		"note": "Client 70009: renamed Demoralizing Screech; 26-46 -> 24-42 damage and a new 10 sec cooldown, all read off rank 4 (24579, the spell the pet casts; 24582 is the learn spell). The attack power reduction is not modelled.",
 		"source": "forever",
 		"tooltip": "20 Focus\nInstant\n10 sec cooldown\nBlasts a single enemy for 24 to 42 damage and lowers the melee attack power of all enemies in melee range for 30 sec."
 	},
@@ -220,7 +220,7 @@
 		"ability": "Serpent Sting",
 		"assumptions": [
 			"The client carries no spell power coefficient on Serpent Sting; Classic's is kept.",
-			"0.11 of ranged attack power on Arcane Shot and 0.035 a Serpent Sting tick, fitted to the beta's own combat logs: four level 20 hunters whose agility and gear the logs carry (Emp, Consumer, Morsmordre, Sparkz) land at 0.10-0.12 and 0.033-0.038 with Aspect of the Hawk up, Hunter's Mark and talents unknown. The client carries no attack power share on either. Across 12 hunters in 20 public foreverlogs.gg reports (2026-09-26, level 20 dungeons), Arcane Shot's non-critical hits average 1.6-2.1x the client's base damage at every rank (rank 3: base 39, 67-82 seen) and Serpent Sting's ticks 1.4-2.0x (rank 2: base 12, 17-24 seen), from hunters with next to no spell power. One beta player reported the same (forum thread 2358919, 2026-09-23)."
+			"0.11 of ranged attack power on Arcane Shot and 0.035 a Serpent Sting tick, fitted to the beta's own combat logs: four level 20 hunters whose agility and gear the logs carry (Emp, Consumer, Morsmordre, Sparkz) land at 0.10-0.12 and 0.033-0.038 with Aspect of the Hawk up, Hunter's Mark and talents unknown. That they scale at all is settled by an aspect swap: Consumer (report 2673, level 20) traded Aspect of the Hawk rank 2 (14318, +35 ranged attack power in the client) for Cheetah for eight minutes on the same Wailing Caverns mobs and then went back. Arcane Shot's non-critical hits fell from 69.0 to 64.8 (0.120 +-0.011 a point) and Serpent Sting's ticks from 20.3 to 18.9 (0.041 +-0.006); against all of that run's Hawk hits, 0.100 and 0.037. The client carries no attack power share on either. Across 12 hunters in 20 public foreverlogs.gg reports (2026-09-26, level 20 dungeons), Arcane Shot's non-critical hits average 1.6-2.1x the client's base damage at every rank (rank 3: base 39, 67-82 seen) and Serpent Sting's ticks 1.4-2.0x (rank 2: base 12, 17-24 seen), from hunters with next to no spell power. One beta player reported the same (forum thread 2358919, 2026-09-23)."
 		],
 		"file": "sim/hunter/serpent_sting.go",
 		"note": "Client 70009: rank 9 deals 555 over 15 sec, as in Classic; the ticks can crit (#362).",
@@ -255,12 +255,9 @@
 	},
 	"5302": {
 		"ability": "Defensive State",
-		"assumptions": [
-			"Forever's Expose Prey grants its own 5 sec aura (1310726); the sim reuses Classic's Defensive State id for it.",
-			"Whether Forever still grants the state on a dodge, as Classic does, is unconfirmed."
-		],
+		"assumptions": ["Forever's Expose Prey grants its own 5 sec aura (1310726); the sim reuses Classic's Defensive State id for it."],
 		"file": "sim/hunter/mongoose_bite.go",
-		"note": "Classic's dodge-driven Defensive State is reused for Forever's Expose Prey proc, which is the only thing that actually enables Mongoose Bite here: the aura's own dodge trigger can never fire, because an aura's OnSpellHitTaken is only dispatched while the aura is already active.",
+		"note": "A dodge opens Mongoose Bite for 5 sec: every rank (1495, 14269-14271) carries CasterAuraState 1 in client 1.60.1.70124 SpellAuraRestrictions, and Wowhead Forever's tooltip says \"Can only be performed after you dodge\". Forever's Expose Prey proc opens the same window. The sim's dodge trigger never fired before (it sat on the inactive aura itself); it now has its own permanent watch.",
 		"source": "assumed",
 		"tooltip": "5 sec duration\nYour Mongoose Bite is active."
 	},

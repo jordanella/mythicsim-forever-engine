@@ -33,7 +33,9 @@ func (mage *Mage) registerConeOfColdSpell() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealAoeDamage(sim, coneOfColdRank.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
+			spell.CalcAndDealAoeDamageWithVariance(sim, spell.OutcomeMagicHitAndCrit, func(sim *core.Simulation, _ *core.Spell) float64 {
+				return coneOfColdRank.DamageEffect().Roll(sim, core.CharacterLevel)
+			})
 		},
 	})
 }

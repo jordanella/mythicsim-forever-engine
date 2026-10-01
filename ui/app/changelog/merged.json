@@ -1,5 +1,101 @@
 [
 	{
+		"number": 598,
+		"title": "rogue, druid: Eviscerate and Rip read their per-combo-point step from the client row",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/598"
+	},
+	{
+		"number": 597,
+		"title": "[DB] Update to 1.60.1.70124 with hotfixes as of 2026-10-01",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/597"
+	},
+	{
+		"number": 596,
+		"title": "priest, warlock, druid, shaman: nukes roll their client range instead of dealing the average",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/596"
+	},
+	{
+		"number": 595,
+		"title": "mage: nukes roll their client range instead of dealing the average",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/595"
+	},
+	{
+		"number": 594,
+		"title": "hunter: Expose Prey procs only on targets with Hunter's Mark",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/594"
+	},
+	{
+		"number": 593,
+		"title": "hunter: a dodge opens Mongoose Bite",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/593"
+	},
+	{
+		"number": 592,
+		"title": "hunter: aspect swap settles that Arcane Shot and Serpent Sting scale with attack power",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/592"
+	},
+	{
+		"number": 591,
+		"title": "paladin: two-handed Seal of Righteousness takes 1.2x the spell power share",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/591"
+	},
+	{
+		"number": 590,
+		"title": "hunter: four talents read their client rows (Careful Aim, Bestial Discipline, Surefooted, Lone Wolf)",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/590"
+	},
+	{
+		"number": 589,
+		"title": "hunter: Bat's Demoralizing Screech reads the client row (casts 24579, not the learn spell)",
+		"mergedAt": "2026-10-01",
+		"url": "https://github.com/ElliotWood/Forever/pull/589"
+	},
+	{
+		"number": 588,
+		"title": "shaman: Windfury Totem and Mana Spring read the client (stale docs)",
+		"mergedAt": "2026-09-30",
+		"url": "https://github.com/ElliotWood/Forever/pull/588"
+	},
+	{
+		"number": 587,
+		"title": "paladin: Holy Strike's melee table is log-backed (docs, closes #581)",
+		"mergedAt": "2026-09-30",
+		"url": "https://github.com/ElliotWood/Forever/pull/587"
+	},
+	{
+		"number": 586,
+		"title": "mage: Ice Lance's .143 spell power share is log-backed, not a guess",
+		"mergedAt": "2026-09-30",
+		"url": "https://github.com/ElliotWood/Forever/pull/586"
+	},
+	{
+		"number": 585,
+		"title": "warrior: Overpower's second cost is the dodge charge (client + beta logs)",
+		"mergedAt": "2026-09-30",
+		"url": "https://github.com/ElliotWood/Forever/pull/585"
+	},
+	{
+		"number": 584,
+		"title": "warrior: Thunder Clap adds 2.55% of attack power (beta logs)",
+		"mergedAt": "2026-09-30",
+		"url": "https://github.com/ElliotWood/Forever/pull/584"
+	},
+	{
+		"number": 580,
+		"title": "Wowhead Forever data changed (2026-09-30)",
+		"mergedAt": "2026-09-30",
+		"url": "https://github.com/ElliotWood/Forever/pull/580"
+	},
+	{
 		"number": 579,
 		"title": "mage: Fingers of Frost reads its 15% chance from the talent row",
 		"mergedAt": "2026-09-30",

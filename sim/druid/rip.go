@@ -7,10 +7,10 @@ import (
 var ripRank = spellData.Rip.Highest()
 var ripTick = ripRank.PeriodicEffect()
 
-// The per-combo-point damage and the attack power share are not in the generated table - the client
-// states the tick base only - so they stay the sim's client-read values: 25.5 a point a tick at rank
-// 6, and 1% of attack power a point, which stops growing at four points.
-const ripTickPerComboPoint = 25.5
+// Rank 6 ticks 15 plus 25.5 a combo point (EffectPointsPerResource): 243 at 1 point to 855 at 5 over
+// 12 sec, as Wowhead Forever prints it. The 1% of attack power a point, which stops growing at four
+// points, is not in the client row.
+var ripTickPerComboPoint = float64(ripTick.PointsPerResource)
 
 func (druid *Druid) registerRipSpell() {
 	druid.Rip = druid.RegisterSpell(Cat, core.SpellConfig{

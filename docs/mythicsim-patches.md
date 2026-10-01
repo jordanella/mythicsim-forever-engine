@@ -3,7 +3,7 @@
 MythicSim runs this engine from its fork (`sage3648/mythicsim-forever-engine`, branch
 `codex/forever-frostfire-omen`). The branch is ElliotWood/Forever master, which is built on the
 official wowsims/forever, plus the patches below. The first base was `442076902` (Merge
-wowsims/forever master ea5412873). The current base is `d91d4afe40` (2026-10-01, client 1.60.1.70124). The 2026-10-01 sync merged 113 upstream commits; the decisions are in "Upstream sync 2026-10-01" at the end of this file. The previous base was `8dc19a4241` (2026-09-27). It includes form-speed and actual spell cast-time Omen of Clarity proc corrections, life-drain weapon effects, Sword of Zeal, Argent Avenger, Fiery Weapon and Lifestealing enchants, Flurry Axe and Electrified Dagger, the 2026-09-27 client hotfix database, Stinging Viper and eight Classic weapon procs, Mage Scroll of Cryoblast, non-engineer explosives and SAF-T / EZ-Thro bombs, Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
+wowsims/forever master ea5412873). The current base is `723ea18f32` (2026-10-01, client 1.60.1.70124). The 2026-10-01 syncs merged 113 upstream commits and then 28 more ("Upstream sync 2026-10-01, second merge" at the end of this file); the decisions are in "Upstream sync 2026-10-01" at the end of this file. The previous base was `8dc19a4241` (2026-09-27). It includes form-speed and actual spell cast-time Omen of Clarity proc corrections, life-drain weapon effects, Sword of Zeal, Argent Avenger, Fiery Weapon and Lifestealing enchants, Flurry Axe and Electrified Dagger, the 2026-09-27 client hotfix database, Stinging Viper and eight Classic weapon procs, Mage Scroll of Cryoblast, non-engineer explosives and SAF-T / EZ-Thro bombs, Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
 
 Keep the set small. Each patch exists because MythicSim needs something upstream does not do
 yet. Drop a patch as soon as upstream covers it; do not keep ours alongside an upstream version.
@@ -663,3 +663,17 @@ On the MythicSim Elemental reference (10,000 iterations): 393.18 to 396.33 DPS o
 393.06 to 394.50 at a fixed 120 seconds and 357.88 to 363.78 at 300 seconds. The Elemental golden
 moves with it. This is a preset change, not an engine one: drop it if upstream's preset adopts Fire
 Nova or measures it worse.
+
+## Upstream sync 2026-10-01, second merge
+
+Merged upstream `723ea18f32` (28 commits since `d91d4afe40`). No patch needed changing; the overlaps
+were all clean text merges:
+
+- Frostfire Bolt: upstream's range roll (#595) applies to our spell as is.
+- Serpent Sting and Rip: upstream's comment and client-row reads (#592, #598) merge with our code.
+- Database: merged per record with `scripts/forever-merge-db.py` (the 1 October hotfix delta: 13 changed
+  lines in `db.json`, one in `leftover_db.json`).
+- Goldens: Balance, Mage, Priest, Warlock, Shaman and Retribution moved with the nuke damage rolls (#595,
+  #596) and two-handed Seal of Righteousness (#591); Protection Warrior with Thunder Clap (#584). The
+  melee Survival golden (ours, no upstream equivalent) falls 6 to 8% with no buffs because Expose Prey
+  now needs Hunter's Mark on the target (#594) and moves under 1% with full buffs.

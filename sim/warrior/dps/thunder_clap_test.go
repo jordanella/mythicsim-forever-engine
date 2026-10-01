@@ -101,3 +101,39 @@ func TestThunderClapBidsItsWholeSlowInTheAttackSpeedCategory(t *testing.T) {
 		speedIs(t, target, setSpeed, "the warrior's clap after the stronger slow dropped")
 	})
 }
+
+// Forever adds 2.55% of attack power to the clap's flat 103 (beta logs, #583); the client row
+// carries no share. A landed non-crit clap on an unarmored, unbuffed target deals exactly that.
+func TestThunderClapAddsAttackPowerShare(t *testing.T) {
+	player := &proto.Player{
+		Name:          "Clapper",
+		Equipment:     &proto.EquipmentSpec{},
+		Race:          proto.Race_RaceOrc,
+		Class:         proto.Class_ClassWarrior,
+		TalentsString: ArmsTalents,
+		Spec:          DefaultOptions,
+	}
+	sim := core.NewSim(&proto.RaidSimRequest{
+		Raid:       core.SinglePlayerRaidProto(player, &proto.PartyBuffs{}, &proto.RaidBuffs{}, &proto.Debuffs{}),
+		Encounter:  core.MakeSingleTargetEncounter(0),
+		SimOptions: &proto.SimOptions{RandomSeed: 1},
+	}, simsignals.CreateSignals())
+	sim.Reset()
+
+	war := sim.Raid.Parties[0].Players[0].(*DpsWarrior)
+	target := sim.Encounter.AllTargetUnits[0]
+	clap := war.GetSpell(core.ActionID{SpellID: 11581})
+	var got float64
+	for i := 0; i < 200 && got == 0; i++ {
+		before := clap.SpellMetrics[0].TotalDamage
+		hits, crits := clap.SpellMetrics[0].Hits, clap.SpellMetrics[0].Crits
+		clap.SkipCastAndApplyEffects(sim, target)
+		if clap.SpellMetrics[0].Hits == hits+1 && clap.SpellMetrics[0].Crits == crits {
+			got = clap.SpellMetrics[0].TotalDamage - before
+		}
+	}
+	ap := clap.MeleeAttackPower(target)
+	if want := 103 + 0.0255*ap; math.Abs(got-want) > 1e-6 {
+		t.Errorf("a landed clap at %.0f attack power dealt %.3f, want 103 + 0.0255 x AP = %.3f", ap, got, want)
+	}
+}

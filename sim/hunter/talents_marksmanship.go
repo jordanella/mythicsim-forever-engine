@@ -135,15 +135,14 @@ func (hunter *Hunter) registerRangedWeaponSpecialization() {
 	})
 }
 
-// Generator gap: spell 1223984 carries no effect rows at all, so the 0.2 attack power per intellect
-// a rank stays from our client-verified sim. The tooltip only says Attack Power, but melee and
-// ranged attack power are separate stats here and every other attack power buff feeds both.
+// 1223984 states 20% of Intellect a rank (Misc 3) twice, once per attack power aura, so melee and
+// ranged attack power each get the same share.
 func (hunter *Hunter) registerCarefulAim() {
 	if hunter.Talents.CarefulAim == 0 {
 		return
 	}
 
-	apPerInt := 0.2 * float64(hunter.Talents.CarefulAim)
+	apPerInt := spellData.CarefulAim.EffectAt(1).FractionAt(hunter.Talents.CarefulAim)
 	hunter.AddStatDependency(stats.Intellect, stats.AttackPower, apPerInt)
 	hunter.AddStatDependency(stats.Intellect, stats.RangedAttackPower, apPerInt)
 }
@@ -185,14 +184,13 @@ func (hunter *Hunter) registerLethalAttacks() {
 	hunter.AddStat(stats.SpellCritPercent, crit)
 }
 
-// Generator gap: Lone Wolf (415370) has no generated row, so the 20% from our client-verified sim
-// stands.
+// 415370: 20% damage done to every school while no pet is out.
 func (hunter *Hunter) registerLoneWolf() {
 	if !hunter.Talents.LoneWolf || hunter.Pet != nil {
 		return
 	}
 
-	hunter.PseudoStats.DamageDealtMultiplier *= 1.2
+	hunter.PseudoStats.DamageDealtMultiplier *= spellData.LoneWolf.Effect(dbcenums.A_MOD_DAMAGE_PERCENT_DONE, 127).MultiplierAt(1)
 }
 
 // Only the Serpent Sting half is modelled: nothing dies mid fight to hand out the kill half.

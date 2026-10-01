@@ -8,14 +8,14 @@
 	"11581": {
 		"ability": "Thunder Clap",
 		"file": "sim/warrior/thunder_clap.go",
-		"note": "Client 1.60.1.70009: 103 damage as in Classic, but the attack speed slow is 20% (Classic 10%, #404), the cooldown 6 sec (Classic 4) and the spell is usable in Battle and Defensive Stance. Threat is its damage (x1) before the stance modifier, measured in the level 20 beta on 2026-09-28: 17 damage for 14 threat in Battle Stance, ~21 in Defensive; the sim had 2.5x. Armor does not reduce it (the sim did): in the level 20 beta logs Chud and Skeefzy's white hits vary 2.3-3.6x from mob to mob while their claps stay within 1.1x (foreverlogs 2677, 2683).",
+		"note": "Client 1.60.1.70009: 103 damage as in Classic, but the attack speed slow is 20% (Classic 10%, #404), the cooldown 6 sec (Classic 4) and the spell is usable in Battle and Defensive Stance. Threat is its damage (x1) before the stance modifier, measured in the level 20 beta on 2026-09-28: 17 damage for 14 threat in Battle Stance, ~21 in Defensive; the sim had 2.5x. Armor does not reduce it (the sim did): in the level 20 beta logs Chud and Skeefzy's white hits vary 2.3-3.6x from mob to mob while their claps stay within 1.1x (foreverlogs 2677, 2683). Beta logs add 2.55% of attack power, which the client row doesn't carry: the level 20 rank 2 claps land 29-31 before Defensive Stance's -10% at 230-300 attack power (foreverlogs 2677, 2680, 2683), and 61 rank 1 hits from 20 warriors at 77-393 attack power fit 12.7 + 0.0255 x AP (95% range 0.018-0.035, #583). Fitted below level 20; the same share on rank 6 at 60 is assumed.",
 		"source": "forever",
 		"tooltip": "20 Rage\nInstant\n6 sec cooldown\nRequires Battle Stance, Defensive Stance\nBlasts nearby enemies with thunder, increasing the time between their attacks by 20% for 30 sec and doing 103 damage to them. Will affect up to 4 targets."
 	},
 	"11585": {
 		"ability": "Overpower",
 		"file": "sim/warrior/overpower.go",
-		"note": "Client 1.60.1.70009: 35 bonus damage, 5 Rage and a 5 sec cooldown as in Classic Era. The client adds a second cost of 1 of power type 4, which nothing in the sim models.",
+		"note": "Client 1.60.1.70009: 35 bonus damage, 5 Rage and a 5 sec cooldown as in Classic Era. The client adds a second cost of 1 of power type 4: the dodge charge, energized by the spell a dodge triggers (1282733) and spent by the cast, which the sim models as its dodge window. Beta logs agree: 38 of 39 casts from 21 warriors spend it 0.7-4.9 sec after a dodge (#582).",
 		"source": "classic"
 	},
 	"11605": {

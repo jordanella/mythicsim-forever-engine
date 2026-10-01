@@ -30,7 +30,7 @@ func (shaman *Shaman) newLightningBoltSpellConfig(config *spelldata.Spell, rank 
 	spellConfig.MissileSpeed = 20
 
 	spellConfig.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		baseDamage := config.DamageEffect().Average(core.CharacterLevel)
+		baseDamage := config.DamageEffect().Roll(sim, core.CharacterLevel)
 		result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 
 		spell.WaitTravelTime(sim, func(sim *core.Simulation) {

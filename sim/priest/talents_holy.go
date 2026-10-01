@@ -165,7 +165,9 @@ func (priest *Priest) registerHolyNovaSpell(rank *spelldata.Spell) {
 		ThreatMultiplier: 0,
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealAoeDamage(sim, rank.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
+			spell.CalcAndDealAoeDamageWithVariance(sim, spell.OutcomeMagicHitAndCrit, func(sim *core.Simulation, _ *core.Spell) float64 {
+				return rank.DamageEffect().Roll(sim, core.CharacterLevel)
+			})
 			healSpell.Cast(sim, &priest.Unit)
 		},
 	})

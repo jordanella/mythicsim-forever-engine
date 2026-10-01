@@ -37,7 +37,7 @@ func (warlock *Warlock) registerIncinerate() {
 		BonusCoefficient:         rank.DamageEffect().Coeff(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := rank.DamageEffect().Average(core.CharacterLevel)
+			baseDamage := rank.DamageEffect().Roll(sim, core.CharacterLevel)
 			if warlock.Immolate.Dot(target).IsActive() {
 				baseDamage *= immolateBonus
 			}

@@ -2,6 +2,7 @@ package hunter
 
 import (
 	"github.com/wowsims/forever/sim/core"
+	"github.com/wowsims/forever/sim/core/buffs"
 	"github.com/wowsims/forever/sim/core/dbcenums"
 	"github.com/wowsims/forever/sim/core/proto"
 	"github.com/wowsims/forever/sim/core/stats"
@@ -62,15 +63,14 @@ func (hunter *Hunter) registerSurvivalist() {
 	hunter.MultiplyStat(stats.Health, spellData.Survivalist.MultiplierAt(hunter.Talents.Survivalist))
 }
 
-// Generator gap: effect 3 of spell 19290, the hit bonus, has no rank curve and is left out of the
-// table (see the head of spell_data_auto_gen.go), so the 1% a rank stays from our client-verified
-// sim. The two effects that are generated are the stun and snare duration cuts.
+// 19290's melee hit effect carries the 1/2/3% curve. Its spell hit effect has no curve and sits at
+// rank 3's 3 for every rank, so spell hit reads the melee curve too, as the tooltip's one number does.
 func (hunter *Hunter) registerSurefooted() {
 	if hunter.Talents.Surefooted == 0 {
 		return
 	}
 
-	hit := float64(hunter.Talents.Surefooted)
+	hit := spellData.Surefooted.Effect(dbcenums.A_MOD_HIT_CHANCE, 0).ValueAt(hunter.Talents.Surefooted)
 	hunter.AddStat(stats.PhysicalHitPercent, hit)
 	hunter.AddStat(stats.SpellHitPercent, hit)
 }
@@ -209,8 +209,9 @@ func (hunter *Hunter) registerSurvivalistsDiscipline() {
 	})
 }
 
-// Expose Prey opens the Mongoose Bite window off any landed hit on a marked target, where only a
-// dodge opens it otherwise.
+// Expose Prey opens the Mongoose Bite window off a landed melee or ranged attack on a target with
+// Hunter's Mark (client 1310532 ProcTypeMask 340 = melee/ranged autos and specials; Wowhead Forever:
+// "targets with Hunter's Mark"), where only a dodge opens it otherwise.
 func (hunter *Hunter) registerExposePrey() {
 	if hunter.Talents.ExposePrey == 0 {
 		return
@@ -219,9 +220,10 @@ func (hunter *Hunter) registerExposePrey() {
 	hunter.MakeProcTriggerAura(core.ProcTrigger{
 		Name:       "Expose Prey",
 		Callback:   core.CallbackOnSpellHitDealt,
+		ProcMask:   core.ProcMaskMeleeOrRanged,
 		ProcChance: spellData.ExposePrey.FractionAt(hunter.Talents.ExposePrey),
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if result.Landed() {
+			if result.Landed() && result.Target.HasActiveAuraWithTag(buffs.HuntersMarkCategory) {
 				hunter.DefensiveState.Activate(sim)
 			}
 		},

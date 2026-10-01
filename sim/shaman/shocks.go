@@ -45,7 +45,7 @@ func (shaman *Shaman) registerEarthShockSpell(shockTimer *core.Timer) {
 	config.ClassSpellMask = SpellMaskEarthShock
 	config.Flags |= core.SpellFlagBinary
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		baseDamage := earthShockRank.DamageEffect().Average(core.CharacterLevel)
+		baseDamage := earthShockRank.DamageEffect().Roll(sim, core.CharacterLevel)
 		spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 	}
 
@@ -58,7 +58,7 @@ func (shaman *Shaman) registerFlameShockSpell(shockTimer *core.Timer) {
 	config := shaman.newShockSpellConfig(flameShockRank, core.SpellSchoolFire, shockTimer)
 	config.ClassSpellMask = SpellMaskFlameShockDirect
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		baseDamage := flameShockRank.DamageEffect().Average(core.CharacterLevel)
+		baseDamage := flameShockRank.DamageEffect().Roll(sim, core.CharacterLevel)
 		result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 		if result.Landed() {
 			spell.RelatedDotSpell.Cast(sim, target)
@@ -115,7 +115,7 @@ func (shaman *Shaman) registerFrostShockSpell(shockTimer *core.Timer) {
 	config.Flags |= core.SpellFlagBinary
 	config.ThreatMultiplier *= 2
 	config.ApplyEffects = func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-		baseDamage := frostShockRank.DamageEffect().Average(core.CharacterLevel)
+		baseDamage := frostShockRank.DamageEffect().Roll(sim, core.CharacterLevel)
 		spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 	}
 

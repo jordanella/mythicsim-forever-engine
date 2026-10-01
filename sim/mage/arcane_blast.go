@@ -32,7 +32,7 @@ func (mage *Mage) registerArcaneBlastSpell() {
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealDamage(sim, target, arcaneBlastRank.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
+			spell.CalcAndDealDamage(sim, target, arcaneBlastRank.DamageEffect().Roll(sim, core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
 			mage.ArcaneBlastAura.Activate(sim)
 			mage.ArcaneBlastAura.AddStack(sim)
 		},

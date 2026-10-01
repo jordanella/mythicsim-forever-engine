@@ -37,7 +37,9 @@ func (mage *Mage) registerBlastWaveSpell() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealAoeDamage(sim, blastWaveRank.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
+			spell.CalcAndDealAoeDamageWithVariance(sim, spell.OutcomeMagicHitAndCrit, func(sim *core.Simulation, _ *core.Spell) float64 {
+				return blastWaveRank.DamageEffect().Roll(sim, core.CharacterLevel)
+			})
 		},
 	})
 }

@@ -49,7 +49,7 @@ func (shaman *Shaman) registerLavaBurstSpell() {
 				defer func() { spell.DamageMultiplier /= flameShockBonus }()
 			}
 
-			result := spell.CalcDamage(sim, target, lavaBurstRank.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, lavaBurstRank.DamageEffect().Roll(sim, core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
 			spell.WaitTravelTime(sim, func(sim *core.Simulation) {
 				spell.DealDamage(sim, result)
 			})

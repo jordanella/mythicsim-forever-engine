@@ -10,7 +10,7 @@ import (
 
 // The Crab casts Pinch, the Crocolisk Dismember, the Owl Mine!, the Hyena Tendon Rip and the Spider Web (client
 // rows 1264742 / 1264933 / 1265058 / 1265042 / 1265883), the Gorilla Thunderstomp (1264455) and, with 3 enemies up, the Bear
-// Swipe (1264502), each landing inside its rank 5 range.
+// Swipe (1264502), and the Bat Demoralizing Screech (24579), each landing inside its rank 5 range.
 func TestPetStrikes(t *testing.T) {
 	for _, c := range []struct {
 		pet      proto.HunterOptions_PetType
@@ -27,6 +27,7 @@ func TestPetStrikes(t *testing.T) {
 		{proto.HunterOptions_Spider, spellData.WebTriggered.Highest().ID, 52, 52, 0},
 		{proto.HunterOptions_Gorilla, spellData.ThunderstompTriggered.Highest().ID, 122, 142, 0},
 		{proto.HunterOptions_Bear, spellData.SwipeTriggered.Highest().ID, 20, 22, 3},
+		{proto.HunterOptions_Bat, spellData.DemoralizingScreechTriggered.Highest().ID, 24, 42, 0},
 	} {
 		player := &proto.Player{
 			Name: "bm", Class: proto.Class_ClassHunter, Race: proto.Race_RaceOrc, TalentsString: BeastMasteryTalents,

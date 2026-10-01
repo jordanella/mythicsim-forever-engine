@@ -1,6 +1,7 @@
 package mage
 
 import (
+	"math"
 	"testing"
 	"time"
 
@@ -158,4 +159,38 @@ func TestArena(t *testing.T) {
 		Role:               arenalib.Caster,
 		DistanceFromTarget: 30,
 	})
+}
+
+// Frostbolt rolls the spread its client row states, as the beta's do (Gromnie, foreverlogs 2679:
+// rank 4 non-crits land anywhere from 65 to 74), where it used to deal the row's average every cast.
+func TestFrostboltRollsItsRow(t *testing.T) {
+	sim := core.NewSim(&proto.RaidSimRequest{
+		SimOptions: &proto.SimOptions{RandomSeed: 1},
+		Raid: &proto.Raid{Parties: []*proto.Party{{Buffs: &proto.PartyBuffs{}, Players: []*proto.Player{{
+			Name: "Mage", Class: proto.Class_ClassMage, Race: proto.Race_RaceGnome, TalentsString: FrostTalents,
+			Equipment: &proto.EquipmentSpec{}, Buffs: &proto.IndividualBuffs{},
+			Spec:     &proto.Player_Mage{Mage: &proto.Mage{Options: &proto.Mage_Options{ClassOptions: &proto.MageOptions{}}}},
+			Rotation: &proto.APLRotation{Type: proto.APLRotation_TypeAPL},
+		}}}}},
+		Encounter: core.MakeSingleTargetEncounter(0),
+	}, simsignals.CreateSignals())
+	sim.Reset()
+
+	mage := sim.Raid.Parties[0].Players[0].(MageAgent).GetMage()
+	frostbolt := mage.GetSpell(core.ActionID{SpellID: spellData.Frostbolt.Highest().ID})
+	m := &frostbolt.SpellMetrics[0]
+	seen := map[float64]bool{}
+	for i := 0; i < 30; i++ {
+		damage, hits, crits, resisted := m.TotalDamage, m.Hits, m.Crits, m.ResistedHits
+		frostbolt.ApplyEffects(sim, mage.CurrentTarget, frostbolt)
+		for end := sim.CurrentTime + 5*time.Second; sim.CurrentTime < end; {
+			sim.Step()
+		}
+		if m.Hits > hits && m.Crits == crits && m.ResistedHits == resisted {
+			seen[math.Round(m.TotalDamage-damage)] = true
+		}
+	}
+	if len(seen) < 3 {
+		t.Errorf("Frostbolt non-crits dealt only %v; it should roll its row's spread", seen)
+	}
 }

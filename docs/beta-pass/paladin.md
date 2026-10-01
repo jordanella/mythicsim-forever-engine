@@ -79,8 +79,12 @@ read as ids). `unreviewedSpellBudget` 762 -> 708, `unresolvedSpellSiteBudget` 19
 - **Resolved** `holy_strike.go:15`, Holy Strike: eight ranks from level 6 on real ids; level 60 is 10333, 20 mana,
   12 sec, 40% x (weapon + 81-105). The 0.429 coefficient is in the client (`EffectBonusCoefficient`; the zero column
   the note looked at is `Coefficient`).
-- **Open** `holy_strike.go:17`, whether melee-table Holy damage partial resists. That is a server combat rule the
-  client data does not carry; it needs a combat log.
+- **Resolved** (melee table) / **Open** (partial resists at 60) `holy_strike.go:17`. Beta logs put Holy Strike on the
+  melee table, as modelled: #581 counts 1,121 landed, 127 miss, 124 dodge, 116 parry, 32 blocked across nine
+  public-realm logs, and foreverlogs.gg reports 2678, 2682, 2689 and 2691 (17 paladins) give 866 landed, 48 miss,
+  43 dodge, 48 parry, 25 blocked. #581 saw no partial resist on any Holy damage, melee or spell table, against
+  level 2-15 targets. The sim only adds level-based partial resists when the target out-levels the attacker, so they
+  cannot test the level 63 boss case, and the sim keeps Classic's level-based partial resists on Holy Strike there.
 - **Resolved** `holy_strike.go:29`, Improved Holy Strike: -1000 / -2000 ms, as modelled.
 - **Resolved** `holy_strike.go:41`, Iron Creed threat: 5 / 10 / 15 / 20 / 25%, as modelled.
 - **Resolved** `holy_strike.go:94`, Iron Creed damage reduction: 2 / 4 / 6 / 8 / 10% for 6 sec (1311033), as modelled.

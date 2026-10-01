@@ -8851,6 +8851,21 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
+	// Burns the target for 33 Fire damage every 3.0 sec for 15s.
+	// https://www.wowhead.com/forever/spell=1316865
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskUnknown,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 284667, ItemName: "Flame Seared Sword"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
 	// Underwater breath lasts 50% longer than normal.
 	// https://www.wowhead.com/forever/spell=1316928
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{

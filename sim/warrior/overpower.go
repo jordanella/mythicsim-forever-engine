@@ -13,6 +13,8 @@ func (warrior *Warrior) registerOverpower() {
 	actionID := core.ActionID{SpellID: overpowerRank.ID}
 	overpowerCD := cooldownOf(overpowerRank)
 
+	// A dodge triggers 1282733, which energizes 1 of power type 4 (the combo point pool); that point is
+	// Overpower's second cost. The window stands in for it: one cast per dodge, stacked charges not modelled.
 	warrior.OverpowerAura = warrior.RegisterAura(core.Aura{
 		ActionID: core.ActionID{SpellID: overpowerWindow.ID},
 		Label:    "Overpower Aura",

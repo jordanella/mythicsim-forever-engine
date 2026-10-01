@@ -53,9 +53,9 @@ const guesses = (dir = 'sim/') => allSpellSources().filter(([, s]) => s.source =
 
 const NEEDS: Array<Need> = [
 	{
-		title: 'Hunter: do Arcane Shot and Serpent Sting scale with attack power?',
-		why: `${guesses('sim/hunter/')} of the ${guesses()} abilities that still carry a guess are hunter ones. The client gives Arcane Shot and Serpent Sting no attack power scaling, but the beta's public combat logs show both hitting for 1.4 to 2.1 times their base damage at every rank, so the sim now adds 0.11 of ranged attack power to Arcane Shot and 0.035 to each Serpent Sting tick, fitted to four level 20 hunters. A clean measurement would pin it down. Volley keeps Classic's coefficient for the same reason, and the hawk from Summon Hawk swings in a way the client does not describe.`,
-		send: 'A DamageMeter.bin from any hunter: ten Arcane Shots and two full Serpent Stings with Aspect of the Hawk up, then the same with it down. If the biggest hit moves, they scale with attack power. Screenshots of those tooltips out of your spellbook help too.',
+		title: 'Hunter: Volley, the hawk, and the attack power share at level 60',
+		why: `${guesses('sim/hunter/')} of the ${guesses()} abilities that still carry a guess are hunter ones. Arcane Shot and Serpent Sting do scale with attack power although the client gives them none: a beta hunter who swapped Aspect of the Hawk for Cheetah mid-dungeon lost 0.10 to 0.12 of the 35 attack power on each Arcane Shot and about 0.04 on each Serpent Sting tick, which is the sim's 0.11 and 0.035. That share is fitted at level 20, though. Volley keeps Classic's coefficient because the client carries only a placeholder, and the hawk from Summon Hawk swings in a way the client does not describe.`,
+		send: 'Once the cap allows it: a DamageMeter.bin from a hunter casting Volley or with Summon Hawk out, with Aspect of the Hawk up and then down. Ten Arcane Shots each way at level 30 or above also checks the share still holds.',
 		find: 'hunter',
 	},
 	{

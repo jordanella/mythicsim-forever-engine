@@ -4704,6 +4704,12 @@ export const MISSING_ITEM_EFFECTS = new Map<number, string[]>([
 		]
 	],
 	[
+		284667, // Flame Seared Sword
+		[
+			"Burns the target for 33 Fire damage every 3.0 sec for 15s.", // 1316865 - https://www.wowhead.com/forever/spell=1316865
+		]
+	],
+	[
 		284699, // Still Water Band
 		[
 			"Underwater breath lasts 50% longer than normal.", // 1316928 - https://www.wowhead.com/forever/spell=1316928

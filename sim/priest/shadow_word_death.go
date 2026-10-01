@@ -53,7 +53,7 @@ func (priest *Priest) registerShadowWordDeathSpell(rank *spelldata.Spell, cdTime
 				bonus = earlyDemise
 			}
 			spell.BonusCritPercent += bonus
-			spell.CalcAndDealDamage(sim, target, rank.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
+			spell.CalcAndDealDamage(sim, target, rank.DamageEffect().Roll(sim, core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
 			spell.BonusCritPercent -= bonus
 		},
 

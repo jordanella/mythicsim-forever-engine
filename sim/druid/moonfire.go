@@ -75,7 +75,7 @@ func (druid *Druid) registerMoonfireImpactSpell() {
 		MaxRange:         float64(moonfireRank.MaxRange),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, moonfireRank.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, moonfireRank.DamageEffect().Roll(sim, core.CharacterLevel), spell.OutcomeMagicHitAndCrit)
 
 			if result.Landed() {
 				druid.Moonfire.RelatedDotSpell.Cast(sim, target)

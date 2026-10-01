@@ -1081,6 +1081,7 @@
 {"id":135550,"name":"Transmog UI Feet Item","icon":"inv_misc_desecrated_clothboots","type":10,"quality":1,"scalingOptions":{"0":{"ilvl":1}}},
 {"id":210250,"name":"Engraved Gold Ring","icon":"inv_jewelry_ring_03","type":11,"quality":1,"unique":true,"scalingOptions":{"0":{"ilvl":20}}},
 {"id":210251,"name":"Engraved Silver Ring","icon":"inv_jewelry_ring_01","type":11,"quality":1,"unique":true,"scalingOptions":{"0":{"ilvl":20}}},
+{"id":215373,"name":"Silver Hand Training Hammer","icon":"inv_hammer_05","type":13,"weaponType":4,"handType":4,"weaponSpeed":3.4,"quality":1,"scalingOptions":{"0":{"weaponDamageMin":53,"weaponDamageMax":81,"ilvl":31}}},
 {"id":215374,"name":"Ancestral Sword","icon":"inv_sword_20","type":13,"weaponType":9,"handType":4,"weaponSpeed":3.1,"quality":1,"scalingOptions":{"0":{"weaponDamageMin":49,"weaponDamageMax":74,"ilvl":31}}},
 {"id":215375,"name":"Tactician's Staff","icon":"inv_staff_38","type":13,"weaponType":8,"handType":4,"weaponSpeed":3.5,"quality":1,"scalingOptions":{"0":{"weaponDamageMin":55,"weaponDamageMax":83,"ilvl":31}}},
 {"id":215376,"name":"Crusader's Mace","icon":"inv_mace_03","type":13,"weaponType":4,"handType":1,"weaponSpeed":2.9,"quality":1,"scalingOptions":{"0":{"weaponDamageMin":30,"weaponDamageMax":57,"ilvl":31}}},

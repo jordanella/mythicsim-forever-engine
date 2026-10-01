@@ -8,18 +8,23 @@ func (hunter *Hunter) registerMongooseBiteSpell() {
 	rank := spellData.MongooseBite.Highest()
 	baseDamage := rank.DamageEffect().Average(core.CharacterLevel)
 
-	// The aura is only a pre-requisite for Mongoose Bite: a dodge opens the window, and Expose Prey
-	// opens it off any landed hit on a marked target.
+	// The aura is only a pre-requisite for Mongoose Bite: a dodge opens the window (client
+	// SpellAuraRestrictions CasterAuraState 1 on every rank), and Expose Prey opens it off any
+	// landed hit on a marked target. The dodge watch is its own permanent aura, since an aura's
+	// OnSpellHitTaken only runs while that aura is up.
 	defensiveWindow := spellData.ExposePreyTriggered.Rank(1)
 	hunter.DefensiveState = hunter.RegisterAura(core.Aura{
 		Label:    "Defensive State",
 		ActionID: core.ActionID{SpellID: defensiveWindow.ID},
 		Duration: defensiveWindow.Duration(),
-
-		OnSpellHitTaken: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-			if result.DidDodge() {
-				aura.Activate(sim)
-			}
+	})
+	hunter.MakeProcTriggerAura(core.ProcTrigger{
+		Name:               "Defensive State - Trigger",
+		TriggerImmediately: true,
+		Outcome:            core.OutcomeDodge,
+		Callback:           core.CallbackOnSpellHitTaken,
+		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			hunter.DefensiveState.Activate(sim)
 		},
 	})
 

@@ -7,13 +7,10 @@ import (
 var eviscerateRank = spellData.Eviscerate.Highest()
 
 func (rogue *Rogue) registerEviscerate() {
-	// The generator stores the average of a damage range, so the client's 54-162 arrives as 108.
-	// The spread and the per combo point step are the beta client values our Forever sim runs on
-	// (rank 9: 54-162 plus 170 per combo point); the table's dummy effect for the step reads 0.
-	avgDamage := eviscerateRank.DamageEffect().Average(core.CharacterLevel)
-	damageVariance := 108.0
-	flatDamage := avgDamage - damageVariance/2
-	comboDamageBonus := 170.0 + rogue.DeathmantleBonus
+	// Rank 9 rolls 54-162 (108, Variance 1) plus 170 a combo point (EffectPointsPerResource), as
+	// Wowhead Forever's tooltip prints it; the spread is on the base only.
+	damage := eviscerateRank.DamageEffect()
+	comboDamageBonus := float64(damage.PointsPerResource) + rogue.DeathmantleBonus
 
 	rogue.Eviscerate = rogue.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: eviscerateRank.ID},
@@ -53,12 +50,10 @@ func (rogue *Rogue) registerEviscerate() {
 			rogue.BreakStealth(sim)
 
 			comboPoints := float64(rogue.ComboPoints())
-			flatBaseDamage := flatDamage + comboDamageBonus*comboPoints
-
-			damage := sim.Roll(flatBaseDamage, flatBaseDamage+damageVariance) +
+			baseDamage := damage.Roll(sim, core.CharacterLevel) + comboDamageBonus*comboPoints +
 				0.03*comboPoints*spell.MeleeAttackPower(target)
 
-			result := spell.CalcDamage(sim, target, damage, spell.OutcomeMeleeSpecialHitAndCrit)
+			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 
 			if result.Landed() {
 				rogue.ApplyFinisher(sim, spell)
