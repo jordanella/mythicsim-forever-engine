@@ -312,6 +312,17 @@ var Party = []BuffSpec{
 		Kind:   KindFlag,
 		Reason: "sim behaviour toggle with no spell source; rendered under Other Inputs.",
 	},
+	// Another shaman's Flametongue Totem (patch 70). The aura is the totem's party aura (15036): 100% on a
+	// landed melee auto attack, triggering 16389's fire hit. driveFlametongueTotem adds the hit on main-hand
+	// autos, and a main-hand Flametongue Weapon turns it off (the category). A fire totem, so unlike the air
+	// totems it joins no slot. No spec's default turns it on.
+	{
+		Field:    "flametongue_totem",
+		SpellID:  15036,
+		CastID:   16387,
+		Kind:     KindManual,
+		Category: "FlametongueTotem",
+	},
 }
 
 var Individual = []BuffSpec{

@@ -118,12 +118,15 @@ type Shaman struct {
 	// Always nil: its registrar is commented out in totems.go, upstream of the fork.
 	HealingStreamTotem *core.Spell
 	SearingTotem       *core.Spell
+	FlametongueTotem   *core.Spell
 	TremorTotem        *core.Spell
 	SearingReplaced    bool // Used for cancelling searing dot if the totem is replaced during prepull
 
 	EarthTotemAura *core.Aura
 	WaterTotemAura *core.Aura
 	AirTotemAura   *core.Aura
+	// The shaman's own Flametongue Totem, which the other fire totems and a new Flametongue Totem replace.
+	FlametongueTotemAura *core.Aura
 }
 
 // Implemented by each Shaman spec.
@@ -156,6 +159,7 @@ func (shaman *Shaman) Initialize() {
 	shaman.registerShieldsSpells()
 	shaman.registerMagmaTotemSpell()
 	shaman.registerSearingTotemSpell()
+	shaman.registerFlametongueTotemSpell()
 	shaman.registerFireNovaSpell()
 	shaman.registerWindfuryTotemSpell()
 	shaman.registerStrengthOfEarthTotemSpell()
@@ -224,7 +228,7 @@ const (
 	SpellMaskOverload    = SpellMaskLightningBoltOverload | SpellMaskChainLightningOverload
 	SpellMaskShock       = SpellMaskFlameShock | SpellMaskEarthShock | SpellMaskFrostShock
 	SpellMaskFireTotem   = SpellMaskMagmaTotem | SpellMaskSearingTotem
-	SpellMaskTotem       = SpellMaskFireTotem | SpellMaskBasicTotem
+	SpellMaskTotem       = SpellMaskFireTotem | SpellMaskFlametongueTotem | SpellMaskBasicTotem
 	SpellMaskImbue       = SpellMaskFrostbrandWeapon | SpellMaskWindfuryWeapon | SpellMaskFlametongueWeapon | SpellMaskRockbiterWeapon
 )
 

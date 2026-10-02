@@ -2,6 +2,7 @@ package shaman
 
 import (
 	"github.com/wowsims/forever/sim/core"
+	"github.com/wowsims/forever/sim/core/buffs"
 )
 
 // The totem lays down a pulse spell of its own; the damage and coefficient live on that spell, not on
@@ -11,9 +12,14 @@ var searingTotemAttack = spellData.SearingTotemTriggered.Highest()
 var magmaTotemRank = spellData.MagmaTotem.Highest()
 var magmaTotemPulse = spellData.MagmaTotemTriggered.ByID(10581)
 
+// Flametongue Totem has no pulse spell. Its party aura (15036) procs the hit 16389 states off a main-hand
+// auto attack, and sim/core/buffs/flametongue_totem.go reads both.
+var flametongueTotemRank = spellData.FlametongueTotem.Highest()
+
 // Forever has no Fire Nova Totem: the totem's ids are gone and the Fire Nova the spellbook teaches in
 // its place is the caster-centred nova, on a 10 sec cooldown.
 var fireNovaRank = spellData.FireNova.Highest()
+
 // The nova's damage is 408428 (403 base, 0.214 coefficient), which the scripted dummy casts, not the Era
 // row 11307 its tooltip cites: beta logs record every Fire Nova hit under the rank 1 sibling 408423.
 var fireNovaDamage = spellData.FireNovaTriggered.ByID(408428)
@@ -77,6 +83,36 @@ func (shaman *Shaman) registerSearingTotemSpell() {
 			shaman.TotemExpirations[FireTotem] = sim.CurrentTime + duration
 		},
 	})
+}
+
+// The shaman's own Flametongue Totem: a 5 min fire totem whose party aura gives the shaman a fire hit on
+// each main-hand auto attack (buffs.FlametongueTotemAttack). It takes the fire slot, so Searing Totem and
+// Magma Totem replace it and it replaces them, and a main-hand Flametongue Weapon turns the benefit off
+// (buffs.DisableFlametongueTotem) while the totem stands. It sits in no air slot, so it does not interact
+// with Windfury Totem or Grace of Air.
+func (shaman *Shaman) registerFlametongueTotemSpell() {
+	duration := flametongueTotemRank.Duration()
+
+	config := shaman.newTotemSpellConfig(int32(flametongueTotemRank.Cost()), flametongueTotemRank.ID, SpellMaskFlametongueTotem, flametongueTotemRank.GCD())
+	config.SpellSchool = flametongueTotemRank.SpellSchool()
+	config.Flags |= SpellFlagShamanSpell
+
+	// The trigger is registered before the totem aura that switches it on, so that it is reset first.
+	buffs.FlametongueTotemTrigger(&shaman.Character)
+	shaman.FlametongueTotemAura = shaman.RegisterAura(core.Aura{
+		Label:    "Flametongue Totem (Self)",
+		ActionID: config.ActionID,
+		Duration: duration,
+	})
+	buffs.JoinFlametongueTotem(&shaman.Character, shaman.FlametongueTotemAura)
+
+	config.ApplyEffects = func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
+		shaman.cancelFireTotems(sim)
+		shaman.TotemExpirations[FireTotem] = sim.CurrentTime + duration
+		shaman.FlametongueTotemAura.Activate(sim)
+	}
+
+	shaman.FlametongueTotem = shaman.RegisterSpell(config)
 }
 
 func (shaman *Shaman) registerMagmaTotemSpell() {
@@ -165,5 +201,8 @@ func (shaman *Shaman) cancelFireTotems(sim *core.Simulation) {
 	}
 	if shaman.TotemOfWrath != nil {
 		shaman.TotemOfWrath.RelatedSelfBuff.Deactivate(sim)
+	}
+	if shaman.FlametongueTotemAura != nil {
+		shaman.FlametongueTotemAura.Deactivate(sim)
 	}
 }

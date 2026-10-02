@@ -60,6 +60,7 @@ export const PARTY_BUFFS_CONFIG = inDisplayOrder(Generated.GENERATED_PARTY_BUFFS
 	Generated.StrengthOfEarthTotem,
 	Generated.GraceOfAirTotem,
 	Generated.WindfuryTotem,
+	Generated.FlametongueTotem,
 ]);
 
 export const BUFFS_CONFIG = inDisplayOrder(

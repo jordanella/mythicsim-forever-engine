@@ -115,6 +115,12 @@ export const WindfuryTotem = makeBooleanPartyBuffInput({
 
 // totem_twisting: sim behaviour toggle with no spell source; rendered under Other Inputs.
 
+export const FlametongueTotem = makeBooleanPartyBuffInput({
+	actionId: ActionId.fromSpellId(15036),
+	fieldName: 'flametongueTotem',
+	label: 'Flametongue Totem',
+});
+
 export const ArcaneBrilliance = makeBooleanRaidBuffInput({
 	actionId: ActionId.fromSpellId(23028),
 	fieldName: 'arcaneBrilliance',
@@ -456,6 +462,11 @@ export const GENERATED_PARTY_BUFFS_CONFIG: RenderableStatOptions[] = [
 	{
 		config: WindfuryTotem,
 		stats: [Stat.StatAttackPower],
+		ownerClass: Class.ClassShaman,
+	},
+	{
+		config: FlametongueTotem,
+		stats: [],
 		ownerClass: Class.ClassShaman,
 	},
 ];

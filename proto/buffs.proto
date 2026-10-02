@@ -24,7 +24,7 @@ message RaidBuffs {
 }
 
 // Buffs that affect a single party.
-// Next index: 20
+// Next index: 21
 message PartyBuffs {
 	bool blood_pact = 1;
 	TristateEffect battle_shout = 2;
@@ -45,6 +45,7 @@ message PartyBuffs {
 	int32 atiesh_druid = 17;
 	int32 atiesh_priest = 18;
 	bool totem_twisting = 19;
+	bool flametongue_totem = 20;
 }
 
 // These are usually individual actions taken by other Characters.

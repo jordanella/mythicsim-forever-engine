@@ -161,6 +161,16 @@ var windfuryImbue = spellData.WindfuryWeaponTriggered.Highest()
 var flametongueImbue = spellData.FlametongueWeaponTriggered.ByID(16344)
 var frostbrandImbue = spellData.FrostbrandWeaponTriggered.Highest()
 
+// A Flametongue Totem hit is the imbue's spell with the totem's base damage (patch 70): a shaman's carries the
+// imbue's class mask, so Elemental Fury's crit damage and Elemental Weapons' damage reach it, and the shaman
+// spell flag, so Natural Grace's threat cut does.
+func init() {
+	buffs.SetFlametongueAttackTraits(proto.Class_ClassShaman, buffs.FlametongueAttackTraits{
+		ClassSpellMask: SpellMaskFlametongueWeapon,
+		Flags:          SpellFlagShamanSpell,
+	})
+}
+
 func (shaman *Shaman) newFlametongueImbueSpell(weapon *core.Item) *core.Spell {
 	return shaman.RegisterSpell(core.SpellConfig{
 		ActionID:    core.ActionID{SpellID: flametongueImbue.ID},
@@ -270,7 +280,12 @@ func (shaman *Shaman) RegisterFlametongueImbue(procMask core.ProcMask) {
 		// so any main-hand imbue displaced it; Forever's is a party aura that names no weapon, and
 		// the beta describes only Windfury Weapon as disabling it ("When applied to mainhand,
 		// disables any benefit you personally benefit from Windfury Totem").
-		shaman.makeFTProcTriggerAura(itemSlot, triggerProcMask, flameTongueSpell)
+		aura := shaman.makeFTProcTriggerAura(itemSlot, triggerProcMask, flameTongueSpell)
+		// It is in Flametongue Totem's: "When applied to main hand, disables any benefit you personally
+		// receive from Flametongue Totem" (patch 70). An off-hand Flametongue Weapon leaves the totem on.
+		if itemSlot == proto.ItemSlot_ItemSlotMainHand {
+			buffs.DisableFlametongueTotem(aura)
+		}
 	}
 
 	shaman.setupItemSwapImbue(proto.ShamanImbue_FlametongueWeapon, flametongueEnchantID)

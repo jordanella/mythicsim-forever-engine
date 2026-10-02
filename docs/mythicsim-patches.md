@@ -1315,3 +1315,134 @@ hotfix cache that failed it before is in the data now), `./tools/spelldata`, `./
 pass. Tests this sync changed: the off-hand hit test (now Furious Precision), the max Rage log test (Gnome's Expansive Mind
 is the only source above 100 now), the crit Rage tests (Dual Wield Specialization pays the off hand 1.5 times at 5/5), the
 percent-stat test (Mystic Mushroom only), and the talent strings of the Warrior tests that were not upstream's.
+
+## 70. `shaman: Flametongue Totem`
+
+Redfall (Discord, 2 October 2026) asked for a Windfury Weapon main hand with Windfury Totem and a Flametongue Totem in
+place of Searing Totem ("ftt (for yourself, which is a dps increase over searing totem) while keeping wf imbue up"). The
+engine had the rank ladders (`spellData.FlametongueTotem` 8227, 8249, 10526, 16387, and the triggered ladder 8230 to
+16389) and the proto enum value `FireTotem_FlametongueTotem`, but nothing registered the cast, so a rotation line naming
+16387 was dropped ("does not know spell") and the fire slot only held Searing Totem, Magma Totem and Fire Nova.
+
+**What the client says** (build 1.60.1.70170, wago rows and Wowhead's Forever tooltip):
+
+- Rank 4 (16387): 275 mana, a 1 sec global (SpellCooldowns StartRecoveryTime 1000), 5 min (DurationIndex 5, 300000 ms),
+  summons a totem with 5 health. Level 58.
+- The totem's aura is 15036, an area party aura (effect 35, 30 yards) with aura 42 (proc trigger spell): ProcChance 100,
+  ProcTypeMask 4 (a landed melee auto attack), triggering 16389. It names no weapon in its row; the aura text reads "Main
+  hand attacks deal an additional (1363 / 77) to (1363 / 25) Fire damage" and the cast text "Each main hand hit causes
+  (1363 / 77 * mult - 1) to (1363 / 25 * mult) additional Fire damage, based on the speed of the weapon".
+- 16389, "Flametongue Totem Proc": one dummy effect, `EffectBasePointsF` 1363, no per-level gain, school fire, class mask
+  bit 34. `mult` is Improved Weapon Totems (29192, 29193: +6% and +12% on that mask), which Forever's talent trees do not
+  carry, so it is 1.
+- The same shape as Flametongue Weapon's proc (16344: 2810 at 60 from 2498 + 78 a level). Both are hundredths of damage
+  per second of weapon speed with the speed held to 1.3 to 4.0 (the tooltip's "/ 77" and "/ 25"): the totem is 13.63 a
+  second of speed, 17.719 at the floor, 54.52 at the cap, 35.438 for a 2.6 speed mace, 51.794 for Arcanite Reaper (3.8).
+
+**What it does.**
+
+- `Shaman.registerFlametongueTotemSpell` casts 16387 like Searing Totem: the rank's cost and global, 300 s, the fire slot
+  (`cancelFireTotems` now ends it, and its cast ends Searing Totem and Magma Totem, and `TotemExpirations[FireTotem]`
+  follows it). It joins `SpellMaskTotem`, so Totemic Focus's cost cut reaches it. A rotation line naming 16387 works.
+- The shaman's totem aura ("Flametongue Totem (Self)", 300 s) switches on a trigger, "Flametongue Totem Trigger", built
+  from the party aura's own row (`spelldata.ProcTrigger` on 15036: 100%, melee autos, damage dealt) narrowed to the main
+  hand (`ProcMaskMeleeMHAuto`). Windfury's extra attacks are main-hand autos, so they add the hit too; off-hand swings,
+  specials, ranged and spell hits do not. Everything lives in `sim/core/buffs/flametongue_totem.go` so the party flag
+  (patch 71) and the cast share one trigger and one hit.
+- The hit keeps the totem's id (16389) so a report lists it apart from the imbue. It is the imbue's spell with the totem's
+  base damage: Magic fire (spell hit and crit tables, partial resists, 1.5 on a crit), 13.63 a second of weapon speed,
+  and a 0.1 spell power coefficient. A weapon with no speed adds nothing, as the imbue's.
+- **An inference, not a row.** Neither dummy deals damage. The only client fire spells of the family with a hit table are
+  the three "Flametongue Attack" spells (10444, 29469, 29470: Magic in SpellCategories, a 0.1 `EffectBonusCoefficient`,
+  class mask bit 21), which the imbue's dummies feed; 16389 has no damage row, no SpellCategories row and its own class
+  mask. The earlier note in `applyElementalFury` ("the same attack granted by Flametongue Totem crits for 1.5x on other
+  players") says the totem's hit is that attack. The engine therefore gives a shaman's totem hit the imbue's class mask
+  and spell flag (`buffs.SetFlametongueAttackTraits`, set in `weapon_imbues.go`), so Elemental Fury (2.0 on a crit),
+  Elemental Weapons (+5% a point) and Natural Grace's threat cut reach it as they reach the imbue's hit, and the coefficient
+  is read from 10444. Another class's totem hit has the coefficient and no talents. If the beta shows the hit as its own
+  spell with no coefficient, set `ClassSpellMask`, `Flags` traits and `BonusCoefficient` aside in `FlametongueTotemAttack`:
+  the numbers in the table below say what that is worth (the "no coefficient" rows).
+- **Main-hand autos only, as the row states.** ProcTypeMask 4 is melee autos; the Windfury Totem aura beside it states 0x14
+  (autos and specials), so the difference looks deliberate. If the totem also hears main-hand specials (Stormstrike) the
+  hit count rises by about a fifth on the Enhancement preset: see the table.
+
+**Tests.** `sim/shaman/fire_totems_test.go` (`TestFlametongueTotemRank4`, `TestFlametongueTotemBaseDamage`: the rank's
+cost, global and duration, the 1363 value and the exact damage at 1.0 to 4.5 speed) and
+`sim/shaman/enhancement/flametongue_totem_test.go`: `TestFlametongueTotemHitDamage` (a hit is exactly 35.438 for a 2.6
+speed mace, 51.794 for a 3.8 speed axe and 20.445 for a 1.5 speed dagger, and a crit 1.5 times that, read off clean hits
+of a 40 iteration run), `TestFlametongueTotemHitScalesWithSpellDamage` (a +35 elixir adds exactly 3.5 to a hit),
+`TestFlametongueTotemHitTakesElementalFuryAndElementalWeapons` (2.0 on a crit at 5/5, +15% at 3/3),
+`TestFlametongueTotemHitsOnlyMainHandAutoAttacks` (one hit per landed main-hand swing, none for the more numerous
+off-hand ones), `TestFlametongueTotemNeedsTheCast`, `TestFlametongueTotemReplacesSearingTotem` (both orders) and
+`TestFlametongueTotemAndWindfuryTotemDoNotInteract`. None of them can build or pass without the cast and trigger.
+
+**Default.** Nothing sets the cast or the flag, so every request that does not name 16387 is bit-identical: the Enhancement
+reference's one-click request gives 619.6935 (120 s) and 596.4838 (300 s) before and after, and every suite golden passes
+unchanged.
+
+**Measured** on the Enhancement reference (Redfall's talents, 10,000 iterations, board seed 1179746067, fixed 120 s and
+300 s, DPS / TPS), each row replacing only what it names; the preset is Rockbiter Weapon, the party's Windfury Totem and
+Searing Totem:
+
+| Variant | 120 s DPS | 300 s DPS | 120 s TPS | 300 s TPS |
+| --- | ---: | ---: | ---: | ---: |
+| (a) preset | 619.69 | 596.48 | 644.28 | 623.00 |
+| (b) Rockbiter + Windfury Totem + Flametongue Totem | **628.48 (+1.42%)** | **608.18 (+1.96%)** | 653.05 | 634.79 |
+| (c) Windfury Weapon + Windfury Totem + Flametongue Totem | 586.70 (-5.33%) | 567.65 (-4.83%) | 612.41 | 595.36 |
+| (d) Windfury Weapon + Grace of Air + Flametongue Totem | 609.10 (-1.71%) | 589.34 (-1.20%) | 634.94 | 617.17 |
+| (e) Flametongue Weapon + Flametongue Totem | 560.73 (-9.51%) | 541.82 (-9.17%) | 585.31 | 568.44 |
+| (f) no fire totem | 598.23 (-3.46%) | 576.96 (-3.28%) | 622.88 | 603.56 |
+
+Controls: Windfury Weapon + Windfury Totem + Searing 572.29 / 551.82; Windfury Weapon + Grace of Air + Searing 594.46 /
+573.34; Flametongue Weapon + Searing 584.70 / 562.23; Flametongue Weapon alone 563.41 / 542.59 ((e) is 2.7 DPS under it
+because the totem adds no hit beside the imbue and its 275 mana costs half a Fire Nova a fight); Rockbiter + Grace of Air
+with Flametongue Totem 563.79 / 543.79 and with Searing 561.21 / 537.88. Against Searing Totem in the same build the
+Flametongue Totem is +1.4% / +2.0% with Rockbiter + Windfury Totem, +2.5% / +2.8% with Windfury Weapon + Grace of Air,
++2.5% / +2.9% with Windfury Weapon + Windfury Totem and +0.5% / +1.1% with Rockbiter + Grace of Air, and -4.1% / -3.6% with
+Flametongue Weapon (the totem is switched off and Searing Totem is gone). Its hit is 91 on average (51.8 base, 1.15 from
+Elemental Weapons, 0.1 of about 200 spell damage that Mental Quickness gives, crits) against Searing Totem's 60.
+
+How much the answer depends on the two inferences above, build (b) against the preset (120 s / 300 s):
+
+| Model of the totem's hit | (b) DPS | vs preset |
+| --- | ---: | ---: |
+| Shipped: the imbue's spell (0.1 coefficient, talents), main-hand autos | 628.48 / 608.18 | +1.42% / +1.96% |
+| Same, and main-hand specials too | 637.39 / 617.36 | +2.85% / +3.50% |
+| No coefficient and no talents, main-hand autos | 614.90 / 594.89 | -0.77% / -0.27% |
+
+**Drop it when** upstream registers Flametongue Totem. Its hit may then be a different spell; keep the exclusivity (patch 72).
+
+## 71. `core: PartyBuffs.FlametongueTotem`
+
+A party buff flag (`flametongue_totem`, field 20, JSON `flametongueTotem`) so a melee spec can assume another shaman's
+Flametongue Totem, as `windfuryTotem` does. It is a row of the buff manifest (`tools/database/buffmanifest/buffs.go`, a
+manual driver on 15036 in the "FlametongueTotem" category), so `proto/buffs.proto`, `sim/core/buffs/buffs_auto_gen.go` and
+`ui/features/settings/model/buffs_debuffs_auto_gen.ts` come from `go run ./tools/gen_buffs_proto` and the buff render.
+`driveFlametongueTotem` keeps a permanent "Flametongue Totem" aura that switches the shared trigger on; the totem sits in
+no air slot, so it does not interact with Windfury Totem or Grace of Air (patch 30), and the party's totem and the
+shaman's own cast are the same effect, so both together add one hit per swing. No spec's defaults set it: every default
+request is unchanged.
+
+**Tests.** `TestPartyAndCastFlametongueTotemAddOneHit` and `TestFlametongueTotemAndWindfuryTotemDoNotInteract` (all four
+pairings of cast and party totems) in the Enhancement package, and `TestPartyFlametongueTotemHitsOnMainHandAutoAttacksOnly`
+in `sim/warrior/dps` (a dual-wielding Fury Warrior: a main-hand auto adds the hit, an off-hand auto, a main-hand or
+off-hand special, a ranged auto and a spell add none).
+
+**Drop it when** upstream carries a Flametongue Totem party flag of its own.
+
+## 72. `shaman: a main-hand Flametongue Weapon disables the personal Flametongue Totem`
+
+The beta's Flametongue Weapon tooltip: "When applied to main hand, disables any benefit you personally receive from
+Flametongue Totem" (and Windfury Weapon's, "...Windfury Totem": patches 20 and 30). `RegisterFlametongueImbue` puts the
+main-hand imbue's trigger aura in the "FlametongueTotem" exclusive category at twice the totem's bid
+(`buffs.DisableFlametongueTotem`), so with a main-hand Flametongue Weapon the totem stands (the aura stays up, the mana is
+spent) and adds no hit, from the shaman's own cast and from the party flag; the totem takes over again when the imbue leaves
+the main hand. An off-hand Flametongue Weapon, Windfury Weapon, Frostbrand Weapon and Rockbiter Weapon leave it alone, since
+the client says this only of Flametongue. Windfury Totem and Flametongue Totem are in different slots (air and fire) and
+categories, and nothing in the rows makes one outrank the other: with both down each procs on its own, and a main-hand
+Windfury Weapon turns off only Windfury Totem's benefit, a Flametongue Weapon only Flametongue Totem's.
+
+**Tests.** `TestOnlyAMainHandFlametongueWeaponDisablesFlametongueTotem`: six imbue setups by cast and party totem, the
+imbue's own hit counted beside; it fails if the exclusive effect is removed.
+
+**Drop it when** upstream models the two weapon texts the same way.
