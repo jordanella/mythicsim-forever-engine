@@ -9,4 +9,45 @@ type Extra struct {
 }
 
 // The spells the generator adds to the store's roots by hand.
-var ExtraSpells = []Extra{}
+var ExtraSpells = []Extra{
+	{
+		SpellID: 5217,
+		Reason: "Client 1.60.1.70170 removed Tiger's Fury from the Druid spell book and King of the Jungle from the " +
+			"talent tree, but the rows are still in the client tables. The sim keeps casting it until the Feral " +
+			"agent moves to Shifting Power (1322605), so the store carries the rows the generator no longer reaches.",
+		Source: "Spell 5217 and its energize sibling 417045 are unchanged between builds 70124 and 70170 in the wago.tools tables.",
+	},
+	{
+		SpellID: 417045,
+		Reason:  "The energize sibling of Tiger's Fury (5217), kept for the same reason.",
+		Source:  "Unchanged between builds 70124 and 70170 in the wago.tools tables.",
+	},
+}
+
+// INTERIM, drop when the database is regenerated with the client hotfix cache. A regeneration from the
+// CDN tables alone (db2tool --cdn without --dbcache, run for build 1.60.1.70170 on 2026-10-02) has
+// no ItemSparse rows for the items the live client adds through DBCache.bin, so the gear filter that
+// roots the store at every item effect misses the spells below. Every one is still the effect of an
+// item in assets/database/db.json that the committed item procs register, and registering a proc whose
+// spell is not in the store panics. They are listed here so the store keeps them until the real hotfix
+// overlay supplies the items again; with the overlay they are roots on their own and this list
+// is redundant.
+var interimHotfixItemSpells = []int32{
+	1133, 430432, 459593, 459594, 459595, 459596, 459598, 459599, 459600, 459601, 459602, 459603, 459604,
+	459605, 459606, 459607, 459608, 460339, 463001, 1213390, 1213395, 1213398, 1213405, 1213407, 1214155,
+	1215404, 1216968, 1216997, 1222994, 1222997, 1282503, 1291551, 1291568, 1291748, 1291749, 1291758, 1291782,
+	1292039, 1292222, 1292252, 1292268, 1292560, 1292575, 1292581, 1292594, 1292670, 1292674, 1292679, 1292683,
+	1293183, 1293306, 1293331, 1293701, 1300128, 1306515, 1306572, 1306578, 1306580, 1306583, 1309315, 1309369,
+	1312176, 1314011, 1314040, 1314305, 1314412, 1315339, 1315767, 1315778, 1316039, 1316865, 1316928, 1318250,
+	1319047, 1320498, 1320579, 1321572,
+}
+
+func init() {
+	for _, id := range interimHotfixItemSpells {
+		ExtraSpells = append(ExtraSpells, Extra{
+			SpellID: id,
+			Reason:  "An item in db.json casts it, and its ItemSparse row only arrives with the client hotfix cache, which the 70170 regeneration did not have.",
+			Source:  "Root of the committed 1.60.1.70124 store (ItemRoots in assets/db_inputs/spell_store_inputs.json at c30f5d2dd5).",
+		})
+	}
+}

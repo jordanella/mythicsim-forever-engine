@@ -115,6 +115,7 @@ type generatedSpellData struct {
 	Retaliation                     spelldata.Ladder
 	RetaliationTriggered            spelldata.Ladder
 	Revenge                         spelldata.Ladder
+	RuleOfRage                      spelldata.Ladder
 	ShieldBash                      spelldata.Ladder
 	ShieldBlock                     spelldata.Ladder
 	ShieldSlam                      spelldata.Ladder
@@ -245,6 +246,7 @@ var spellData = generatedSpellData{
 	Retaliation:                     spelldata.Ranked(20230),
 	RetaliationTriggered:            spelldata.Ranked(20240),
 	Revenge:                         spelldata.Ranked(6572, 6574, 7379, 11600, 11601, 25288),
+	RuleOfRage:                      spelldata.Ranked(1322574),
 	ShieldBash:                      spelldata.Ranked(72, 1671, 1672),
 	ShieldBlock:                     spelldata.Ranked(2565),
 	ShieldSlam:                      spelldata.Ranked(23922, 23923, 23924, 23925),
