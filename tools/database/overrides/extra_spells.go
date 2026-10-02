@@ -9,18 +9,21 @@ type Extra struct {
 }
 
 // The spells the generator adds to the store's roots by hand.
-var ExtraSpells = []Extra{
+var ExtraSpells = []Extra{}
+
+// One-rank talent nodes whose spell is an ability the talent grants, which the generator would
+// otherwise leave off the class file: a one-rank node on a spell that is not passive is usually an
+// ability the game teaches (Hemorrhage, Water Shield) and is filed under the skill line's own ranks.
+// Listing the spell here puts the ability on a single-rank ladder of its own, through the skill line
+// row that grants it (AcquireMethod 3), the way Cat Form is. Reason and Source weigh the same as an
+// Override's.
+var TalentGrantedAbilities = []Extra{
 	{
-		SpellID: 5217,
-		Reason: "Client 1.60.1.70170 removed Tiger's Fury from the Druid spell book and King of the Jungle from the " +
-			"talent tree, but the rows are still in the client tables. The sim keeps casting it until the Feral " +
-			"agent moves to Shifting Power (1322605), so the store carries the rows the generator no longer reaches.",
-		Source: "Spell 5217 and its energize sibling 417045 are unchanged between builds 70124 and 70170 in the wago.tools tables.",
-	},
-	{
-		SpellID: 417045,
-		Reason:  "The energize sibling of Tiger's Fury (5217), kept for the same reason.",
-		Source:  "Unchanged between builds 70124 and 70170 in the wago.tools tables.",
+		SpellID: 1322605,
+		Reason: "Shifting Power is the Feral talent of client 1.60.1.70170 that converts Mana into Energy. Its node " +
+			"is one rank on an ability nothing trains, only the talent grants it, so the sim reads it as a " +
+			"single-rank family like Cat Form instead of through the talent curve.",
+		Source: "SpellEffect 1358458 (energize, 40 Energy), SpellPower 314986 (55% of base mana), SpellCooldowns 101953 (16 s, 1 s global cooldown), SkillLineAbility 59569 (granted)",
 	},
 }
 

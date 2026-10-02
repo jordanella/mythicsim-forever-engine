@@ -113,16 +113,16 @@ func TestCastRequirementAutoUnshift(t *testing.T) {
 func TestCastRequirementCasterAura(t *testing.T) {
 	unit := &Unit{auraTracker: newAuraTracker()}
 	catForm := unit.RegisterAura(Aura{Label: "Cat Form", ActionID: ActionID{SpellID: 768}, Duration: NeverExpires})
-	tigersFury := &Spell{Unit: unit, CastRequirement: CastRequirement{CasterAura: 768}}
-	tigersFury.resolveCasterAuras()
+	shiftingPower := &Spell{Unit: unit, CastRequirement: CastRequirement{CasterAura: 768}}
+	shiftingPower.resolveCasterAuras()
 
-	if reason, _ := tigersFury.castRequirementFailure(); reason != "missing caster aura" {
-		t.Errorf("Tiger's Fury without Cat Form: %q, want \"missing caster aura\"", reason)
+	if reason, _ := shiftingPower.castRequirementFailure(); reason != "missing caster aura" {
+		t.Errorf("Shifting Power without Cat Form: %q, want \"missing caster aura\"", reason)
 	}
 
 	catForm.active = true
-	if reason, _ := tigersFury.castRequirementFailure(); reason != "" {
-		t.Errorf("Tiger's Fury in Cat Form: %q, want castable", reason)
+	if reason, _ := shiftingPower.castRequirementFailure(); reason != "" {
+		t.Errorf("Shifting Power in Cat Form: %q, want castable", reason)
 	}
 
 	notInCat := &Spell{Unit: unit, CastRequirement: CastRequirement{ExcludeCasterAura: 768}}

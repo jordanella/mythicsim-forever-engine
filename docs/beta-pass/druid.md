@@ -84,9 +84,9 @@ entries are gone.
 - **Resolved** `talents.go:453`, Natural Reaction dodge: curve 1-5%. No change.
 - **Resolved** `talents.go:456`, Natural Reaction Rage: curve 20-100%, 5 Rage (417053). No change.
 - **Resolved** `talents.go:522`, Naturalist: curve 1-5%. No change.
-- **Resolved** `tigers_fury.go`, lower ranks: Forever has one Tiger's Fury (5217, learned at 24), 15% for 6 sec, 30 sec
-  cooldown, no cost; 6793, 9845 and 9846 no longer exist. The sim already applied 15% at every level under Forever. It
-  keeps Classic's per level ids because the feral APLs name 9846.
+- **Superseded** `tigers_fury.go`: client 1.60.1.70170 removed Tiger's Fury; `shifting_power.go` replaces it (patch 41
+  in `docs/mythicsim-patches.md`). Until then Forever had one Tiger's Fury (5217, learned at 24), 15% for 6 sec, 30 sec
+  cooldown, no cost; 6793, 9845 and 9846 no longer exist.
 - **Resolved** `wrath.go:53`, Improved Wrath: curves 10-50% cost and 0.1-0.5 sec cast. No change.
 
 ### Talents the sim does not read

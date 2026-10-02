@@ -14,6 +14,7 @@ import (
 
 	"github.com/wowsims/forever/sim/core/dbcenums"
 	"github.com/wowsims/forever/tools/database/dbc"
+	"github.com/wowsims/forever/tools/database/overrides"
 )
 
 var rankSubtext = regexp.MustCompile(`^Rank (\d+)$`)
@@ -502,6 +503,11 @@ func discoverTraitLadders(db *sql.DB, treeID int) (map[string]traitLadder, map[s
 				return nil, nil, nil, err
 			}
 			if !passive {
+				// A talent-granted ability the overrides name is a single-rank family of its own: said
+				// out loud here so discoverLadders takes the skill line's row for it.
+				if talentGrantsAbility(d.SpellID) {
+					skipped[d.Name] = fmt.Sprintf("a talent-granted ability, filed through the skill line row of spell %d", d.SpellID)
+				}
 				continue
 			}
 			taught, err := taughtBySkillLine(db, d.SpellID)
@@ -559,6 +565,16 @@ func discoverTraitLadders(db *sql.DB, treeID int) (map[string]traitLadder, map[s
 	}
 
 	return ladders, skipped, partial, nil
+}
+
+// Whether overrides.TalentGrantedAbilities lists the spell.
+func talentGrantsAbility(spellID int32) bool {
+	for _, extra := range overrides.TalentGrantedAbilities {
+		if extra.SpellID == spellID {
+			return true
+		}
+	}
+	return false
 }
 
 // Whether a trainer, the skill itself or a level grants the spell (AcquireMethod 0, 1 or 2).

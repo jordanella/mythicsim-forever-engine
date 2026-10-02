@@ -244,8 +244,8 @@ put there.
 `core.CastRequirement` is what the client requires of the caster's form and auras, and core refuses a
 cast, `CanCast` and `CanQueue` that break it ("wrong form", "missing caster aura", "excluded caster
 aura"). It reads four client sources: `SpellShapeshift`'s mask and exclude mask (`StanceMask`,
-`StanceExclude`), `SpellAuraRestrictions` (`CasterAura`, `ExcludeCasterAura` - Tiger's Fury states its
-Cat Form requirement there, not in a mask), the not-shapeshifted and castable-in-caster-form attribute
+`StanceExclude`), `SpellAuraRestrictions` (`CasterAura`, `ExcludeCasterAura` - Shifting Power names
+Cat Form there as well as in its mask), the not-shapeshifted and castable-in-caster-form attribute
 bits, and `SpellShapeshiftForm`'s stance flag (`dbcenums.ShapeshiftForm.IsStance`, generated into
 `sim/core/dbcenums/forms_auto_gen.go`).
 
@@ -961,7 +961,9 @@ Nothing lists which spells to generate. The class files walk `dbc.Classes`, take
 lines and emit a family for every spell whose subtext reads `Rank N`; the store starts from what those
 families name, from the item, enchant and set-bonus tables, and from the talent trees, and closes over
 everything those reach. A family that could not be resolved is named in the `// Not generated:` comment
-at the head of the class file.
+at the head of the class file. The one hand-kept list is `overrides.TalentGrantedAbilities`: a one-rank talent
+node on an ability nothing trains (Shifting Power) is filed on a single-rank ladder through the skill line row that
+grants it, which the generator would otherwise skip as an ability the game teaches under its own ranks.
 
 `assets/db_inputs/spell_store_inputs.json` is the client rows the store was built from, committed
 beside it, and every `SpellShapeshiftForm` row whole alongside them, since a form names no spell for

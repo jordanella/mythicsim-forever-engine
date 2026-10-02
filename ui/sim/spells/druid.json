@@ -15,6 +15,20 @@
 		"source": "assumed",
 		"tooltip": "20 Rage\nMelee Range\nInstant\n6 sec cooldown\nBite the target for 100% normal damage plus 77. Requires Bear Form."
 	},
+	"1322605": {
+		"ability": "Shifting Power",
+		"file": "sim/druid/shifting_power.go",
+		"note": "Client 70170: a one-rank Feral talent that replaces Tiger's Fury. 55% of base mana for 40 Energy, a 16 sec cooldown and a 1 sec global cooldown, Cat Form only. Natural Shapeshifter reduces its cost as it does Cat Form's. Wolfshead Helm adds 20 Energy.",
+		"source": "forever",
+		"tooltip": "55% of base mana\nInstant\n16 sec cooldown\nRequires Cat Form\nInstantly convert 55% of your base mana into 40 Energy. Shifting Power's cost is reduced by effects that reduce the cost of Shapeshifting."
+	},
+	"1322670": {
+		"ability": "Improved Shifting Power",
+		"file": "sim/druid/shifting_power.go",
+		"note": "Client 70170: the talent's curve states -4000 and -8000 milliseconds on the cooldown of Shifting Power.",
+		"source": "forever",
+		"tooltip": "Reduces the cooldown of your Shifting Power spell by 4 sec."
+	},
 	"16886": {
 		"ability": "Nature's Grace",
 		"file": "sim/druid/talents_balance.go",
@@ -145,13 +159,6 @@
 		"note": "Client 70009 raised Wrath by about half over 69893, still well under Classic's from rank 3 up (rank 8 248-277 -> 92-102, 62-69 in 69893), with a third less mana (rank 8 180 -> 120) and no downranking penalty (ranks 1-3 .123/.231/.443 -> .429/.486/.571). Cast times are Classic's; #450 registers every rank.",
 		"source": "forever",
 		"tooltip": "70 Mana\n2 sec cast\nCauses 47 to 53 Nature damage to the target."
-	},
-	"5217": {
-		"ability": "Tiger's Fury",
-		"file": "sim/druid/tigers_fury.go",
-		"note": "Client 70009: Tiger's Fury is one spell (5217), learned at 24, 15% Physical damage for 6 sec on a 30 sec cooldown with no cost; 6793, 9845 and 9846 no longer exist, and the sim registers only 5217.",
-		"source": "forever",
-		"tooltip": "Instant\n30 sec cooldown\nRequires Cat Form\nIncreases Physical damage done by 15% for 6 sec."
 	},
 	"5229": {
 		"ability": "Enrage",

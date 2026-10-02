@@ -584,6 +584,9 @@ Cat and Bear regression tests verify both the cooldown gains and absence of
 shift gains, with and without the helm. Both fail on the previous pin. The
 Wolfshead Trophy enchant is a separate effect and has not been changed.
 
+Client 1.60.1.70170 rewords the item to "an additional 20 Energy from activating Shifting Power" (the Rage half is
+unchanged), and patch 41 moves the Energy onto that spell.
+
 ## Upstream sync 2026-10-01
 
 Merged ElliotWood/Forever `d91d4afe40` (113 commits since `8dc19a4241`, client 1.60.1.70124) into the
@@ -798,6 +801,72 @@ nothing named them.
   caster suites pass unchanged.
 - **Drop it when** upstream guards zero-speed weapons in the swing loop.
 
+## 40. `tools: gen_spelldata files a talent-granted ability on a ladder of its own`
+
+- **What it does.** `discoverTraitLadders` skips a one-rank talent node whose spell is not passive, because such a node
+  usually grants an ability the game teaches (Hemorrhage, Water Shield) and the ability's own ranks are the ladder.
+  Shifting Power is a node on an ability only the talent grants, so it fell through and the Druid file had no ladder
+  for it. `overrides.TalentGrantedAbilities` names spells that are the exception; the generator then takes the skill
+  line row that grants the spell (AcquireMethod 3), as it does for Cat Form, and writes `ShiftingPower:
+  spelldata.Ranked(1322605)`. The list is hand kept so no other class file moves.
+- **Why.** `spellData.ShiftingPower` is how the new spell reads its cost, cooldown and energy off the client row.
+- **Tests.** `TestShippedOverridesAreWellFormed` checks the entry states a reason and a source; the generated file is
+  covered by `gen_spelldata -check` and the store by `TestStoreRegeneratesFromTheCommittedInputs`.
+- **Default.** The only generated change is the one Druid ladder.
+- **Drop it when** upstream's generator files one-rank talent abilities itself.
+
+## 41. `druid: Shifting Power replaces Tiger's Fury`
+
+- **What it does.** Client 1.60.1.70170 took Tiger's Fury out of the spell book and King of the Jungle out of the
+  tree, and added Shifting Power (1322605, one rank) and Improved Shifting Power (1322670, two ranks). The sim drops
+  the Tiger's Fury spell, aura and Cat Form exit hook (`sim/druid/tigers_fury.go`) and registers Shifting Power for a
+  Cat that took the talent (`sim/druid/shifting_power.go`). The client rows state 55% of base mana (SpellPower, the
+  same share Cat Form costs), a 40 Energy energize effect, a 16 second cooldown and a 1 second global cooldown
+  (SpellCooldowns), and Cat Form as the only form (caster aura 768, shapeshift mask 1); the druid stays in Cat Form.
+  Improved Shifting Power takes 4 and 8 seconds off the cooldown (its curve states -4000 and -8000 ms) through a
+  `SpellMod_Cooldown_Flat` on the `DruidSpellShiftingPower` bit, which takes Tiger's Fury's slot. The tooltip says its
+  cost is "reduced by effects that reduce the cost of Shapeshifting": Natural Shapeshifter's class mask (word 0,
+  0xE0000000) holds the family bit Shifting Power carries (0x20000000) beside Cat, Bear and Moonkin Form, so
+  `applyNaturalShapeshifter` names it too and the talent cuts both costs by the same 10% a rank. Clearcasting's mask
+  (16870) does not name it. Wolfshead Helm (patch 24) now reads "an additional 20 Energy from activating Shifting
+  Power", so its 20 Energy moved from Tiger's Fury to this spell: a cast gives 60 Energy with the helm and its 5 Rage
+  from Enrage is unchanged. `tools/database/overrides/extra_spells.go` no longer pins Tiger's Fury (5217, 417045), so
+  the store lost those two rows; an APL line that names 5217 is now dropped like any spell the engine does not know.
+- **Why.** Without it the Cat kept casting a spell the client removed (+3.6% damage and a Wolfshead Energy gain, 482.56
+  on the Cat reference at 70170 with King of the Jungle gone) and had nothing to spend the two new talents on.
+- **Tests.** `sim/druid/feralcat/shifting_power_test.go`: a cast spends 55% of base mana and gives 40 Energy, costs
+  what Cat Form costs, takes a 1 second global cooldown and leaves the form; the cooldown is 16, 12 and 8 seconds at 0,
+  1 and 2 ranks of Improved Shifting Power; Natural Shapeshifter ranks 0 to 3 cut Shifting Power and Cat Form alike;
+  the spell needs Cat Form and the talent; `TestTigersFuryIsGone`. `TestWolfsheadResourcesComeFromCooldowns` checks 40
+  and 60 Energy, `TestClearcastingSpentByNextCostedAbility` uses Shifting Power as the spell outside the mask.
+  `sim/core/spelldata` pins its caster aura and stance mask. Every one fails on the previous source.
+- **Not modelled.** Howling Idol (item 272427, effect 1291059) and the Tier 1 Feral 5 piece (1301247) now reduce
+  Shifting Power's cooldown, as they reduced Tiger's Fury's. Neither was ever applied.
+- **Drop it when** upstream implements Shifting Power and removes Tiger's Fury.
+
+## 42. `druid: the Feral Cat default rotation shifts with Shifting Power`
+
+- **What it does.** `ui/specs/druid/feralcat/apls/default.apl.json` loses the Tiger's Fury lines (prepull and
+  priority) and the two powershift lines (`cancelAura` of Cat Form), gains a Shifting Power line after Shred and
+  Claw (Energy at or under 60, so it fires when nothing else can), and moves the out-of-form lines (Goblin Sapper,
+  Demonic Rune, Major Mana Potion, Innervate, then Cat Form) to the top. Three in-form lines open that window: a
+  rune, a potion or Innervate that is ready, with room in the mana pool (the original lines' 1500, 2250 and 40%),
+  Furor known and Energy at or under 30. Furor's carry-over keeps the Energy through the shift, so the window costs the
+  Cat Form recast (684 Mana, 1.5 s of global cooldown) and nothing else. The Furor and Energy conditions keep a build
+  without Furor from throwing its Energy away. The two Cat presets in `presets.ts` and the default talents spend the
+  three points King of the Jungle left on Shifting Power and Improved Shifting Power 2/2.
+- **Why.** Shifting Power makes mana the Cat's second resource. On the Cat reference (10,000 iterations, board seed,
+  Improved Shifting Power 2/2) the ShP line alone runs out of mana for 37 s of 120 and 210 s of 300, and the three
+  consumables fix it: 546.31 to 563.51 on the board, 545.05 to 564.47 at 120 s and 510.81 to 530.72 at 300 s. The
+  powershift lines the default shipped with burn that mana on 15 Energy a shift: with them kept, Shifting Power on top
+  makes 531.72, against 563.51 without them. A Moonfire weave is no longer worth it either (465.74).
+- **Tests.** `TestFeralCat` golden re-blessed (212.08 to 261.81 on naked gear, Average-Default; the 212.08 already lacked King of the
+  Jungle's Energy, so the rise is Shifting Power, its two talents and the new lines). No other golden moves.
+- **Default.** The reference Cat (`050022-55000032121032212051-052`): 563.51 board, 564.47 at 120 s, 530.72 at 300 s,
+  against 519.25 before client 70170.
+- **Drop it when** upstream ships its own Shifting Power rotation, and keep the Furor-gated shift lines in the
+  presets that MythicSim's `scripts/lib/forever-rotation-adjustments.mjs` generates.
+
 ## Client 1.60.1.70170 (2 October 2026), interim
 
 The branch `mythicsim/client-70170` merges upstream `696a6c4040` (4 commits: Master of Elements refunds once
@@ -836,7 +905,8 @@ What the regeneration changed that the sim read by position or by name:
 - **Tiger's Fury stays registered.** The client dropped it from the spell book and tree but kept the rows, so
   `extra_spells.go` pins 5217 and 417045 and `sim/druid/tigers_fury.go` reads 5217 by id. Its King of the
   Jungle energy (20 a rank) is gone with the talent, which is the whole -9.9% on the Feral Cat golden. The
-  Shifting Power work should replace it, Wolfshead Helm (patch 24) included.
+  Shifting Power work should replace it, Wolfshead Helm (patch 24) included. Patches 40 to 42 did: the spell,
+  the pins and the file are gone.
 - **Flametongue Weapon ladder (patches 20 and 31).** The 70170 tooltips name a Flametongue Attack spell (10444,
   29469, 29470) beside each rank's proc, so the generated `FlametongueWeaponTriggered` ladder is nine spells in
   id order and `Highest()` became a spell with no damage. `sim/shaman/weapon_imbues.go` takes 16344 by id.

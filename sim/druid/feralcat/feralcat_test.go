@@ -72,8 +72,10 @@ func TestFeralCat(t *testing.T) {
 }
 
 // Our Forever sim's feral builds.
-const DefaultTalents = "-55210032020132012051-05503"
-const FeralCatTalents = "050022-55000032120032012051-052"
+// Shifting Power and both ranks of Improved Shifting Power took the three points King of the Jungle left
+// unspent in client 70170.
+const DefaultTalents = "-55210032021132212051-05503"
+const FeralCatTalents = "050022-55000032121032212051-052"
 
 var DefaultSpecOptions = &proto.Player_FeralCatDruid{
 	FeralCatDruid: &proto.FeralCatDruid{
@@ -111,8 +113,8 @@ func TestClearcastingSpentByNextCostedAbility(t *testing.T) {
 	cat := sim.Raid.Parties[0].Players[0].(druid.DruidAgent).GetDruid()
 	cat.ClearcastingAura.Activate(sim)
 
-	if !cat.TigersFury.Cast(sim, cat.CurrentTarget) || !cat.ClearcastingAura.IsActive() {
-		t.Fatal("Tiger's Fury, outside the mask, did not cast or spent Clearcasting")
+	if !cat.ShiftingPower.Cast(sim, cat.CurrentTarget) || !cat.ClearcastingAura.IsActive() {
+		t.Fatal("Shifting Power, outside the mask, did not cast or spent Clearcasting")
 	}
 
 	for !cat.GCD.IsReady(sim) && sim.CurrentTime < 5*time.Second {

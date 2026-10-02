@@ -149,10 +149,6 @@ func (druid *Druid) RegisterCatFormAura() {
 				druid.DisableBuildPhaseStatDep(sim, hotwDep)
 			}
 
-			if druid.TigersFuryAura != nil {
-				druid.TigersFuryAura.Deactivate(sim)
-			}
-
 			if !druid.Env.MeasuringStats {
 				druid.lastCatFormEnergy = druid.CurrentEnergy()
 				druid.lastCatFormExitAt = sim.CurrentTime

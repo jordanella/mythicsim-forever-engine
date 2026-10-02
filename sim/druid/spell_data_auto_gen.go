@@ -128,6 +128,7 @@ type generatedSpellData struct {
 	Rip                       spelldata.Ladder
 	SavageFury                spelldata.Ladder
 	SharpenedClaws            spelldata.Ladder
+	ShiftingPower             spelldata.Ladder
 	Shred                     spelldata.Ladder
 	ShreddingAttacks          spelldata.Ladder
 	SootheAnimal              spelldata.Ladder
@@ -260,6 +261,7 @@ var spellData = generatedSpellData{
 	Rip:                       spelldata.Ranked(1079, 9492, 9493, 9752, 9894, 9896),
 	SavageFury:                spelldata.Talent(16998, 2),
 	SharpenedClaws:            spelldata.Talent(16942, 2),
+	ShiftingPower:             spelldata.Ranked(1322605),
 	Shred:                     spelldata.Ranked(5221, 6800, 8992, 9829, 9830),
 	ShreddingAttacks:          spelldata.Talent(16966, 3),
 	SootheAnimal:              spelldata.Ranked(2908, 8955, 9901),
