@@ -27,6 +27,10 @@ const (
 	fakeOHSwingSpeed = 1.8
 )
 
+// The crit bonus the fake warrior's bar is built with. Warrior and Bear Form use CritAutoAttackRageBonus;
+// a test that needs a bar without it (Cat Form) sets this to 0 before SetupFakeRageSim.
+var fakeCritRageBonus = CritAutoAttackRageBonus
+
 type FakeRageWarrior struct {
 	Character
 }
@@ -50,6 +54,7 @@ func NewFakeRageWarrior(char *Character, _ *proto.Player, _ *proto.Raid) Agent {
 	fw.EnableRageBar(RageBarOptions{
 		MaxRage:            100,
 		BaseRageMultiplier: 1,
+		CritRageBonus:      fakeCritRageBonus,
 		StartingRage:       0,
 	})
 
@@ -117,7 +122,8 @@ func rageFromAutoAttack(sim *Simulation, fw *FakeRageWarrior, spell *Spell, outc
 }
 
 func TestAutoAttackRageGeneration(t *testing.T) {
-	// A one-hand MH swing at 2.6 speed: 2.6 * 3.46 = 8.996, whatever it dealt.
+	// A one-hand MH swing at 2.6 speed: 2.6 * 3.46 = 8.996, whatever it dealt. A critical strike pays 75%
+	// more (client 70170): 8.996 * 1.75 = 15.743.
 	const swingDamage = 500.0
 
 	tests := []struct {
@@ -133,7 +139,12 @@ func TestAutoAttackRageGeneration(t *testing.T) {
 		{
 			name:     "crit",
 			outcome:  OutcomeCrit,
-			wantRage: 8.996,
+			wantRage: 15.743,
+		},
+		{
+			name:     "blocked crit",
+			outcome:  OutcomeBlock | OutcomeCrit,
+			wantRage: 15.743,
 		},
 		{
 			name:     "glance",

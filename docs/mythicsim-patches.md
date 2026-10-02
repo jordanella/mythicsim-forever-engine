@@ -866,3 +866,44 @@ Golden movements on the regenerated data (all explained, none from a silent misr
 | TestProtection | 258.72 to 260.78 (+0.8%) | Holy Shield block 20 to 30 (+6.0) and Redoubt 6..30 to 4..20 (-4.1) |
 | TestSurvival | 290.26 unchanged | Deflection parry 10 to 5 only |
 | TestBalance, FeralBear, FeralCat, SurvivalMelee, Arcane, Frost, Shadow, Smite, Elemental, Enhancement, Affliction, Destruction, Arms | unchanged | one to three AllItems rows each: Searing Dagger (Sear 1291568), Mystic Mushroom (Increased Spirit), Plaguefang (Poison 1309315), Insight enchant |
+
+## Client 1.60.1.70170: the Warrior and Bear Rage items (patches 50 to 52)
+
+Numbered from 50 so they do not collide with the other 70170 branches. Each patch states the reading it
+took of the patch notes, because for all three the client rows carry nothing the sim could read.
+
+## 50. A critical auto attack gives 75% more Rage
+
+- **What it does.** `RageBarOptions.CritRageBonus` (0.75, `core.CritAutoAttackRageBonus`) multiplies the Rage a
+  swing gives by 1.75 when it crits. Warrior, Feral Bear and Feral Cat (whose Bear Form is the form that gets
+  it) set it. The Cat's rage bar is only ever used in Bear Form.
+- **The notes.** Warrior: "Players now generate 75% increased Rage when landing a critical strike with a basic
+  attack." Druid: "Bear Form and Dire Bear Form now generate 75% increased Rage when landing a Critical Strike."
+- **What the client says.** Nothing numeric. The 70124 to 70170 diff has no row with 75 on Rage. It does add the
+  hooks the server needs: Bear Form (Passive) 1178 and Dire Bear Form (Passive) 9635 gain a SpellAuraOptions row
+  (ProcChance 100, ProcTypeMask 0x4 = a melee auto attack landed) with no effect that uses it; a new Warrior
+  passive "Rule of Rage (DND)" 1322574 (class set 4, label 25) has the same 100% / 0x4 proc and an A_DUMMY effect
+  of 10; and 1313291, the energize that Dual Wield Specialization used for its off-hand Rage, is renamed "Rule
+  of Rage (DND)" and loses its class set. Both warrior rows are generated into `spellData.RuleOfRage` and read by
+  nothing. The proc mask is 0x4 on all three, so the client's own wording of "basic attack" is the auto attack
+  of either hand: no ability proc flag (0x10 and up) is on any of them. The crit condition is a server hit mask
+  that the DB2 tables do not carry, which is why no row names it. The dummy's 10 is not 75 and is left unread.
+- **Reading.** A crit auto attack, main hand or off hand, one-hander or two-hander, pays 1.75 times what the
+  same swing pays as a hit. The engine's rage formula does not depend on the damage dealt (3.46 a second of
+  weapon speed, 4.5 for a two-hander, half for the off hand, from `f9f9f21883`), so a crit that deals twice a
+  hit's damage pays 1.75 times, not 2. A glancing blow is not a crit. Abilities (Heroic Strike, Cleave, Mortal
+  Strike, Maul) pay no Rage on a hit in this engine, so "basic attack" against the Bear's "Critical Strike" does
+  not separate them here. Rage from damage taken is a separate rule and does not change.
+- **Alternatives, measured** (10,000 iterations on the reference builds, DPS against this patch, 120 s / 300 s).
+  (a) The bonus also multiplies Unbridled Wrath's Rage when it procs off a crit white hit: Fury +0.4% / +0.3%,
+  Arms +0.4% / +0.2%, Fury-Protection +0.2%, Protection +0.1%. (b) The bonus also multiplies the Bear's Blood
+  Frenzy Rage (5 Rage on a crit): Feral Bear +3.8% / +3.9% DPS, +5.6% / +5.6% TPS, because the Bear is
+  rage-starved. Not taken: the client's proc mask is a melee auto attack, and Blood Frenzy's Rage is its own
+  energize.
+- **Tests.** `sim/core/rage_crit_test.go` (1.75 times a hit in each hand and for a two-hander, 15.743 against
+  8.996 for a 2.6 speed main hand, a bar without the bonus pays a crit as a hit, damage taken unchanged),
+  `sim/core/rage_test.go` (the crit rows now pay 15.743), `sim/warrior/dps/crit_rage_test.go`,
+  `sim/druid/feralbear/crit_rage_test.go`. The first and the crit rows of the second fail on the unpatched source.
+- **Default.** Warrior and Bear goldens move up (Average-Default DPS: Fury +6.6%, Arms +7.3%, Protection +0.3%,
+  Feral Bear +1.1%); Feral Cat is unchanged.
+- **Drop it when** upstream models the client's Rule of Rage, or measures a different factor.

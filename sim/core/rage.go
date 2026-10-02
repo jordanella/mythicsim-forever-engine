@@ -16,6 +16,11 @@ const (
 	TwoHandRageMultiplier = TwoHandRageHitFactor / BaseRageHitFactor
 )
 
+// Client 1.60.1.70170: "Players now generate 75% increased Rage when landing a critical strike with a
+// basic attack" (Warrior) and "Bear Form and Dire Bear Form now generate 75% increased Rage when landing a
+// Critical Strike". The number is only in the patch notes: no client row carries it.
+const CritAutoAttackRageBonus = 0.75
+
 type rageBar struct {
 	unit *Unit
 
@@ -34,6 +39,10 @@ type RageBarOptions struct {
 	MaxRage            float64
 	StartingRage       float64
 	BaseRageMultiplier float64
+
+	// CritRageBonus is the share of extra Rage a critical auto attack pays: 0.75 makes it 1.75 times
+	// the Rage the same swing pays as a plain hit. Zero keeps a crit equal to a hit.
+	CritRageBonus float64
 }
 
 func (unit *Unit) EnableRageBar(options RageBarOptions) {
@@ -76,6 +85,9 @@ func (unit *Unit) EnableRageBar(options RageBarOptions) {
 
 			// rage is normalized so it only depends on weapon swing speed and some multipliers
 			generatedRage := hitFactor * weapon.SwingSpeed * options.BaseRageMultiplier * handMultiplier
+			if result.DidCrit() {
+				generatedRage *= 1 + options.CritRageBonus
+			}
 
 			var metrics *ResourceMetrics
 			if spell.Cost != nil {
