@@ -49,7 +49,7 @@ func applyRaceEffects(agent Agent) {
 		})
 	case proto.Race_RaceGnome:
 		applyExpansiveMind(character)
-		applyEureka(character)
+		applyEureka(agent)
 	case proto.Race_RaceHuman:
 		character.MultiplyStat(stats.Spirit, 1.05)
 		applyWeaponSpecialization(character, "Sword Specialization", 20597, 2, proto.WeaponType_WeaponTypeSword)
@@ -330,14 +330,40 @@ func applyExpansiveMind(character *Character) {
 	}
 }
 
-// The client scopes Eureka! to each class's damaging abilities with a spell family mask. Core cannot
-// see those masks, so this takes every class ability that deals damage (or heals, for a priest).
-func applyEureka(character *Character) {
+// EurekaSpells names, as the class's own spell masks, the abilities client 1.60.1.70170 lists on the
+// three effects of its Eureka! rows (1259812 Rogue, 1259813 Warrior, 1259817 Mage, 1259821 Warlock,
+// 1259823 Priest). Core cannot see the client's family masks, so each class that can be a Gnome states
+// them, and its tests hold them to the rows.
+type EurekaSpells struct {
+	// Effect 0, SPELLMOD_COST -10%.
+	Cost int64
+	// Effect 1, SPELLMOD_DAMAGE +10%: the spells whose direct hits gain the bonus. A spell the sim deals as
+	// a hit of a triggered spell, as the client does for Arcane Missiles, Blizzard and Rain of Fire, is named
+	// here by the mask its tick spell carries.
+	Damage int64
+	// Effect 2, SPELLMOD_DOT +10%, and the channels the client deals as hits of a triggered spell (Hellfire)
+	// that the sim deals as ticks: the spells whose dot ticks gain the bonus. Client 70170 empties this
+	// effect for every class but the Priest and Warlock, whose channels stay on it ("channeled spells do
+	// not count as periodics").
+	Tick int64
+}
+
+// EurekaAgent is implemented by the agents of the classes that can be Gnomes.
+type EurekaAgent interface {
+	EurekaSpells() EurekaSpells
+}
+
+// Eureka! for the next three casts of the abilities the client's rows name. Client 1.60.1.70170 ("no
+// longer benefits periodic effects at all. Channeled spells do not count as periodics") takes the bleeds
+// and damage-over-time spells off every class's list, so a dot's ticks keep their damage unless the spell
+// is in Tick, and a cast of a spell on none of the three lists neither costs less nor spends a charge.
+func applyEureka(agent Agent) {
+	character := agent.GetCharacter()
 	var spellID int32
 	var resourceType proto.ResourceType
 	procMask := ProcMaskSpecial
-	// Build 70009 states -10% cost (effect 0, SPELLMOD_COST) on all five class variants; core
-	// cannot import spelldata, so the value is mirrored here.
+	// Build 70009 states -10% cost (effect 0, SPELLMOD_COST) on all five class variants and 70170 keeps
+	// it; core cannot import spelldata, so the value is mirrored here.
 	const costReduction = 0.1
 
 	switch character.Class {
@@ -358,20 +384,36 @@ func applyEureka(character *Character) {
 
 	actionID := ActionID{SpellID: spellID}
 	const anyClassSpell = math.MaxInt64
+	spells := EurekaSpells{Cost: anyClassSpell, Damage: anyClassSpell}
+	if eurekaAgent, ok := agent.(EurekaAgent); ok {
+		spells = eurekaAgent.EurekaSpells()
+	}
+	spent := spells.Cost | spells.Damage | spells.Tick
 
 	costMod := character.AddDynamicMod(SpellModConfig{
 		Kind:         SpellMod_PowerCost_Pct,
-		ClassMask:    anyClassSpell,
+		ClassMask:    spells.Cost,
 		ProcMask:     procMask,
 		ResourceType: resourceType,
 		FloatValue:   -costReduction,
 	})
+	// A spell's damage multiplier covers its hits and its ticks alike, so the +10% goes on every spell
+	// of either list, and the ticks of a spell that is only on the direct list take it back.
 	damageMod := character.AddDynamicMod(SpellModConfig{
 		Kind:       SpellMod_DamageDone_Pct,
-		ClassMask:  anyClassSpell,
+		ClassMask:  spells.Damage | spells.Tick,
 		ProcMask:   procMask,
 		FloatValue: 0.1,
 	})
+	var tickCancelMod *SpellMod
+	if directOnly := spells.Damage &^ spells.Tick; directOnly != 0 {
+		tickCancelMod = character.AddDynamicMod(SpellModConfig{
+			Kind:       SpellMod_DotDamageDone_Pct,
+			ClassMask:  directOnly,
+			ProcMask:   procMask,
+			FloatValue: 1/1.1 - 1,
+		})
+	}
 
 	aura := character.RegisterAura(Aura{
 		Label:     "Eureka!",
@@ -382,13 +424,19 @@ func applyEureka(character *Character) {
 			aura.SetStacks(sim, 3)
 			costMod.Activate()
 			damageMod.Activate()
+			if tickCancelMod != nil {
+				tickCancelMod.Activate()
+			}
 		},
 		OnExpire: func(_ *Aura, _ *Simulation) {
 			costMod.Deactivate()
 			damageMod.Deactivate()
+			if tickCancelMod != nil {
+				tickCancelMod.Deactivate()
+			}
 		},
 		OnCastComplete: func(aura *Aura, sim *Simulation, spell *Spell) {
-			if spell.Matches(anyClassSpell) && spell.ProcMask.Matches(procMask) {
+			if spell.Matches(spent) && spell.ProcMask.Matches(procMask) {
 				aura.RemoveStack(sim)
 			}
 		},
