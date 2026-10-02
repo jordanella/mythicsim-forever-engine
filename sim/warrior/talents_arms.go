@@ -297,6 +297,13 @@ func (warrior *Warrior) registerSpearingStrike() {
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
 
+		// Client 1.60.1.70170 (StanceMask 0x10000 on 1310222): "Spearing Strike no longer requires a 2handed
+		// weapon. Spearing Strike requires Battle Stance." The weapon half needs nothing here, since the sim
+		// never checked the weapon, and the weapon's own damage is used whatever it is.
+		ExtraCastCondition: func(sim *core.Simulation, target *core.Unit) bool {
+			return warrior.StanceMatches(BattleStance)
+		},
+
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := spearingStrikeWeaponShare * spell.Unit.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
 			if target.MobType == proto.MobType_MobTypeGiant || target.MobType == proto.MobType_MobTypeDragonkin {

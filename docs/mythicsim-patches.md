@@ -925,3 +925,49 @@ took of the patch notes, because for all three the client rows carry nothing the
   with a Swipe line before Maul on two or more targets (the preset has none): 2 targets +4.1% / +4.4% DPS
   (+4.5% / +4.8% TPS), 3 targets +5.0% / +5.4% DPS (+5.3% / +5.6% TPS) at 120 s / 300 s.
 - **Drop it when** the client carries the coefficient (then read it by row).
+
+## 52. Spearing Strike requires Battle Stance
+
+- **What it does.** `registerSpearingStrike` (`sim/warrior/talents_arms.go`) casts only in Battle Stance.
+- **The note.** "Arms: Spearing Strike no longer requires a 2handed weapon. Spearing Strike requires Battle Stance."
+- **What the client says.** Spell 1310222 gains a SpellShapeshift row (ShapeshiftMask 0x10000, Battle Stance) and its
+  SpellEquippedItems subclass mask goes from 1378 (two-handed axes, maces, swords, polearms, staves) to 173555
+  (every melee weapon type), plus a ProcChance 101 row. The weapon half needs no change: the sim never checked the
+  weapon, and the swing uses the main hand's own normalized damage. The stance half is new and stated in the
+  engine like every other warrior stance requirement (`StanceMatches`), since the warrior abilities do not read
+  StanceMask.
+- **Tests.** `sim/warrior/dps/spearing_strike_test.go`: castable in Battle Stance with a two-hander or a one-hander,
+  not in Berserker or Defensive Stance; the two refusals fail on the unpatched source.
+- **Default.** The Arms preset swaps to Berserker Stance only in the execute phase, where it never reaches
+  Spearing Strike, so the reference Arms request is bit-identical before and after this patch. The engine's own
+  Arms golden moves -0.28% Average-Default (-2.85% to +4.13% across rows): its `dps_reck` and `dps_no_reck` APLs
+  fight in Berserker Stance throughout and never cast Spearing Strike now.
+- **Drop it when** upstream gates Spearing Strike by the client's stance mask.
+
+### The rest of the Warrior and Druid notes: nothing to change
+
+Checked against the 70124 to 70170 diff and the engine; tests pin the current behaviour so a later change shows.
+
+- **Faerie Fire no longer resets your swing timer.** The row loses its SpellInterrupts entry (InterruptFlags 8) on
+  770, 778, 9749 and 9907. The engine never moved the swing for Faerie Fire (an instant on the global cooldown;
+  nothing in `sim/druid/faerie_fire.go` or the cast path calls the swing functions), so it already matches.
+  `sim/druid/feralbear/faerie_fire_swing_test.go` and `sim/druid/feralcat/faerie_fire_swing_test.go`.
+- **Queueing Heroic Strike no longer increases off-hand hit chance.** The Warrior engine already lifts the dual wield
+  miss penalty for the queued swing alone (`calcQueuedSwing`), so an off-hand auto against a queued Heroic Strike
+  rolls the same table as without it. `sim/warrior/dps/off_hand_hit_test.go`. The Hunter's Raptor Strike does hold
+  the penalty off for the whole queue (`sim/hunter/raptor_strike.go`, `makeRaptorStrikeQueueSpell`), so a
+  dual-wielding Hunter's off hand still gets the better table while one is queued: left alone, as the note names
+  Heroic Strike only.
+- **Unbridled Rage proc chance.** The talent is Unbridled Wrath, 12322. The build changes the spell-level ProcChance
+  60 to 100 and nothing else; the rank values are the trait curve on its effect (12/24/36/48/60, the tooltip's
+  `$m1%`), which did not change, and the engine rolls the curve (`ProcChanceEffectN`, `registerUnbridledWrath`)
+  and never the row. Read as "the real chance was the row times the curve, now the curve", the engine already
+  rolled the intended chance. Read as a flat 100% at any rank, a 5/5 warrior gains Fury +0.7% / +0.5%, Arms +0.7% /
+  +0.6%, Fury-Protection +0.5% / +0.4%, Protection +0.4% / +0.35% (120 s / 300 s). Not taken.
+  `sim/warrior/unbridled_wrath_test.go`.
+- **Dual Wield Specialization.** The rage half went with upstream #601. The hit half is aura 54 on effect 1, read by aura
+  (`registerDualWieldSpecialization`) and applied as an off-hand-only mod, so the engine has the intended
+  off-hand-only 2/4/6/8/10%, not the both-hands behaviour the build lists as a known issue. Left as the intended
+  behaviour. `TestDualWieldSpecializationHitChanceIsOffHandOnly`.
+- **Rend and Sunder Armor tap enemies instantly.** Attributes_6 0x800000 (TAPS_IMMEDIATELY) on the Rend and Sunder
+  Armor ranks. Tagging has no effect in a sim with one boss.
