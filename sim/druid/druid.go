@@ -21,8 +21,8 @@ type Druid struct {
 
 	CannotShredTarget bool
 
-	WolfsheadTigersFuryEnergy float64 // Wolfshead Helm (8345): +20 energy from Tiger's Fury
-	WolfsheadEnrageRage       float64 // Wolfshead Helm (8345): +5 rage from Enrage
+	WolfsheadShiftingPowerEnergy float64 // Wolfshead Helm (8345): +20 energy from Shifting Power
+	WolfsheadEnrageRage          float64 // Wolfshead Helm (8345): +5 rage from Enrage
 
 	MHAutoSpell *core.Spell
 
@@ -51,7 +51,7 @@ type Druid struct {
 	Rip                  *DruidSpell
 	Shred                *DruidSpell
 	Starfire             []*DruidSpell
-	TigersFury           *DruidSpell
+	ShiftingPower        *DruidSpell
 	Swipe                *DruidSpell
 	Wrath                *DruidSpell
 
@@ -71,7 +71,6 @@ type Druid struct {
 	MoonkinFormAura          *core.Aura
 	EclipseAura              *core.Aura
 	ProwlAura                *core.Aura
-	TigersFuryAura           *core.Aura
 
 	form DruidForm
 
@@ -117,7 +116,7 @@ const (
 	DruidSpellThorns
 	DruidSpellWrath
 	DruidSpellEnrage
-	DruidSpellTigersFury
+	DruidSpellShiftingPower
 	DruidSpellCatForm
 	DruidSpellBearForm
 	DruidSpellMoonkinForm
@@ -271,7 +270,7 @@ func (druid *Druid) RegisterFeralCatSpells() {
 	druid.registerClawSpell()
 	druid.registerProwlSpell()
 	druid.registerRavageSpell()
-	druid.registerTigersFurySpell()
+	druid.registerShiftingPowerSpell()
 	// A cat that leaves its form to refresh Moonfire (the Furor powershift with a Moonfire cast as
 	// the form drop). The spell is castable in caster form only, so casting it from Cat Form
 	// unshifts first, as every other caster spell does here.

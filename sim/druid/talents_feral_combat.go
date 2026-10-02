@@ -31,6 +31,7 @@ func (druid *Druid) registerFeralCombatTalents() {
 	druid.applyBloodFrenzy()
 
 	// Tier 5
+	druid.applyImprovedShiftingPower()
 	druid.applyPredatoryInstincts()
 	// Leader of the Pack implemented in druid.go
 

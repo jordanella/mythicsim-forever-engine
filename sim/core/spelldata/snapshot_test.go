@@ -239,8 +239,8 @@ func TestGeneratedInterruptFlags(t *testing.T) {
 	}
 }
 
-// Wrath is castable in Moonkin Form and excludes Tree Form, Healing Touch the reverse. Tiger's Fury
-// states its Cat Form requirement as a caster aura; its SpellShapeshift row is empty.
+// Wrath is castable in Moonkin Form and excludes Tree Form, Healing Touch the reverse. Shifting Power
+// names Cat Form as a caster aura and as a shapeshift mask.
 func TestGeneratedStanceAndAuraRestriction(t *testing.T) {
 	withGeneratedStore(t)
 
@@ -256,9 +256,10 @@ func TestGeneratedStanceAndAuraRestriction(t *testing.T) {
 			healingTouch.StanceMask, healingTouch.StanceExclude)
 	}
 
-	tigersFury := MustFind(5217)
-	if tigersFury.CasterAura != 768 {
-		t.Errorf("Tiger's Fury's caster aura is %d, want 768", tigersFury.CasterAura)
+	shiftingPower := MustFind(1322605)
+	if shiftingPower.CasterAura != 768 || shiftingPower.StanceMask != 0x1 {
+		t.Errorf("Shifting Power's caster aura is %d and stance mask %#x, want 768 and 0x1",
+			shiftingPower.CasterAura, shiftingPower.StanceMask)
 	}
 
 	for id, want := range map[int32]dbcenums.ShapeshiftForm{

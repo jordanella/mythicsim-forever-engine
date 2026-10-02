@@ -2272,10 +2272,6 @@ var generatedSpells = []Spell{
 			{ID: 683678, SpellID: 5215, Index: 1, Type: dbcenums.E_APPLY_AURA, Aura: dbcenums.A_MOD_DECREASE_SPEED, BasePoints: -40, SpellLevel: 20, MaxLevel: 39, PvpMult: 1, ChainAmp: 1, Target: [2]dbcenums.ImplicitTarget{1, 0}},
 		},
 		Powers: []Power{{Type: 3}}},
-	{ID: 5217, Name: "Tiger's Fury", School: 1, Attr: [17]uint32{0: 0x40010, 1: 0x20, 15: 0x2000}, SpellLevel: 24, BaseLevel: 24, DurationMs: 6000, CooldownMs: 30000, ClassFlags: core.ClassFlags{Family: 7, Mask: [4]uint32{2: 2048}}, CasterAura: 768, Labels: []int16{21}, RefIDs: []int32{417046},
-		Effects: []Effect{
-			{ID: 683697, SpellID: 5217, Type: dbcenums.E_APPLY_AURA, Aura: dbcenums.A_DUMMY, BasePoints: 15, SpellLevel: 24, PvpMult: 1, ChainAmp: 1, Target: [2]dbcenums.ImplicitTarget{1, 0}},
-		}},
 	{ID: 5221, Name: "Shred", Rank: "Rank 1", School: 1, Attr: [17]uint32{0: 0x40010, 1: 0xc000200, 2: 0x100000, 15: 0x2000}, SpellLevel: 22, BaseLevel: 22, MaxRange: 5, GCDMs: 1000, StartRecoveryCategory: 133, DefenseType: 2, PreventionType: 2, ClassFlags: core.ClassFlags{Family: 7, Mask: [4]uint32{0: 32768}}, StanceMask: 0x1, Labels: []int16{21},
 		Effects: []Effect{
 			{ID: 683154, SpellID: 5221, Type: dbcenums.E_WEAPON_DAMAGE, BasePoints: 24, SpellLevel: 22, SPCoef: 1, PvpMult: 1, ChainAmp: 1, Target: [2]dbcenums.ImplicitTarget{6, 0}},
@@ -23513,10 +23509,6 @@ var generatedSpells = []Spell{
 	{ID: 416081, Name: "Coherence", School: 1, Attr: [17]uint32{0: 0x40, 8: 0x1000, 9: 0x400000, 10: 0x8000, 15: 0x2000}, SpellLevel: 1, ClassFlags: core.ClassFlags{Family: 11},
 		Effects: []Effect{
 			{ID: 1086232, SpellID: 416081, Type: dbcenums.E_APPLY_AURA, Aura: dbcenums.A_OVERRIDE_ACTIONBAR_SPELLS, BasePoints: 415096, SpellLevel: 1, PvpMult: 1, Misc: 417347, ChainAmp: 1, Target: [2]dbcenums.ImplicitTarget{1, 0}},
-		}},
-	{ID: 417045, Name: "Tiger's Fury", School: 1, Attr: [17]uint32{0: 0x40010, 1: 0x20, 15: 0x2000}, SpellLevel: 1, BaseLevel: 1, ClassFlags: core.ClassFlags{Family: 7, Mask: [4]uint32{3: 16}}, CasterAura: 768, Labels: []int16{21},
-		Effects: []Effect{
-			{ID: 1088347, SpellID: 417045, Type: dbcenums.E_ENERGIZE, BasePoints: 60, SpellLevel: 1, PvpMult: 1, Misc: 3, ChainAmp: 1, Target: [2]dbcenums.ImplicitTarget{1, 0}},
 		}},
 	{ID: 417046, Name: "King of the Jungle", School: 1, Attr: [17]uint32{0: 0x1d0, 2: 0x100, 8: 0x1000, 9: 0x400000, 15: 0x2000}, SpellLevel: 1, BaseLevel: 1, ClassFlags: core.ClassFlags{Family: 7}, Labels: []int16{21},
 		Effects: []Effect{

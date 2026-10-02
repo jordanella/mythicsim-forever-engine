@@ -244,8 +244,8 @@ put there.
 `core.CastRequirement` is what the client requires of the caster's form and auras, and core refuses a
 cast, `CanCast` and `CanQueue` that break it ("wrong form", "missing caster aura", "excluded caster
 aura"). It reads four client sources: `SpellShapeshift`'s mask and exclude mask (`StanceMask`,
-`StanceExclude`), `SpellAuraRestrictions` (`CasterAura`, `ExcludeCasterAura` - Tiger's Fury states its
-Cat Form requirement there, not in a mask), the not-shapeshifted and castable-in-caster-form attribute
+`StanceExclude`), `SpellAuraRestrictions` (`CasterAura`, `ExcludeCasterAura` - Shifting Power names
+Cat Form there as well as in its mask), the not-shapeshifted and castable-in-caster-form attribute
 bits, and `SpellShapeshiftForm`'s stance flag (`dbcenums.ShapeshiftForm.IsStance`, generated into
 `sim/core/dbcenums/forms_auto_gen.go`).
 

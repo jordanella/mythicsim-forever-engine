@@ -54,7 +54,7 @@ below is gated on `IsForever()` unless it says the class code is Forever-only.
 | Rule | Source | Here |
 |---|---|---|
 | Furor: shifting into Cat carries over a share of the energy left, plus a little per second out of form (was a chance at a flat 40). Per-rank scaling assumed linear. | *demo* | `sim/druid/forms.go` |
-| Tiger's Fury: no Energy cost and a 30 sec cooldown (Wrath's shape), so that King of the Jungle's 60 Energy is a cooldown and not an engine. Assumed from the talent's wording. | Tree | `sim/druid/tigers_fury.go` |
+| Shifting Power (client 70170, replaces Tiger's Fury and King of the Jungle): 55% of base mana into 40 Energy in Cat Form, 16 sec cooldown, 1 sec global cooldown; Improved Shifting Power takes 4 sec a rank off the cooldown and Natural Shapeshifter reduces the cost. Read from the client rows. | Tree | `sim/druid/shifting_power.go` |
 | Nature's Grace: a short haste buff (also shortens the GCD) instead of a cast time cut on the next cast. | *demo* | `sim/druid/talents.go` |
 | Thick Hide: flat base Armor from level and defense skill instead of an armor multiplier. | *demo* | `sim/druid/talents.go` |
 | Primal Fury absorbs the old Blood Frenzy combo point proc. | Tree | `sim/druid/talents.go` |

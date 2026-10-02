@@ -10,13 +10,15 @@ import (
 	"github.com/wowsims/forever/sim/druid"
 )
 
-// Forever item 8345 / spell 17768 grants resources from cooldowns, not forms.
+// Forever item 8345 / spell 17768 grants resources from cooldowns, not forms: client 70170 words it
+// "an additional 20 Energy from activating Shifting Power" (it said Tiger's Fury before).
 // Source: https://www.wowhead.com/forever/item=8345/wolfshead-helm
 func TestWolfsheadResourcesComeFromCooldowns(t *testing.T) {
 	for _, helm := range []int32{0, 8345} {
 		player := &proto.Player{Name: "Wolfshead", Class: proto.Class_ClassDruid, Race: proto.Race_RaceNightElf,
-			Equipment: &proto.EquipmentSpec{Items: []*proto.ItemSpec{{Id: helm}}},
-			Spec:      DefaultSpecOptions, Rotation: &proto.APLRotation{Type: proto.APLRotation_TypeAPL}}
+			TalentsString: shiftingPowerOnly,
+			Equipment:     &proto.EquipmentSpec{Items: []*proto.ItemSpec{{Id: helm}}},
+			Spec:          DefaultSpecOptions, Rotation: &proto.APLRotation{Type: proto.APLRotation_TypeAPL}}
 		sim := core.NewSim(&proto.RaidSimRequest{SimOptions: &proto.SimOptions{RandomSeed: 1},
 			Raid:      core.SinglePlayerRaidProto(player, &proto.PartyBuffs{}, &proto.RaidBuffs{}, &proto.Debuffs{}),
 			Encounter: core.MakeSingleTargetEncounter(0)}, simsignals.CreateSignals())
@@ -32,15 +34,15 @@ func TestWolfsheadResourcesComeFromCooldowns(t *testing.T) {
 			t.Fatalf("helm %d: shifting generated %v energy", helm, d.CurrentEnergy())
 		}
 		d.GCD.Set(sim.CurrentTime)
-		if !d.TigersFury.Cast(sim, d.CurrentTarget) {
-			t.Fatal("Tiger's Fury failed")
+		if !d.ShiftingPower.Cast(sim, d.CurrentTarget) {
+			t.Fatal("Shifting Power failed")
 		}
-		want := 0.0
+		want := 40.0
 		if helm != 0 {
-			want = 20
+			want = 60
 		}
 		if d.CurrentEnergy() != want {
-			t.Fatalf("helm %d: Tiger's Fury energy %v, want %v", helm, d.CurrentEnergy(), want)
+			t.Fatalf("helm %d: Shifting Power energy %v, want %v", helm, d.CurrentEnergy(), want)
 		}
 	}
 }

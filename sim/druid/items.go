@@ -48,18 +48,18 @@ func init() {
 	})
 
 	// Forever Wolfshead Helm (8345, effect 17768): the bonus belongs to
-	// Tiger's Fury and Enrage, not to entering a form.
+	// Shifting Power (Tiger's Fury before client 70170) and Enrage, not to entering a form.
 	core.NewItemEffect(8345, func(agent core.Agent) {
 		druid := agent.(DruidAgent).GetDruid()
 		core.MakePermanent(druid.RegisterAura(core.Aura{
 			Label:    "Wolfshead Helm",
 			ActionID: core.ActionID{SpellID: 17768},
 			OnGain: func(_ *core.Aura, _ *core.Simulation) {
-				druid.WolfsheadTigersFuryEnergy += 20
+				druid.WolfsheadShiftingPowerEnergy += 20
 				druid.WolfsheadEnrageRage += 5
 			},
 			OnExpire: func(_ *core.Aura, _ *core.Simulation) {
-				druid.WolfsheadTigersFuryEnergy -= 20
+				druid.WolfsheadShiftingPowerEnergy -= 20
 				druid.WolfsheadEnrageRage -= 5
 			},
 		}))
