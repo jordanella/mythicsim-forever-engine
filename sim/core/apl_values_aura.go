@@ -27,7 +27,7 @@ func (rot *APLRotation) newValueAuraIsActive(config *proto.APLValueAuraIsActive,
 	}
 	aura := rot.GetAPLAura(rot.GetSourceUnit(config.SourceUnit), config.AuraId)
 	if aura.Get() == nil {
-		return nil
+		return rot.newValueConst(&proto.APLValueConst{Val: "false"}, nil)
 	}
 	return &APLValueAuraIsActive{
 		aura:                aura,
@@ -62,7 +62,7 @@ func (rot *APLRotation) newValueAuraIsInactive(config *proto.APLValueAuraIsInact
 	}
 	aura := rot.GetAPLAura(rot.GetSourceUnit(config.SourceUnit), config.AuraId)
 	if aura.Get() == nil {
-		return nil
+		return rot.newValueConst(&proto.APLValueConst{Val: "true"}, nil)
 	}
 
 	return &APLValueAuraIsInactive{
@@ -96,7 +96,7 @@ func (rot *APLRotation) newValueAuraRemainingTime(config *proto.APLValueAuraRema
 	}
 	aura := rot.GetAPLAura(rot.GetSourceUnit(config.SourceUnit), config.AuraId)
 	if aura.Get() == nil {
-		return nil
+		return rot.newValueConst(&proto.APLValueConst{Val: "0ms"}, nil)
 	}
 	return &APLValueAuraRemainingTime{
 		aura: aura,
@@ -131,7 +131,10 @@ func (rot *APLRotation) newValueAuraNumStacks(config *proto.APLValueAuraNumStack
 	aura := rot.GetAPLAura(rot.GetSourceUnit(config.SourceUnit), config.AuraId)
 	resolvedAura := aura.Get()
 	if resolvedAura == nil {
-		return nil
+		// An aura this character can't have (an untaken talent's) has no stacks. Returning nil
+		// dropped the whole comparison, so "Maelstrom Weapon >= 5 stacks" without the talent
+		// became "always" and enhancement hard-cast Lightning Bolt on every GCD.
+		return rot.newValueConst(&proto.APLValueConst{Val: "0"}, uuid)
 	}
 	if resolvedAura.MaxStacks == 0 {
 		rot.ValidationMessageByUUID(uuid, proto.LogLevel_Warning, "%s is not a stackable aura", ProtoToActionID(config.AuraId))

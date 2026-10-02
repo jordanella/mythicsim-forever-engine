@@ -1,9 +1,9 @@
 # MythicSim downstream patches
 
 MythicSim runs this engine from its fork (`sage3648/mythicsim-forever-engine`, branch
-`codex/forever-frostfire-omen`). The branch is ElliotWood/Forever master, which is built on the
+`codex/forever-upstream-oct03`). The branch is ElliotWood/Forever master, which is built on the
 official wowsims/forever, plus the patches below. The first base was `442076902` (Merge
-wowsims/forever master ea5412873). The current base is `ccfaacb5c3` (2026-10-02, client 1.60.1.70170 with the 2026-10-02 hotfix cache). The 2026-10-01 syncs merged 113 upstream commits and then 28 more ("Upstream sync 2026-10-01, second merge" below); the decisions are in "Upstream sync 2026-10-01". The 2026-10-02 sync merged the 12 commits #602 to #609 ("Upstream sync 2026-10-02, #602 to #609" at the end of this file): patches 50 and 61 are dropped, patch 63 is narrowed to Mystic Mushroom, and the interim 70170 regeneration is replaced by upstream's real one. The previous base was `8dc19a4241` (2026-09-27). It includes form-speed and actual spell cast-time Omen of Clarity proc corrections, life-drain weapon effects, Sword of Zeal, Argent Avenger, Fiery Weapon and Lifestealing enchants, Flurry Axe and Electrified Dagger, the 2026-09-27 client hotfix database, Stinging Viper and eight Classic weapon procs, Mage Scroll of Cryoblast, non-engineer explosives and SAF-T / EZ-Thro bombs, Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
+wowsims/forever master ea5412873). The current base is `dd5b8f9fa1` (2026-10-03 adoption, client 1.60.1.70178 with unchanged simulator tables). The 2026-10-01 syncs merged 113 upstream commits and then 28 more ("Upstream sync 2026-10-01, second merge" below); the decisions are in "Upstream sync 2026-10-01". The 2026-10-02 sync merged the 12 commits #602 to #609 ("Upstream sync 2026-10-02, #602 to #609" at the end of this file): patches 50 and 61 are dropped, patch 63 is narrowed to Mystic Mushroom, and the interim 70170 regeneration is replaced by upstream's real one. The previous base was `8dc19a4241` (2026-09-27). It includes form-speed and actual spell cast-time Omen of Clarity proc corrections, life-drain weapon effects, Sword of Zeal, Argent Avenger, Fiery Weapon and Lifestealing enchants, Flurry Axe and Electrified Dagger, the 2026-09-27 client hotfix database, Stinging Viper and eight Classic weapon procs, Mage Scroll of Cryoblast, non-engineer explosives and SAF-T / EZ-Thro bombs, Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
 
 Keep the set small. Each patch exists because MythicSim needs something upstream does not do
 yet. Drop a patch as soon as upstream covers it; do not keep ours alongside an upstream version.
@@ -1481,3 +1481,37 @@ Test-mode simulations keep their existing three splits. The normal default remai
 available Go concurrency. The real caster and tank image checks cover the worker budget.
 
 Drop this when upstream respects the caller's concurrency limit.
+
+
+## Upstream sync 2026-10-03, #613 to #624
+
+Merged ElliotWood/Forever `dd5b8f9fa132b813de72aa2f87dd168e6909317f` on top of
+MythicSim release `6823b49eb8aff741f197ef36d83766ef6a218285`. The release remains
+an ancestor of the merged engine, preserving its downstream patches through 74.
+
+Whirlwind strikes with both equipped melee weapons without Raging Blows, which
+now also reduces Whirlwind's Rage cost. Booming Voice reduces shout costs by 5%
+per point. Piercing Ice gives Frostfire Bolt's direct hit its rank-scaled bonus
+and its DoT a flat 2%. Missing APL auras now read as false, inactive, zero duration
+or zero stacks instead of dropping conditions. Retribution maintains Seal of
+Righteousness on builds without Seal of Command.
+
+Resolve `simple_vael` with upstream's guarded Shifting Power action (1322605).
+Both versions remove Tiger's Fury (9846), and the new action uses MythicSim's
+existing Shifting Power implementation. The default Cat and Destruction rotation
+patches, melee Survival rotation, item stats and armor, dynamic DoTs, pet scaling,
+Flametongue and Windfury interactions, strict CLI, stat weights and Go concurrency
+budget remain present. The inherited Frostfire hybrid regression now checks the
+effective hit and periodic multipliers separately (1.14 and 1.10), while retaining
+its crit, Ignite, Hot Streak and mana-refund assertions.
+
+The four conflicted Hunter and DPS Warrior goldens were regenerated against the
+combined engine. No other existing golden changes beyond the upstream
+Retribution update. New optional rotations and arena tooling are retained as
+upstream source; they do not select new MythicSim application defaults. The
+application retains its measured Hunter, Feral, Enhancement, Destruction, Smite,
+Fury and Protection presets, adding only the Retribution seal fallback.
+
+Client metadata advances to 1.60.1.70178. Upstream's client diff reports no changes
+in the simulator tables, and the merged item database, spell store, talent trees
+and proto sources remain identical to the previous MythicSim release.

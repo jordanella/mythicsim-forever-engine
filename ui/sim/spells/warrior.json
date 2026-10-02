@@ -131,7 +131,7 @@
 	"1680": {
 		"ability": "Whirlwind",
 		"file": "sim/warrior/whirlwind.go",
-		"note": "Base Whirlwind is untouched (25 Rage, 10 sec cooldown, up to 4 targets, Berserker Stance); the same id with tag 2 is the off-hand swing that Forever's Raging Blows talent adds, which is the talent's text and not this one's.",
+		"note": "25 Rage, 10 sec cooldown, up to 4 targets, Berserker Stance as in Classic. Hotfix 112347 (build 70170) rewrote its text to \"weapon damage from both melee weapons\": the off-hand swing, the same id with tag 2, is now Whirlwind's own for a dual-wielding warrior, where it used to come from Raging Blows. Raging Blows now takes 3 Rage off Whirlwind and Cleave instead.",
 		"source": "classic"
 	},
 	"1719": {
@@ -149,7 +149,7 @@
 	"20569": {
 		"ability": "Cleave",
 		"file": "sim/warrior/heroic_strike_cleave.go",
-		"note": "Client 1.60.1.70009: 50 bonus damage and 20 Rage as in Classic Era; the Rage discounts come from Forever's Improved Cleave and Raging Blows.",
+		"note": "Client 1.60.1.70009: 50 bonus damage and 20 Rage as in Classic Era; build 70170 dropped Improved Cleave, so the Rage discount is Raging Blows' 3 (shared with Whirlwind).",
 		"source": "classic"
 	},
 	"20662": {

@@ -93,5 +93,25 @@ func TestArena(t *testing.T) {
 		}}},
 		Role:               arenalib.Caster,
 		DistanceFromTarget: 30,
+		// Demonic Sacrifice only applies when the demon is sacrificed before the pull, which is a
+		// class option, so builds with the talent get the rotations again with the Imp sacrificed (Shadow
+		// damage). The Succubus (Fire) lost on every build when measured, so it is not offered.
+		Variants: map[string]arenalib.Variant{
+			"affliction_sacrifice_imp":  {Rotation: "affliction", SpecOptions: arenaSacrifice(proto.WarlockOptions_Imp)},
+			"ds_ruin_sacrifice_imp":     {Rotation: "ds_ruin", SpecOptions: arenaSacrifice(proto.WarlockOptions_Imp)},
+			"destruction_sacrifice_imp": {Rotation: "destruction", SpecOptions: arenaSacrifice(proto.WarlockOptions_Imp)},
+		},
 	})
+}
+
+// The arena's warlock options with the given demon summoned and sacrificed before the pull.
+func arenaSacrifice(demon proto.WarlockOptions_Summon) *proto.Player_Warlock {
+	return &proto.Player_Warlock{Warlock: &proto.Warlock{Options: &proto.Warlock_Options{
+		ClassOptions: &proto.WarlockOptions{
+			Summon:          demon,
+			SacrificeSummon: true,
+			Armor:           proto.WarlockOptions_DemonArmor,
+			CurseOptions:    proto.WarlockOptions_Elements,
+		},
+	}}}
 }

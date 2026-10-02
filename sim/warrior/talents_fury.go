@@ -11,7 +11,7 @@ import (
 
 func (warrior *Warrior) registerFuryTalents() {
 	// Tier 1
-	// Booming Voice (12321) widens the shout radius only, which the sim does not model.
+	warrior.registerBoomingVoice()
 	warrior.registerCruelty()
 
 	// Tier 2
@@ -323,13 +323,30 @@ func (warrior *Warrior) registerBloodCraze() {
 	})
 }
 
+// Booming Voice (12321) widens the shout radius, which the sim does not model. Build 70170 added a
+// second effect the tooltip does not mention yet: -5% a point off the Rage cost of Battle,
+// Demoralizing, Intimidating and Challenging Shout (mask 0xF0000).
+func (warrior *Warrior) registerBoomingVoice() {
+	if warrior.Talents.BoomingVoice == 0 {
+		return
+	}
+
+	warrior.AddStaticMod(core.SpellModConfig{
+		ClassMask:  SpellMaskShouts,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
+		FloatValue: spellData.BoomingVoice.EffectAt(2).FractionAt(warrior.Talents.BoomingVoice),
+	})
+}
+
 func (warrior *Warrior) registerRagingBlows() {
 	if !warrior.Talents.RagingBlows {
 		return
 	}
 
+	// Build 70170 + hotfix 112347: "Reduces the Rage cost of your Cleave and Whirlwind abilities",
+	// effect 2's mask names both (Cleave 0x400000, Whirlwind mask_1 0x4).
 	warrior.AddStaticMod(core.SpellModConfig{
-		ClassMask: SpellMaskCleave,
+		ClassMask: SpellMaskCleave | SpellMaskWhirlwind,
 		Kind:      core.SpellMod_PowerCost_Flat,
 		IntValue:  int32(spellData.RagingBlows.EffectAt(2).TenthsAt(1)),
 	})

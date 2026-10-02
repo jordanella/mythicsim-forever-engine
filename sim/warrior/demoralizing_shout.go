@@ -10,8 +10,8 @@ func (warrior *Warrior) registerDemoralizingShout() {
 	demoralizingShoutRank := spellData.DemoralizingShout.Highest()
 
 	warrior.DemoralizingShoutAuras = warrior.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
-		// Forever has no Improved Demoralizing Shout and Booming Voice widens the radius only, so
-		// the aura is the client's attack power reduction for 45 seconds.
+		// Forever has no Improved Demoralizing Shout and Booming Voice widens the radius and cuts the
+		// cost only, so the aura is the client's attack power reduction for 45 seconds.
 		return buffs.DemoralizingShoutAura(target, true, 0)
 	})
 

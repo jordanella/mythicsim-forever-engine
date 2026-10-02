@@ -120,16 +120,31 @@ func (mage *Mage) registerFrostbite() {
 	}
 }
 
+// registerPiercingIce: effect 0 (SPELLMOD_DAMAGE, 2/4/6%) raises Frost spell hits, Blizzard's too (its
+// ticks are direct hits of 1279949). Effect 1 (SPELLMOD_DOT) names Blizzard and Frostfire Bolt but has
+// no rank curve in client 1.60.1.70170, so Frostfire Bolt's DoT gets its base 2% at every rank.
 func (mage *Mage) registerPiercingIce() {
 	if mage.Talents.PiercingIce == 0 {
 		return
 	}
 
+	hit := spellData.PiercingIce.Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_DAMAGE)).FractionAt(mage.Talents.PiercingIce)
+	dot := spellData.PiercingIce.Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_DOT)).FractionAt(mage.Talents.PiercingIce)
 	mage.AddStaticMod(core.SpellModConfig{
-		ClassMask:  MageSpellsAll,
+		ClassMask:  MageSpellsAll &^ MageSpellFrostfireBolt,
 		School:     core.SpellSchoolFrost,
-		FloatValue: spellData.PiercingIce.Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_DAMAGE)).FractionAt(mage.Talents.PiercingIce),
+		FloatValue: hit,
 		Kind:       core.SpellMod_DamageDone_Flat,
+	})
+	mage.AddStaticMod(core.SpellModConfig{
+		ClassMask:  MageSpellFrostfireBolt,
+		FloatValue: dot,
+		Kind:       core.SpellMod_DamageDone_Flat,
+	})
+	mage.AddStaticMod(core.SpellModConfig{
+		ClassMask:  MageSpellFrostfireBolt,
+		FloatValue: hit - dot,
+		Kind:       core.SpellMod_DirectDamageDone_Flat,
 	})
 }
 

@@ -1,5 +1,77 @@
 [
 	{
+		"number": 624,
+		"title": "rotations: retribution keeps Seal of Righteousness up without Seal of Command",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/624"
+	},
+	{
+		"number": 623,
+		"title": "rotations: forever_flameshock, an optional enhancement rotation that keeps Flame Shock up",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/623"
+	},
+	{
+		"number": 622,
+		"title": "apl: an aura the character doesn't have reads as absent, not as \"no condition\"",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/622"
+	},
+	{
+		"number": 621,
+		"title": "Forever client build 1.60.1.70178",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/621"
+	},
+	{
+		"number": 620,
+		"title": "arena: rank warlock builds with the Imp sacrificed, via option variants",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/620"
+	},
+	{
+		"number": 619,
+		"title": "rotations: optional Destruction rotation with Conflagrate",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/619"
+	},
+	{
+		"number": 618,
+		"title": "rotations: hunters cast Arcane Shot, Smite gets a Mind Blast variant, feral drops Tiger's Fury",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/618"
+	},
+	{
+		"number": 617,
+		"title": "arenalib: ARENA_ROTATION_AUDIT lists stale and unused rotation spells",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/617"
+	},
+	{
+		"number": 616,
+		"title": "gear: launch sets drop Leafre's Ring of Precise Spell Power, gone from the game",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/616"
+	},
+	{
+		"number": 615,
+		"title": "Piercing Ice gives Frostfire Bolt's DoT a flat 2%",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/615"
+	},
+	{
+		"number": 614,
+		"title": "Booming Voice takes 5% a point off the shouts' Rage cost",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/614"
+	},
+	{
+		"number": 613,
+		"title": "Whirlwind swings both weapons on its own; Raging Blows cuts Whirlwind's Rage too",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/613"
+	},
+	{
 		"number": 612,
 		"title": "Nature's Grace also takes 10% off the global cooldown",
 		"mergedAt": "2026-10-02",

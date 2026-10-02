@@ -133,6 +133,17 @@ type Spec struct {
 	Talents   string
 	GearSets  []string
 	Rotations []string
+
+	// Rotations that differ by class options rather than by APL: a warlock who sacrifices a demon
+	// before the pull runs the same priority list with another demon out. Each is ranked as a
+	// rotation of its own, under its key, so the arena keeps it only for the builds it wins.
+	Variants map[string]Variant
+}
+
+// A rotation file run with other spec options.
+type Variant struct {
+	Rotation    string
+	SpecOptions interface{}
 }
 
 type TalentBuild struct {
@@ -161,6 +172,13 @@ func Run(t *testing.T, spec Spec) {
 	}
 	gearSets := filter(namesIn(filepath.Join(uiDir, "gear_sets"), ".gear.json"), spec.GearSets)
 	rotations := filter(namesIn(filepath.Join(uiDir, "apls"), ".apl.json"), spec.Rotations)
+	for _, name := range slices.Sorted(maps.Keys(spec.Variants)) {
+		rotations = append(rotations, name)
+	}
+	if rotationAuditOn() && len(gearSets) > 0 && len(rotations) > 0 {
+		auditRotations(t, spec, talents, gearSets, rotations)
+		return
+	}
 	if outDir != "" && os.Getenv(relevanceEnv) != "" {
 		surveyRelevance(t, spec, outDir, talents, gearSets, rotations)
 		return
@@ -462,7 +480,6 @@ func (m *memo) all(runs []run) []Result {
 }
 
 func runAt(spec Spec, talent TalentBuild, gear string, rotation string, iterations int32) (row Result) {
-	uiDir := specDir(spec)
 	environment := consumesFor(spec.Role, spec.ClassImbues)
 	row = Result{
 		Spec:        spec.Dir,
@@ -483,35 +500,7 @@ func runAt(spec Spec, talent TalentBuild, gear string, rotation string, iteratio
 		}
 	}()
 
-	gearCombo := core.GetGearSet(filepath.Join(uiDir, "gear_sets"), gear)
-	rotationProto := &proto.APLRotation{}
-	if rotation != "" {
-		rotationProto = core.GetAplRotation(filepath.Join(uiDir, "apls"), rotation).Rotation
-	}
-
-	distance := spec.DistanceFromTarget
-	if distance == 0 {
-		distance = 5
-	}
-
-	player := core.WithSpec(&proto.Player{
-		Class:              spec.Class,
-		Race:               spec.Race,
-		Equipment:          gearCombo.GearSet,
-		Consumables:        environment.Consumables,
-		Buffs:              environment.Player,
-		TalentsString:      talent.Talents,
-		Profession1:        proto.Profession_Engineering,
-		Rotation:           rotationProto,
-		DistanceFromTarget: distance,
-		ReactionTimeMs:     150,
-		ChannelClipDelayMs: 50,
-	}, spec.SpecOptions)
-
-	raid := core.SinglePlayerRaidProto(player, environment.Party, environment.Raid, environment.Debuffs)
-	if spec.IsTank {
-		raid.Tanks = append(raid.Tanks, &proto.UnitReference{Type: proto.UnitReference_Player, Index: 0})
-	}
+	raid := raidFor(spec, talent, gear, rotation, environment)
 
 	result := core.RunRaidSim(&proto.RaidSimRequest{
 		Raid:      raid,
@@ -537,6 +526,45 @@ func runAt(spec Spec, talent TalentBuild, gear string, rotation string, iteratio
 		collect(&row, pet)
 	}
 	return row
+}
+
+// The one-player raid a build is simulated in.
+func raidFor(spec Spec, talent TalentBuild, gear string, rotation string, environment core.BuffsCombo) *proto.Raid {
+	uiDir := specDir(spec)
+	specOptions := spec.SpecOptions
+	if variant, ok := spec.Variants[rotation]; ok {
+		rotation, specOptions = variant.Rotation, variant.SpecOptions
+	}
+	gearCombo := core.GetGearSet(filepath.Join(uiDir, "gear_sets"), gear)
+	rotationProto := &proto.APLRotation{}
+	if rotation != "" {
+		rotationProto = core.GetAplRotation(filepath.Join(uiDir, "apls"), rotation).Rotation
+	}
+
+	distance := spec.DistanceFromTarget
+	if distance == 0 {
+		distance = 5
+	}
+
+	player := core.WithSpec(&proto.Player{
+		Class:              spec.Class,
+		Race:               spec.Race,
+		Equipment:          gearCombo.GearSet,
+		Consumables:        environment.Consumables,
+		Buffs:              environment.Player,
+		TalentsString:      talent.Talents,
+		Profession1:        proto.Profession_Engineering,
+		Rotation:           rotationProto,
+		DistanceFromTarget: distance,
+		ReactionTimeMs:     150,
+		ChannelClipDelayMs: 50,
+	}, specOptions)
+
+	raid := core.SinglePlayerRaidProto(player, environment.Party, environment.Raid, environment.Debuffs)
+	if spec.IsTank {
+		raid.Tanks = append(raid.Tanks, &proto.UnitReference{Type: proto.UnitReference_Player, Index: 0})
+	}
+	return raid
 }
 
 // Without ARENA_OUT the arena still runs every build, briefly, to hold the evidence manifest

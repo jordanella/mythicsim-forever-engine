@@ -55,8 +55,13 @@ func TestFrostfireRanksAndTalents(t *testing.T) {
 	if got := spell.SpellHitChance(hybrid.CurrentTarget); math.Abs(got-.05) > 1e-9 {
 		t.Errorf("hit = %v, want .05", got)
 	}
-	if math.Abs(spell.DamageMultiplierAdditive-1.14) > 1e-9 {
-		t.Errorf("Fire Power + Piercing Ice = %v, want 1.14", spell.DamageMultiplierAdditive)
+	// Fire Power adds 8%. Piercing Ice adds 6% to the hit and 2% to the DoT.
+	table := hybrid.AttackTables[hybrid.CurrentTarget.UnitIndex]
+	if got := spell.AttackerDamageMultiplier(table, false); math.Abs(got-1.14) > 1e-9 {
+		t.Errorf("Fire Power + Piercing Ice direct multiplier = %v, want 1.14", got)
+	}
+	if got := spell.AttackerDamageMultiplier(table, true); math.Abs(got-1.10) > 1e-9 {
+		t.Errorf("Fire Power + Piercing Ice periodic multiplier = %v, want 1.10", got)
 	}
 	if spell.BonusCritPercent != 6 {
 		t.Errorf("Critical Mass = %v, want 6", spell.BonusCritPercent)

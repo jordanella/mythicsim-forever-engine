@@ -107,7 +107,7 @@ func TestArenaSmite(t *testing.T) {
 		DistanceFromTarget: 30,
 		Talents:            "Smite",
 		GearSets:           []string{"smite_launch"},
-		Rotations:          []string{"smite", "smite_lowrank"},
+		Rotations:          []string{"smite", "smite_lowrank", "smite_lowrank_mindblast"},
 	})
 }
 

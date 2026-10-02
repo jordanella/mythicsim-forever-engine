@@ -9,8 +9,10 @@ func (warrior *Warrior) registerWhirlwind() {
 
 	actionID := core.ActionID{SpellID: whirlwindRank.ID}
 
+	// Hotfix 112347 (build 70170) rewrote 1680's text to "weapon damage from both melee weapons":
+	// the off-hand swing Raging Blows used to add is now Whirlwind's own, for anyone dual wielding.
 	var whirlwindOH *core.Spell
-	if warrior.Talents.RagingBlows {
+	if warrior.HasOHWeapon() {
 		whirlwindOH = warrior.RegisterSpell(core.SpellConfig{
 			ActionID:       actionID.WithTag(2),
 			SpellSchool:    core.SpellSchoolPhysical,
@@ -67,7 +69,7 @@ func (warrior *Warrior) registerWhirlwind() {
 			warrior.CastNormalizedSweepingStrikesAttack(results, sim)
 			spell.DealBatchedAoeDamage(sim)
 
-			if whirlwindOH != nil && warrior.HasOHWeapon() {
+			if whirlwindOH != nil {
 				whirlwindOH.Cast(sim, target)
 			}
 		},
