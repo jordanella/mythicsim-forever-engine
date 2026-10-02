@@ -936,3 +936,108 @@ Golden movements on the regenerated data (all explained, none from a silent misr
 | TestProtection | 258.72 to 260.78 (+0.8%) | Holy Shield block 20 to 30 (+6.0) and Redoubt 6..30 to 4..20 (-4.1) |
 | TestSurvival | 290.26 unchanged | Deflection parry 10 to 5 only |
 | TestBalance, FeralBear, FeralCat, SurvivalMelee, Arcane, Frost, Shadow, Smite, Elemental, Enhancement, Affliction, Destruction, Arms | unchanged | one to three AllItems rows each: Searing Dagger (Sear 1291568), Mystic Mushroom (Increased Spirit), Plaguefang (Poison 1309315), Insight enchant |
+
+## Client 1.60.1.70170: the Warrior and Bear Rage items (patches 50 to 52)
+
+Numbered from 50 so they do not collide with the other 70170 branches. Each patch states the reading it
+took of the patch notes, because for all three the client rows carry nothing the sim could read.
+
+## 50. A critical auto attack gives 75% more Rage
+
+- **What it does.** `RageBarOptions.CritRageBonus` (0.75, `core.CritAutoAttackRageBonus`) multiplies the Rage a
+  swing gives by 1.75 when it crits. Warrior, Feral Bear and Feral Cat (whose Bear Form is the form that gets
+  it) set it. The Cat's rage bar is only ever used in Bear Form.
+- **The notes.** Warrior: "Players now generate 75% increased Rage when landing a critical strike with a basic
+  attack." Druid: "Bear Form and Dire Bear Form now generate 75% increased Rage when landing a Critical Strike."
+- **What the client says.** Nothing numeric. The 70124 to 70170 diff has no row with 75 on Rage. It does add the
+  hooks the server needs: Bear Form (Passive) 1178 and Dire Bear Form (Passive) 9635 gain a SpellAuraOptions row
+  (ProcChance 100, ProcTypeMask 0x4 = a melee auto attack landed) with no effect that uses it; a new Warrior
+  passive "Rule of Rage (DND)" 1322574 (class set 4, label 25) has the same 100% / 0x4 proc and an A_DUMMY effect
+  of 10; and 1313291, the energize that Dual Wield Specialization used for its off-hand Rage, is renamed "Rule
+  of Rage (DND)" and loses its class set. Both warrior rows are generated into `spellData.RuleOfRage` and read by
+  nothing. The proc mask is 0x4 on all three, so the client's own wording of "basic attack" is the auto attack
+  of either hand: no ability proc flag (0x10 and up) is on any of them. The crit condition is a server hit mask
+  that the DB2 tables do not carry, which is why no row names it. The dummy's 10 is not 75 and is left unread.
+- **Reading.** A crit auto attack, main hand or off hand, one-hander or two-hander, pays 1.75 times what the
+  same swing pays as a hit. The engine's rage formula does not depend on the damage dealt (3.46 a second of
+  weapon speed, 4.5 for a two-hander, half for the off hand, from `f9f9f21883`), so a crit that deals twice a
+  hit's damage pays 1.75 times, not 2. A glancing blow is not a crit. Abilities (Heroic Strike, Cleave, Mortal
+  Strike, Maul) pay no Rage on a hit in this engine, so "basic attack" against the Bear's "Critical Strike" does
+  not separate them here. Rage from damage taken is a separate rule and does not change.
+- **Alternatives, measured** (10,000 iterations on the reference builds, DPS against this patch, 120 s / 300 s).
+  (a) The bonus also multiplies Unbridled Wrath's Rage when it procs off a crit white hit: Fury +0.4% / +0.3%,
+  Arms +0.4% / +0.2%, Fury-Protection +0.2%, Protection +0.1%. (b) The bonus also multiplies the Bear's Blood
+  Frenzy Rage (5 Rage on a crit): Feral Bear +3.8% / +3.9% DPS, +5.6% / +5.6% TPS, because the Bear is
+  rage-starved. Not taken: the client's proc mask is a melee auto attack, and Blood Frenzy's Rage is its own
+  energize.
+- **Tests.** `sim/core/rage_crit_test.go` (1.75 times a hit in each hand and for a two-hander, 15.743 against
+  8.996 for a 2.6 speed main hand, a bar without the bonus pays a crit as a hit, damage taken unchanged),
+  `sim/core/rage_test.go` (the crit rows now pay 15.743), `sim/warrior/dps/crit_rage_test.go`,
+  `sim/druid/feralbear/crit_rage_test.go`. The first and the crit rows of the second fail on the unpatched source.
+- **Default.** Warrior and Bear goldens move up (Average-Default DPS: Fury +6.6%, Arms +7.3%, Protection +0.3%,
+  Feral Bear +1.1%); Feral Cat is unchanged.
+- **Drop it when** upstream models the client's Rule of Rage, or measures a different factor.
+
+## 51. Swipe gains 3% of attack power
+
+- **What it does.** `sim/druid/swipe.go` adds `0.03 * attack power` to each target's base Swipe damage, before
+  Feral Instinct's and the other damage mods.
+- **The note.** "Fixed a bug causing Swipe to not scale with Attack Power. It will now correctly gain 3% of the
+  Druid's attack power" and, in the same line, that the tooltip will not update.
+- **What the client says.** Nothing: none of the five Swipe ranks (779, 780, 769, 9754, 9908) has a
+  BonusCoefficientFromAP, and the 70170 rows are unchanged, which is what "tooltip will not update" means. So the
+  coefficient is stated in the engine (`swipeAttackPowerCoefficient`) and not read by row. Only the Bear has
+  Swipe (family 7, stance mask 0x90); the Cat has none, and the Family 9 "Swipe" rows (1264494 to 1264502) are a
+  Hunter pet's.
+- **Tests.** `sim/druid/feralbear/swipe_test.go` casts the same roll at two attack powers and solves for the
+  coefficient, without naming the modifiers: it reads 0.03 and fails on the unpatched source (the hit does not move).
+- **Default.** The default Bear rotation casts no Swipe on one target, so no golden moves. On the reference Bear
+  with a Swipe line before Maul on two or more targets (the preset has none): 2 targets +4.1% / +4.4% DPS
+  (+4.5% / +4.8% TPS), 3 targets +5.0% / +5.4% DPS (+5.3% / +5.6% TPS) at 120 s / 300 s.
+- **Drop it when** the client carries the coefficient (then read it by row).
+
+## 52. Spearing Strike requires Battle Stance
+
+- **What it does.** `registerSpearingStrike` (`sim/warrior/talents_arms.go`) casts only in Battle Stance.
+- **The note.** "Arms: Spearing Strike no longer requires a 2handed weapon. Spearing Strike requires Battle Stance."
+- **What the client says.** Spell 1310222 gains a SpellShapeshift row (ShapeshiftMask 0x10000, Battle Stance) and its
+  SpellEquippedItems subclass mask goes from 1378 (two-handed axes, maces, swords, polearms, staves) to 173555
+  (every melee weapon type), plus a ProcChance 101 row. The weapon half needs no change: the sim never checked the
+  weapon, and the swing uses the main hand's own normalized damage. The stance half is new and stated in the
+  engine like every other warrior stance requirement (`StanceMatches`), since the warrior abilities do not read
+  StanceMask.
+- **Tests.** `sim/warrior/dps/spearing_strike_test.go`: castable in Battle Stance with a two-hander or a one-hander,
+  not in Berserker or Defensive Stance; the two refusals fail on the unpatched source.
+- **Default.** The Arms preset swaps to Berserker Stance only in the execute phase, where it never reaches
+  Spearing Strike, so the reference Arms request is bit-identical before and after this patch. The engine's own
+  Arms golden moves -0.28% Average-Default (-2.85% to +4.13% across rows): its `dps_reck` and `dps_no_reck` APLs
+  fight in Berserker Stance throughout and never cast Spearing Strike now.
+- **Drop it when** upstream gates Spearing Strike by the client's stance mask.
+
+### The rest of the Warrior and Druid notes: nothing to change
+
+Checked against the 70124 to 70170 diff and the engine; tests pin the current behaviour so a later change shows.
+
+- **Faerie Fire no longer resets your swing timer.** The row loses its SpellInterrupts entry (InterruptFlags 8) on
+  770, 778, 9749 and 9907. The engine never moved the swing for Faerie Fire (an instant on the global cooldown;
+  nothing in `sim/druid/faerie_fire.go` or the cast path calls the swing functions), so it already matches.
+  `sim/druid/feralbear/faerie_fire_swing_test.go` and `sim/druid/feralcat/faerie_fire_swing_test.go`.
+- **Queueing Heroic Strike no longer increases off-hand hit chance.** The Warrior engine already lifts the dual wield
+  miss penalty for the queued swing alone (`calcQueuedSwing`), so an off-hand auto against a queued Heroic Strike
+  rolls the same table as without it. `sim/warrior/dps/off_hand_hit_test.go`. The Hunter's Raptor Strike does hold
+  the penalty off for the whole queue (`sim/hunter/raptor_strike.go`, `makeRaptorStrikeQueueSpell`), so a
+  dual-wielding Hunter's off hand still gets the better table while one is queued: left alone, as the note names
+  Heroic Strike only.
+- **Unbridled Rage proc chance.** The talent is Unbridled Wrath, 12322. The build changes the spell-level ProcChance
+  60 to 100 and nothing else; the rank values are the trait curve on its effect (12/24/36/48/60, the tooltip's
+  `$m1%`), which did not change, and the engine rolls the curve (`ProcChanceEffectN`, `registerUnbridledWrath`)
+  and never the row. Read as "the real chance was the row times the curve, now the curve", the engine already
+  rolled the intended chance. Read as a flat 100% at any rank, a 5/5 warrior gains Fury +0.7% / +0.5%, Arms +0.7% /
+  +0.6%, Fury-Protection +0.5% / +0.4%, Protection +0.4% / +0.35% (120 s / 300 s). Not taken.
+  `sim/warrior/unbridled_wrath_test.go`.
+- **Dual Wield Specialization.** The rage half went with upstream #601. The hit half is aura 54 on effect 1, read by aura
+  (`registerDualWieldSpecialization`) and applied as an off-hand-only mod, so the engine has the intended
+  off-hand-only 2/4/6/8/10%, not the both-hands behaviour the build lists as a known issue. Left as the intended
+  behaviour. `TestDualWieldSpecializationHitChanceIsOffHandOnly`.
+- **Rend and Sunder Armor tap enemies instantly.** Attributes_6 0x800000 (TAPS_IMMEDIATELY) on the Rend and Sunder
+  Armor ranks. Tagging has no effect in a sim with one boss.

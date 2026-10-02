@@ -38,7 +38,8 @@ func NewFeralCatDruid(character *core.Character, options *proto.Player) *FeralDr
 		MaxEnergy:      100.0,
 		UnitClass:      proto.Class_ClassDruid,
 	})
-	cat.EnableRageBar(core.RageBarOptions{BaseRageMultiplier: 1})
+	// The Cat never swings in Bear Form unless a custom rotation shifts, but the Rage bonus is the form's.
+	cat.EnableRageBar(core.RageBarOptions{BaseRageMultiplier: 1, CritRageBonus: core.CritAutoAttackRageBonus})
 
 	cat.EnableAutoAttacks(cat, core.AutoAttackOptions{
 		// Base paw weapon.

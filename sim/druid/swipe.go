@@ -6,6 +6,12 @@ import (
 
 var swipeRank = spellData.Swipe.Highest()
 
+// Client 1.60.1.70170: "Fixed a bug causing Swipe to not scale with Attack Power. It will now correctly gain
+// 3% of the Druid's attack power" and "tooltip will not update". The client rows of every Swipe rank (779,
+// 780, 769, 9754, 9908) still carry no BonusCoefficientFromAP, so the share is the patch note's and the
+// engine states it. It is added to each target's base hit before Feral Instinct's and the other damage mods.
+const swipeAttackPowerCoefficient = 0.03
+
 func (druid *Druid) registerSwipeBearSpell() {
 	druid.Swipe = druid.RegisterSpell(Bear, core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: swipeRank.ID},
@@ -35,7 +41,9 @@ func (druid *Druid) registerSwipeBearSpell() {
 			numHits := min(3, len(druid.Env.Encounter.AllTargetUnits))
 			for i := 0; i < numHits; i++ {
 				aoeTarget := druid.Env.Encounter.AllTargetUnits[i]
-				spell.CalcAndDealDamage(sim, aoeTarget, swipeRank.DamageEffect().Average(core.CharacterLevel), spell.OutcomeMeleeWeaponSpecialHitAndCrit)
+				baseDamage := swipeRank.DamageEffect().Average(core.CharacterLevel) +
+					swipeAttackPowerCoefficient*spell.MeleeAttackPower(aoeTarget)
+				spell.CalcAndDealDamage(sim, aoeTarget, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
 			}
 		},
 	})

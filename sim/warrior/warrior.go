@@ -230,6 +230,7 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	warrior.EnableRageBar(core.RageBarOptions{
 		MaxRage:            100 + spellData.BoundlessRage.TenthsAt(warrior.Talents.BoundlessRage),
 		BaseRageMultiplier: 1,
+		CritRageBonus:      core.CritAutoAttackRageBonus,
 		StartingRage:       inputs.StartingRage,
 	})
 
