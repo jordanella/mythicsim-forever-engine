@@ -926,8 +926,8 @@ dps_results: {
 dps_results: {
  key: "TestElemental-AllItems-SearingDagger-273003"
  value: {
-  dps: 122.03198
-  tps: 78.8144
+  dps: 123.73836
+  tps: 79.99912
  }
 }
 dps_results: {

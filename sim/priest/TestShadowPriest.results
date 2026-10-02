@@ -667,8 +667,8 @@ dps_results: {
 dps_results: {
  key: "TestShadowPriest-AllItems-SearingDagger-273003"
  value: {
-  dps: 342.74786
-  tps: 249.43263
+  dps: 343.86905
+  tps: 250.21746
  }
 }
 dps_results: {

@@ -723,8 +723,8 @@ dps_results: {
 dps_results: {
  key: "TestBalance-AllItems-MysticMushroom-249396"
  value: {
-  dps: 176.56661
-  tps: 92.07347
+  dps: 175.03751
+  tps: 91.29143
  }
 }
 dps_results: {
@@ -793,8 +793,8 @@ dps_results: {
 dps_results: {
  key: "TestBalance-AllItems-SearingDagger-273003"
  value: {
-  dps: 173.05508
-  tps: 90.56617
+  dps: 174.55922
+  tps: 91.53931
  }
 }
 dps_results: {

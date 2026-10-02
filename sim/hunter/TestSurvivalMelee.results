@@ -499,8 +499,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvivalMelee-AllItems-EnchantWeapon-Insight-8216"
  value: {
-  dps: 378.03375
-  tps: 238.5935
+  dps: 379.92012
+  tps: 240.1044
  }
 }
 dps_results: {
@@ -913,8 +913,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Plaguefang-279876"
  value: {
-  dps: 468.77189
-  tps: 304.05522
+  dps: 468.06702
+  tps: 303.56181
  }
 }
 dps_results: {
@@ -983,8 +983,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvivalMelee-AllItems-SearingDagger-273003"
  value: {
-  dps: 266.31454
-  tps: 162.8555
+  dps: 266.51793
+  tps: 162.99553
  }
 }
 dps_results: {
