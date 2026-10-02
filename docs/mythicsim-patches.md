@@ -1446,3 +1446,26 @@ Windfury Weapon turns off only Windfury Totem's benefit, a Flametongue Weapon on
 imbue's own hit counted beside; it fails if the exclusive effect is removed.
 
 **Drop it when** upstream models the two weapon texts the same way.
+
+## Upstream sync 2026-10-02, #610 to #612
+
+Merged ElliotWood/Forever `f4b776b4f41d5c7799b8141697a2c9e67c89d426` on top of release `0ebf4100ae`.
+Arcane Power and Arcane Instability now boost Frostfire Bolt's direct hit alone. Nature's Grace
+also shortens the affected spells' global cooldown. The item database includes seven changed
+items and four additions, merged per field while retaining the fork's stat indices and planner armor.
+Only the Balance golden changes, matching upstream's Nature's Grace movement.
+
+## 73. `cli: statweights`
+
+The application worker requests character stat weights through `statweights --strict --infile ...
+--outfile ...`, but the CLI only exposed raid simulations. The missing command caused optional
+weights to fail while the DPS simulation completed. The new command calls the existing
+`core.StatWeights` API with a `StatWeightsRequest` and writes its `StatWeightsResult`. Strict mode
+rejects unknown fields and enum names. Incomplete requests fail before calculation; structured
+engine errors are saved and also return a nonzero exit status.
+
+Tests: `TestStatWeightsCommand` calculates a real Mage spell damage weight and checks positive,
+finite weight and reference EP of one. `TestStatWeightsRequestValidation` checks strict decoding
+and missing fields, iterations and stats.
+
+Drop this adapter when upstream exposes the equivalent CLI command.

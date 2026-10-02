@@ -12,15 +12,21 @@ func (mage *Mage) registerArcanePowerSpell() {
 
 	arcanePowerRank := spellData.ArcanePower.Highest()
 	actionID := core.ActionID{SpellID: arcanePowerRank.ID}
+	damage := arcanePowerRank.Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_DAMAGE)).Average(core.CharacterLevel) / 100
 
 	mage.ArcanePowerAura = mage.RegisterAura(core.Aura{
 		Label:    "Arcane Power",
 		ActionID: actionID,
 		Duration: arcanePowerRank.Duration(),
 	}).AttachSpellMod(core.SpellModConfig{
-		ClassMask:  MageSpellsAll,
-		FloatValue: arcanePowerRank.Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_DAMAGE)).Average(core.CharacterLevel) / 100,
+		ClassMask:  MageSpellsAll &^ MageSpellFrostfireBolt,
+		FloatValue: damage,
 		Kind:       core.SpellMod_DamageDone_Flat,
+	}).AttachSpellMod(core.SpellModConfig{
+		// The SPELLMOD_DOT mask leaves out Frostfire Bolt: its hit takes the bonus, its DoT does not.
+		ClassMask:  MageSpellFrostfireBolt,
+		FloatValue: damage,
+		Kind:       core.SpellMod_DirectDamageDone_Flat,
 	}).AttachSpellMod(core.SpellModConfig{
 		ClassMask:  MageSpellsAll,
 		FloatValue: arcanePowerRank.Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_COST)).Average(core.CharacterLevel) / 100,

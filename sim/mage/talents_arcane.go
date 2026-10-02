@@ -273,10 +273,17 @@ func (mage *Mage) registerArcaneInstability() {
 		return
 	}
 
+	damage := spellData.ArcaneInstability.Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_DAMAGE)).FractionAt(mage.Talents.ArcaneInstability)
 	mage.AddStaticMod(core.SpellModConfig{
-		ClassMask:  MageSpellsAll,
-		FloatValue: spellData.ArcaneInstability.Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_DAMAGE)).FractionAt(mage.Talents.ArcaneInstability),
+		ClassMask:  MageSpellsAll &^ MageSpellFrostfireBolt,
+		FloatValue: damage,
 		Kind:       core.SpellMod_DamageDone_Flat,
+	})
+	// The SPELLMOD_DOT mask leaves out Frostfire Bolt: its hit takes the bonus, its DoT does not.
+	mage.AddStaticMod(core.SpellModConfig{
+		ClassMask:  MageSpellFrostfireBolt,
+		FloatValue: damage,
+		Kind:       core.SpellMod_DirectDamageDone_Flat,
 	})
 	mage.AddStaticMod(core.SpellModConfig{
 		ClassMask:  MageSpellsAll,

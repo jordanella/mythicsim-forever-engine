@@ -9,6 +9,7 @@ import (
 	"github.com/wowsims/forever/sim/common"
 	_ "github.com/wowsims/forever/sim/common"
 	"github.com/wowsims/forever/sim/core"
+	"github.com/wowsims/forever/sim/core/dbcenums"
 	"github.com/wowsims/forever/sim/core/proto"
 	"github.com/wowsims/forever/sim/core/simsignals"
 	"github.com/wowsims/forever/sim/core/stats"
@@ -235,5 +236,42 @@ func TestMasterOfElementsRefundsOncePerCast(t *testing.T) {
 	want := float64(coneOfCold.Cost.BaseCost) * spellData.MasterOfElements.FractionAt(mage.Talents.MasterOfElements)
 	if got := mage.CurrentMana() - before + coneOfCold.CurCast.Cost; math.Abs(got-want) > 0.01 {
 		t.Errorf("Master of Elements refunded %.1f mana off %d crits, want one refund of %.1f", got, totalCrits, want)
+	}
+}
+
+// Arcane Instability (15058) and Arcane Power (12042) name Frostfire Bolt in their SPELLMOD_DAMAGE
+// mask but not their SPELLMOD_DOT one (client 1.60.1.70170): the bolt's hit takes the bonus, its DoT
+// does not.
+func TestArcaneBonusesSkipFrostfireBoltDot(t *testing.T) {
+	sim := core.NewSim(&proto.RaidSimRequest{
+		SimOptions: &proto.SimOptions{RandomSeed: 1},
+		Raid: &proto.Raid{Parties: []*proto.Party{{Buffs: &proto.PartyBuffs{}, Players: []*proto.Player{{
+			Name: "Mage", Class: proto.Class_ClassMage, Race: proto.Race_RaceGnome, TalentsString: ArcaneTalents,
+			Equipment: &proto.EquipmentSpec{}, Buffs: &proto.IndividualBuffs{},
+			Spec:     &proto.Player_Mage{Mage: &proto.Mage{Options: &proto.Mage_Options{ClassOptions: &proto.MageOptions{}}}},
+			Rotation: &proto.APLRotation{Type: proto.APLRotation_TypeAPL},
+		}}}}},
+		Encounter: core.MakeSingleTargetEncounter(0),
+	}, simsignals.CreateSignals())
+	sim.Reset()
+
+	mage := sim.Raid.Parties[0].Players[0].(MageAgent).GetMage()
+	if mage.Talents.ArcaneInstability == 0 || !mage.Talents.ArcanePower {
+		t.Fatal("ArcaneTalents no longer take Arcane Instability and Arcane Power; pick a build that does")
+	}
+	ffb := mage.GetSpell(core.ActionID{SpellID: spellData.FrostfireBolt.Highest().ID})
+	table := mage.AttackTables[mage.CurrentTarget.UnitIndex]
+	gap := func() float64 {
+		return ffb.AttackerDamageMultiplier(table, false) - ffb.AttackerDamageMultiplier(table, true)
+	}
+
+	instability := spellData.ArcaneInstability.Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_DAMAGE)).FractionAt(mage.Talents.ArcaneInstability)
+	if got := gap(); math.Abs(got-instability) > 1e-9 {
+		t.Errorf("Frostfire Bolt hit - DoT multiplier = %.4f, want Arcane Instability's %.4f on the hit alone", got, instability)
+	}
+	mage.ArcanePowerAura.Activate(sim)
+	power := spellData.ArcanePower.Highest().Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_DAMAGE)).Average(core.CharacterLevel) / 100
+	if got := gap(); math.Abs(got-instability-power) > 1e-9 {
+		t.Errorf("with Arcane Power, Frostfire Bolt hit - DoT multiplier = %.4f, want %.4f", got, instability+power)
 	}
 }
