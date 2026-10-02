@@ -907,3 +907,21 @@ took of the patch notes, because for all three the client rows carry nothing the
 - **Default.** Warrior and Bear goldens move up (Average-Default DPS: Fury +6.6%, Arms +7.3%, Protection +0.3%,
   Feral Bear +1.1%); Feral Cat is unchanged.
 - **Drop it when** upstream models the client's Rule of Rage, or measures a different factor.
+
+## 51. Swipe gains 3% of attack power
+
+- **What it does.** `sim/druid/swipe.go` adds `0.03 * attack power` to each target's base Swipe damage, before
+  Feral Instinct's and the other damage mods.
+- **The note.** "Fixed a bug causing Swipe to not scale with Attack Power. It will now correctly gain 3% of the
+  Druid's attack power" and, in the same line, that the tooltip will not update.
+- **What the client says.** Nothing: none of the five Swipe ranks (779, 780, 769, 9754, 9908) has a
+  BonusCoefficientFromAP, and the 70170 rows are unchanged, which is what "tooltip will not update" means. So the
+  coefficient is stated in the engine (`swipeAttackPowerCoefficient`) and not read by row. Only the Bear has
+  Swipe (family 7, stance mask 0x90); the Cat has none, and the Family 9 "Swipe" rows (1264494 to 1264502) are a
+  Hunter pet's.
+- **Tests.** `sim/druid/feralbear/swipe_test.go` casts the same roll at two attack powers and solves for the
+  coefficient, without naming the modifiers: it reads 0.03 and fails on the unpatched source (the hit does not move).
+- **Default.** The default Bear rotation casts no Swipe on one target, so no golden moves. On the reference Bear
+  with a Swipe line before Maul on two or more targets (the preset has none): 2 targets +4.1% / +4.4% DPS
+  (+4.5% / +4.8% TPS), 3 targets +5.0% / +5.4% DPS (+5.3% / +5.6% TPS) at 120 s / 300 s.
+- **Drop it when** the client carries the coefficient (then read it by row).
