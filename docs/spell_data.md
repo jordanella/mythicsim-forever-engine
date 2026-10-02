@@ -961,7 +961,9 @@ Nothing lists which spells to generate. The class files walk `dbc.Classes`, take
 lines and emit a family for every spell whose subtext reads `Rank N`; the store starts from what those
 families name, from the item, enchant and set-bonus tables, and from the talent trees, and closes over
 everything those reach. A family that could not be resolved is named in the `// Not generated:` comment
-at the head of the class file.
+at the head of the class file. The one hand-kept list is `overrides.TalentGrantedAbilities`: a one-rank talent
+node on an ability nothing trains (Shifting Power) is filed on a single-rank ladder through the skill line row that
+grants it, which the generator would otherwise skip as an ability the game teaches under its own ranks.
 
 `assets/db_inputs/spell_store_inputs.json` is the client rows the store was built from, committed
 beside it, and every `SpellShapeshiftForm` row whole alongside them, since a form names no spell for
