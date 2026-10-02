@@ -174,6 +174,12 @@ func TestShippedOverridesAreWellFormed(t *testing.T) {
 		}
 	}
 
+	for _, granted := range overrides.TalentGrantedAbilities {
+		if granted.Reason == "" || granted.Source == "" {
+			t.Errorf("talent-granted ability %d states reason %q and source %q", granted.SpellID, granted.Reason, granted.Source)
+		}
+	}
+
 	for _, link := range overrides.HandTriggers {
 		if link.Reason == "" || link.Source == "" {
 			t.Errorf("the hand trigger %d -> %d states reason %q and source %q",

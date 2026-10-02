@@ -798,6 +798,20 @@ nothing named them.
   caster suites pass unchanged.
 - **Drop it when** upstream guards zero-speed weapons in the swing loop.
 
+## 40. `tools: gen_spelldata files a talent-granted ability on a ladder of its own`
+
+- **What it does.** `discoverTraitLadders` skips a one-rank talent node whose spell is not passive, because such a node
+  usually grants an ability the game teaches (Hemorrhage, Water Shield) and the ability's own ranks are the ladder.
+  Shifting Power is a node on an ability only the talent grants, so it fell through and the Druid file had no ladder
+  for it. `overrides.TalentGrantedAbilities` names spells that are the exception; the generator then takes the skill
+  line row that grants the spell (AcquireMethod 3), as it does for Cat Form, and writes `ShiftingPower:
+  spelldata.Ranked(1322605)`. The list is hand kept so no other class file moves.
+- **Why.** `spellData.ShiftingPower` is how the new spell reads its cost, cooldown and energy off the client row.
+- **Tests.** `TestShippedOverridesAreWellFormed` checks the entry states a reason and a source; the generated file is
+  covered by `gen_spelldata -check` and the store by `TestStoreRegeneratesFromTheCommittedInputs`.
+- **Default.** The only generated change is the one Druid ladder.
+- **Drop it when** upstream's generator files one-rank talent abilities itself.
+
 ## Client 1.60.1.70170 (2 October 2026), interim
 
 The branch `mythicsim/client-70170` merges upstream `696a6c4040` (4 commits: Master of Elements refunds once
