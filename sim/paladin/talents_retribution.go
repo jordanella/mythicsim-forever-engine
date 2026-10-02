@@ -315,8 +315,9 @@ func (paladin *Paladin) applyVengeance() {
 	})
 }
 
-// Champion of the Light - Increases your spell damage and healing by up to 33/66/100% of your
-// Intellect. The healing effect states no rank curve, so both follow the damage ladder.
+// Champion of the Light - Increases your spell damage by up to 20/40/60% of your Intellect. Client
+// 70170 cut it from 100% and dropped the healing effect, as the WoW: Forever Podcast (episode 2)
+// announced: "60% instead of 100, and it doesn't increase healing power anymore".
 func (paladin *Paladin) applyChampionOfTheLight() {
 	if paladin.Talents.ChampionOfTheLight == 0 {
 		return
@@ -324,7 +325,6 @@ func (paladin *Paladin) applyChampionOfTheLight() {
 
 	share := spellData.ChampionOfTheLight.Effect(dbcenums.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, 126).FractionAt(paladin.Talents.ChampionOfTheLight)
 	paladin.AddStatDependency(stats.Intellect, stats.SpellDamage, share)
-	paladin.AddStatDependency(stats.Intellect, stats.HealingPower, share)
 }
 
 // Instrument of Law - Reduces the cast time of your Hammer of Wrath by 0.5/1.0 sec, and reduces all

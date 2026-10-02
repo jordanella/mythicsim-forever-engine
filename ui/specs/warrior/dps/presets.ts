@@ -33,8 +33,8 @@ export const ROTATION_PRESET_NO_RECK = PresetUtils.makePresetAPLRotation('DPS (N
 export const ROTATION_PRESET_RECK = PresetUtils.makePresetAPLRotation('DPS (With Reck)', ForeverReckApl);
 
 // The three builds our Forever sim ships.
-export const DpsTalents = PresetUtils.makePresetTalents('DPS', SavedTalents.create({ talentsString: '30305013-050520035150310051' }));
-export const FuryTalents = PresetUtils.makePresetTalents('Fury 17/34/0', SavedTalents.create({ talentsString: '30305213-550501015050010051' }));
+export const DpsTalents = PresetUtils.makePresetTalents('DPS', SavedTalents.create({ talentsString: '30305013-05553005150010501' }));
+export const FuryTalents = PresetUtils.makePresetTalents('Fury 17/34/0', SavedTalents.create({ talentsString: '30305213-55051105050010501' }));
 export const ArmsTalents = PresetUtils.makePresetTalents('Arms 39/12/0', SavedTalents.create({ talentsString: '32305213132515201-5502' }));
 
 export const DefaultOptions = WarriorOptions.create({

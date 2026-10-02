@@ -73,23 +73,6 @@ func TestCritAutoAttackRageIsOneAndThreeQuartersOfAHit(t *testing.T) {
 	}
 }
 
-// A bar built without the bonus (Cat Form's) pays a crit exactly what a hit pays.
-func TestCritAutoAttackRageBonusIsOptional(t *testing.T) {
-	previous := fakeCritRageBonus
-	fakeCritRageBonus = 0
-	t.Cleanup(func() { fakeCritRageBonus = previous })
-
-	sim := SetupFakeRageSim()
-	fw := sim.Raid.Parties[0].Players[0].(*FakeRageWarrior)
-
-	hit := rageFromAutoAttack(sim, fw, fw.AutoAttacks.MHAuto(), OutcomeHit, 500)
-	fw.ResetRageBar(sim, 0)
-	crit := rageFromAutoAttack(sim, fw, fw.AutoAttacks.MHAuto(), OutcomeCrit, 1000)
-	if !WithinToleranceFloat64(8.996, hit, 0.0005) || !WithinToleranceFloat64(8.996, crit, 0.0005) {
-		t.Fatalf("without the bonus a hit paid %0.4f and a crit %0.4f Rage, want 8.996 for both", hit, crit)
-	}
-}
-
 // Rage from a hit taken is a separate rule, and a critical hit taken pays by the damage it dealt like
 // any other: 1000 damage on 10000 maximum health is 1000 * 10 / 10000 = 1 Rage.
 func TestCritBonusLeavesDamageTakenRageAlone(t *testing.T) {

@@ -1,5 +1,53 @@
 [
 	{
+		"number": 609,
+		"title": "rage: critical auto attacks pay 75% more; Champion of the Light no longer adds healing",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/609"
+	},
+	{
+		"number": 608,
+		"title": "[DB] Update to 1.60.1.70170 with hotfixes as of 2026-10-02",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/608"
+	},
+	{
+		"number": 607,
+		"title": "Eureka! adds 10% to the hit, not the DoT, of Immolate/Fireball/Holy Fire",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/607"
+	},
+	{
+		"number": 606,
+		"title": "Talent trees for client 70170 + hotfixes: Shifting Power, Furious Precision, Heating Up",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/606"
+	},
+	{
+		"number": 605,
+		"title": "Hellfire's area hits crit where the Hellfire Effect row allows (client 70170)",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/605"
+	},
+	{
+		"number": 604,
+		"title": "Forever client build 1.60.1.70170",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/604"
+	},
+	{
+		"number": 603,
+		"title": "Wowhead Forever data changed (2026-10-02)",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/603"
+	},
+	{
+		"number": 602,
+		"title": "Gnome Eureka! only affects the spells the client names (non-periodic since 70170)",
+		"mergedAt": "2026-10-02",
+		"url": "https://github.com/ElliotWood/Forever/pull/602"
+	},
+	{
 		"number": 601,
 		"title": "Warrior Dual Wield Specialization no longer raises off-hand rage (client 70170)",
 		"mergedAt": "2026-10-01",

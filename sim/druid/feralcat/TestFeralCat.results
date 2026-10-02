@@ -764,13 +764,6 @@ dps_results: {
  }
 }
 dps_results: {
- key: "TestFeralCat-AllItems-MysticMushroom-249396"
- value: {
-  dps: 258.64728
-  tps: 147.47234
- }
-}
-dps_results: {
  key: "TestFeralCat-AllItems-Naglering-11669"
  value: {
   dps: 258.64728
@@ -837,7 +830,7 @@ dps_results: {
  key: "TestFeralCat-AllItems-SearingDagger-273003"
  value: {
   dps: 277.66435
-  tps: 156.97441
+  tps: 156.94641
  }
 }
 dps_results: {

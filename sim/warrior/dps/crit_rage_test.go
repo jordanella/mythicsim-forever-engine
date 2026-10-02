@@ -55,7 +55,8 @@ func TestCritAutoAttackGivesAWarriorOneAndThreeQuartersTheRage(t *testing.T) {
 		wantHit float64
 	}{
 		{"main hand", war.AutoAttacks.MHAuto(), core.BaseRageHitFactor * mhSpeed},
-		{"off hand", war.AutoAttacks.OHAuto(), core.BaseRageHitFactor * ohSpeed / 2},
+		// Dual Wield Specialization 5/5 pays the off hand 10% a rank more Rage since the 70170 hotfixes.
+		{"off hand", war.AutoAttacks.OHAuto(), core.BaseRageHitFactor * ohSpeed / 2 * 1.5},
 	} {
 		hit := rageFromSwing(sim, war, tc.spell, core.OutcomeHit, 1000)
 		crit := rageFromSwing(sim, war, tc.spell, core.OutcomeCrit, 2000)

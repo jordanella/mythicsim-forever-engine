@@ -185,9 +185,9 @@
 	"23894": {
 		"ability": "Bloodthirst",
 		"file": "sim/warrior/talents_fury.go",
-		"note": "Client 1.60.1.70009: rank 4 deals 48 plus 35% of attack power and grants 10% movement speed for 10 sec, for 30 Rage on a 6 sec cooldown. Classic is a flat 45% of attack power with a five stack heal. The talent tooltip's 30 is rank 1 (23881).",
+		"note": "Client 1.60.1.70009: rank 4 deals 48 plus 45% of attack power (35% before the 70170 hotfixes) and grants 10% movement speed for 10 sec, for 30 Rage on a 6 sec cooldown. Classic is a flat 45% of attack power with a five stack heal. The talent tooltip's 30 is rank 1 (23881).",
 		"source": "forever",
-		"tooltip": "30 Rage\nMelee Range\nInstant\n6 sec cooldown\nInstantly attack the target causing damage equal to 35% of your Attack Power plus 48 and increasing your movement speed by 10% for 10 sec."
+		"tooltip": "30 Rage\nMelee Range\nInstant\n6 sec cooldown\nInstantly attack the target causing damage equal to 45% of your Attack Power plus 48 and increasing your movement speed by 10% for 10 sec."
 	},
 	"23925": {
 		"ability": "Shield Slam",

@@ -87,7 +87,7 @@ func RegisterAllProcs() {
 	//	{ItemID: 263435, ItemName: "Mark of Urs'endris"},
 	// })
 
-	// After entering combat, reduce the next instance of physical damage taken within 20s by 15.
+	// After entering combat, reduce the next instance of Physical damage taken within 20s by 15.
 	// https://www.wowhead.com/forever/spell=1291908
 	// equip: 1291908 (A_MOD_DAMAGE_TAKEN)
 	shared.NewSpellDataEquipAura(shared.SpellDataProc{TriggerSpellID: 1291908},
@@ -119,7 +119,7 @@ func RegisterAllProcs() {
 			{ItemID: 11810, ItemName: "Force of Will"},
 		})
 
-	// After entering combat, reduce the next instance of physical damage taken within 20s by 60.
+	// After entering combat, reduce the next instance of Physical damage taken within 20s by 60.
 	// https://www.wowhead.com/forever/spell=1298231
 	// equip: 1298231 (A_MOD_DAMAGE_TAKEN)
 	shared.NewSpellDataEquipAura(shared.SpellDataProc{TriggerSpellID: 1298231},
@@ -157,14 +157,6 @@ func RegisterAllProcs() {
 	shared.NewSpellDataEquipAura(shared.SpellDataProc{TriggerSpellID: 27206},
 		[]shared.ItemVariant{
 			{ItemID: 226881, ItemName: "Beastmaster's Treads"},
-		})
-
-	// Increases Spirit by 5%.
-	// https://www.wowhead.com/forever/spell=1248751
-	// equip: 1248751 (A_MOD_PERCENT_STAT)
-	shared.NewSpellDataEquipAura(shared.SpellDataProc{TriggerSpellID: 1248751},
-		[]shared.ItemVariant{
-			{ItemID: 249396, ItemName: "Mystic Mushroom"},
 		})
 
 	// Procs
@@ -377,7 +369,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Sends a shadowy bolt at the enemy causing 100 Shadow damage.
+	// Sends a shadowy bolt at the enemy, causing 100 Shadow damage.
 	// https://www.wowhead.com/forever/spell=1312438
 	// unsupported: states no rate
 	// trigger 1312438 (0%, core.CallbackEmpty, core.ProcMaskUnknown)
@@ -511,7 +503,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Movement speed Increased by 2% in Elwynn Forest, Westfall, Redridge Mountains, and the Deadmines.
+	// Movement speed increased by 2% in Elwynn Forest, Westfall, Redridge Mountains, and the Deadmines.
 	// https://www.wowhead.com/forever/spell=1292011
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -755,7 +747,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Dying inflicts 420 Holy damage to all enemies within 15 yards.
+	// Dying inflicts 420 Holy damage to all enemies within 15 yds.
 	// https://www.wowhead.com/forever/spell=1292746
 	// unsupported: ProcTypeMask DEATH; no callback in the proc mask
 	// trigger 1292749 (every time, core.CallbackEmpty, core.ProcMaskUnknown) -> buff 1292746
@@ -923,6 +915,21 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
+	// Increases your Cooking speed by 25%.
+	// https://www.wowhead.com/forever/spell=1322312
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskUnknown,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 5198, ItemName: "Cookie's Stirring Rod"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
 	// Reduces the crafting time of Smelt Copper, Smelt Tin, Smelt Bronze, and Smelt Silver by 25%.
 	// https://www.wowhead.com/forever/spell=1291915
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -1035,7 +1042,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Movement speed Increased by 2% in Tirisfal Glades, Silverpine Forest, and Shadowfang Keep.
+	// Increases movement speed by 2% in Tirisfal Glades, Silverpine Forest, and Shadowfang Keep.
 	// https://www.wowhead.com/forever/spell=1292121
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -1050,7 +1057,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Cause party members within 30 yards to regenerate 4 health every 5 sec.
+	// Cause party members within 30 yds to regenerate 4 health every 5 sec.
 	// https://www.wowhead.com/forever/spell=1292142
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -1078,7 +1085,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When struck in combat inflicts 1 Nature damage to the attacker.
+	// When struck in combat, inflicts 1 Nature damage to the attacker.
 	// https://www.wowhead.com/forever/spell=1291698
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -1120,7 +1127,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Movement speed Increased by 3% in The Barrens, Thousand Needles, Razorfen Kraul, and Razorfen Downs.
+	// Increases movement speed by 3% in The Barrens, Thousand Needles, Razorfen Kraul, and Razorfen Downs.
 	// https://www.wowhead.com/forever/spell=1293199
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -1178,14 +1185,28 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Deal 42 Fire and 14 Frost damage, slow the target by 50% for 5s, reduce armor by 50, and deal 7 Nature
-	// damage every 3.0 sec for 12s.
+	// Inflict 42 Fire and 14 Frost damage, slow the target by 50% for 5s, reduce armor by 50, and inflict 7
+	// Nature damage every 3.0 sec for 12s.
 	// https://www.wowhead.com/forever/spell=1292657
 	// unsupported: states no rate
 	// trigger 1292657 (every time, core.CallbackEmpty, core.ProcMaskUnknown)
 	// shared.NewSpellDataDebuffProc(shared.SpellDataProc{TriggerSpellID: 1292657, IsWeaponProc: true},
 	//	[]shared.ItemVariant{
 	//	{ItemID: 6909, ItemName: "Strike of the Hydra"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Ignite the target in the flames of the Great Forge, dealing 49 Holyfire damage. Deals 3 times as much
+	// damage to Fire Elementals and Earth Elementals.
+	// https://www.wowhead.com/forever/spell=1322218
+	// unsupported: states no rate
+	// trigger 1322218 (0%, core.CallbackEmpty, core.ProcMaskUnknown)
+	// shared.NewSpellDataDamageProc(shared.SpellDataProc{TriggerSpellID: 1322218, BuffSpellID: 1322218, IsWeaponProc: true},
+	//	[]shared.ItemVariant{
+	//	{ItemID: 6953, ItemName: "Verigan's Fist"},
 	// })
 
 	// TODO: Manual implementation required
@@ -1239,7 +1260,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Discipline the target, dealing 91 Physical damage. Canines and Hyena are Stunned and sit for 3s.
+	// Discipline the target, dealing 91 Physical damage. Canines and Hyenas are Stunned and sit for 3s.
 	// https://www.wowhead.com/forever/spell=1293482
 	// unsupported: states no rate
 	// trigger 1293482 (0%, core.CallbackEmpty, core.ProcMaskUnknown)
@@ -1311,7 +1332,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Silences an enemy preventing it from casting spells for 6s.
+	// Silences an enemy, preventing it from casting spells for 6s.
 	// https://www.wowhead.com/forever/spell=1293654
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -1550,7 +1571,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increased Feral Combat +1.
+	// Increases Feral Combat +1.
 	// https://www.wowhead.com/forever/spell=1320726
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -1678,7 +1699,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Punctures target's armor lowering it by 100.
+	// Punctures target's armor, lowering it by 100.
 	// https://www.wowhead.com/forever/spell=1293005
 	// unsupported: states no rate
 	// trigger 1293005 (0%, core.CallbackEmpty, core.ProcMaskUnknown)
@@ -1733,7 +1754,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Deal 294 Physical damage and stun for 1s. Trolls take 2 times damage and stun duration.
+	// Deal 294 Physical damage and stun for 1s. Trolls take 2 times as much damage and stun duration.
 	// https://www.wowhead.com/forever/spell=1294339
 	// unsupported: states no rate
 	// trigger 1294339 (0%, core.CallbackEmpty, core.ProcMaskUnknown)
@@ -1774,7 +1795,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Punctures target's armor lowering it by 100.
+	// Punctures target's armor, lowering it by 100.
 	// https://www.wowhead.com/forever/spell=1293005
 	// unsupported: states no rate
 	// trigger 1293005 (0%, core.CallbackEmpty, core.ProcMaskUnknown)
@@ -1855,7 +1876,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Underwater breath lasts 100% longer than normal.
+	// Water breathing lasts 100% longer than normal.
 	// https://www.wowhead.com/forever/spell=1320643
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -2032,7 +2053,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Steals 21 life from target enemy. Deals 3 times as much damage to Undead.
+	// Steals 21 life from the target enemy. Deals 3 times as much damage to Undead.
 	// https://www.wowhead.com/forever/spell=1299869
 	// unsupported: states no rate
 	// trigger 1299869 (every time, core.CallbackEmpty, core.ProcMaskUnknown)
@@ -2045,7 +2066,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Harmful spell casts have a chance to steal 112 life from target enemy over 8s.
+	// Harmful spell casts have a chance to steal 112 life from the target enemy over 8s.
 	// https://www.wowhead.com/forever/spell=1299943
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -2153,7 +2174,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Deal 109 Physical damage. Trolls and Orcs take 2 times damage and are horrified for 4s.
+	// Deal 109 Physical damage. Trolls and Orcs take 2 times as much damage and are horrified for 4s.
 	// https://www.wowhead.com/forever/spell=1300783
 	// unsupported: states no rate
 	// trigger 1300783 (0%, core.CallbackEmpty, core.ProcMaskUnknown)
@@ -2205,7 +2226,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Dying heals all party members within 40 yards for 1176.
+	// Dying heals all party members within 40 yds for 1176.
 	// https://www.wowhead.com/forever/spell=1300891
 	// unsupported: ProcTypeMask DEATH; no callback in the proc mask; the heal lands on implicit target 22, not the wearer
 	// trigger 1300890 (every time, core.CallbackEmpty, core.ProcMaskUnknown) -> buff 1300891
@@ -2923,7 +2944,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Wounds the target causing them to bleed for 140 damage over 14s.
+	// Wounds the target, causing them to bleed for 140 damage over 14s.
 	// https://www.wowhead.com/forever/spell=1320824
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -2961,14 +2982,14 @@ func RegisterAllProcs() {
 	//	Outcome:            core.OutcomeEmpty,
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
-	//	{ItemID: 13503, ItemName: "Alchemists' Stone"},
+	//	{ItemID: 13503, ItemName: "Alchemist's Stone"},
 	// })
 
 	// TODO: Manual implementation required
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Silences an enemy preventing it from casting spells for 6s.
+	// Silences an enemy, preventing it from casting spells for 6s.
 	// https://www.wowhead.com/forever/spell=1293654
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -3456,7 +3477,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Sends a shadowy bolt at the enemy causing 140 Shadow damage.
+	// Sends a shadowy bolt at the enemy, causing 140 Shadow damage.
 	// https://www.wowhead.com/forever/spell=1305398
 	// unsupported: states no rate
 	// trigger 1305398 (0%, core.CallbackEmpty, core.ProcMaskUnknown)
@@ -4021,7 +4042,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases the chance your Pick Pocket and Distract abilities are successful by 2%
+	// Increases the chance your Pick Pocket and Distract abilities are successful by 2%.
 	// https://www.wowhead.com/forever/spell=1302345
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -4682,7 +4703,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When struck in combat inflicts 3 Physical damage to the attacker.
+	// When struck in combat, inflicts 3 Physical damage to the attacker.
 	// https://www.wowhead.com/forever/spell=1300680
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -7336,6 +7357,21 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
+	// Increases Spirit by 5%.
+	// https://www.wowhead.com/forever/spell=1248751
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskUnknown,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 249396, ItemName: "Mystic Mushroom"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
 	// Allows 8% of your Mana regeneration to continue while casting.
 	// https://www.wowhead.com/forever/spell=1248756
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
@@ -7395,7 +7431,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Movement speed increased by 2% in Silverpine Forest and Hillsbrad Foothills.
+	// Increases movement speed by 2% in Silverpine Forest and Hillsbrad Foothills.
 	// https://www.wowhead.com/forever/spell=1309369
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -7410,7 +7446,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Movement speed increased by 2% in Silverpine Forest and Hillsbrad Foothills.
+	// Increases movement speed by 2% in Silverpine Forest and Hillsbrad Foothills.
 	// https://www.wowhead.com/forever/spell=1309369
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -7445,6 +7481,36 @@ func RegisterAllProcs() {
 	// shared.NewSpellDataDamageProc(shared.SpellDataProc{TriggerSpellID: 1318159, BuffSpellID: 1265634},
 	//	[]shared.ItemVariant{
 	//	{ItemID: 260205, ItemName: "Highborne Research Tablet"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Reduces the mana cost of shapeshifting spells by 40.
+	// https://www.wowhead.com/forever/spell=1270470
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskUnknown,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 263411, ItemName: "Idol of Shifting Tides"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Reduces the mana cost of Flame Shock and Lightning Bolt by 5 Mana.
+	// https://www.wowhead.com/forever/spell=1270478
+	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
+	//	Callback:           core.CallbackEmpty,
+	//	ProcMask:           core.ProcMaskUnknown,
+	//	Outcome:            core.OutcomeEmpty,
+	//	RequireDamageDealt: false
+	// }, []shared.ItemVariant{
+	//	{ItemID: 263412, ItemName: "Totem of Charged Flames"},
 	// })
 
 	// TODO: Manual implementation required
@@ -7507,7 +7573,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Reduces the cooldown of your Tiger's Fury ability by 3 sec.
+	// Reduces the cooldown of your Shifting Power ability by 1 sec.
 	// https://www.wowhead.com/forever/spell=1291059
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -7537,8 +7603,8 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Each of your heal over time effects on the target reduces Swiftmend's cooldown by 1 sec when you cast
-	// it.
+	// Each of your heal over time effects on the target reduces the remaining cooldown on Swiftmend by 1 sec
+	// when you cast it.
 	// https://www.wowhead.com/forever/spell=1291075
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -8228,7 +8294,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Movement speed increased by 2% in Duskwood.
+	// Increases movement speed by 2% in Duskwood.
 	// https://www.wowhead.com/forever/spell=1292575
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -8271,7 +8337,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When struck in combat inflicts 2 Nature damage to the attacker.
+	// When struck in combat, inflicts 2 Nature damage to the attacker.
 	// https://www.wowhead.com/forever/spell=1292670
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -8494,7 +8560,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Disease target for 25 Nature damage every 1.0 sec for 7s. Deals 2 times as much damage to Aquatic enemies.
+	// Diseases target for 25 Nature damage every 1.0 sec for 7s. Deals 2 times as much damage to Aquatic enemies.
 	// https://www.wowhead.com/forever/spell=1295744
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -8535,7 +8601,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Chance on harmful spell cast to reduce target enemy's attack power by 60 for 30s.
+	// Chance on harmful spell cast to reduce target's attack power by 60 for 30s.
 	//
 	// https://www.wowhead.com/forever/spell=1297082
 	// unsupported: states no rate
@@ -8549,7 +8615,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Heals wielder of 182 damage over 14s.
+	// Heals the wielder for 182 damage over 14s.
 	// https://www.wowhead.com/forever/spell=1297357
 	// unsupported: states no rate
 	// trigger 1297357 (0%, core.CallbackEmpty, core.ProcMaskUnknown)
@@ -8577,7 +8643,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When struck in combat inflicts 3 Nature damage to the attacker.
+	// When struck in combat, inflicts 3 Nature damage to the attacker.
 	// https://www.wowhead.com/forever/spell=1297378
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -8592,7 +8658,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When struck in combat inflicts 3 Nature damage to the attacker.
+	// When struck in combat, inflicts 3 Nature damage to the attacker.
 	// https://www.wowhead.com/forever/spell=1297910
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -8651,7 +8717,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Increases the critical strike chance of your Lessing Healing Wave spell by 4%.
+	// Increases the critical strike chance of your Lesser Healing Wave spell by 4%.
 	// https://www.wowhead.com/forever/spell=1306448
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -8666,7 +8732,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Reduces the cooldown on your Swiftmend spell by 3 sec.
+	// Reduces the cooldown of your Swiftmend spell by 3 sec.
 	// https://www.wowhead.com/forever/spell=1306488
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -8690,6 +8756,19 @@ func RegisterAllProcs() {
 	//	RequireDamageDealt: false
 	// }, []shared.ItemVariant{
 	//	{ItemID: 279251, ItemName: "Idol of the Ursine Twins"},
+	// })
+
+	// TODO: Manual implementation required
+	//       This can be ignored if the effect has already been implemented.
+	//       With next db run the item will be removed if implemented.
+	//
+	// Blasts a target for 42 Fire damage.
+	// https://www.wowhead.com/forever/spell=1322295
+	// unsupported: states no rate
+	// trigger 1322295 (0%, core.CallbackEmpty, core.ProcMaskUnknown)
+	// shared.NewSpellDataDamageProc(shared.SpellDataProc{TriggerSpellID: 1322295, BuffSpellID: 1322295, IsWeaponProc: true},
+	//	[]shared.ItemVariant{
+	//	{ItemID: 279895, ItemName: "Ironforge Greathammer"},
 	// })
 
 	// TODO: Manual implementation required
@@ -8754,7 +8833,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// When struck in combat inflicts 2 Fire damage to the attacker.
+	// When struck in combat, inflicts 2 Fire damage to the attacker.
 	// https://www.wowhead.com/forever/spell=1312955
 	// shared.NewProcStatBonusEffectWithVariants(shared.ProcStatBonusEffect{
 	//	Callback:           core.CallbackEmpty,
@@ -8825,7 +8904,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Reduces target enemy's attack power by 60 for 30s.
+	// Reduces the target enemy's attack power by 60 for 30s.
 	// https://www.wowhead.com/forever/spell=1315767
 	// unsupported: states no rate
 	// trigger 1315767 (0%, core.CallbackEmpty, core.ProcMaskUnknown)
@@ -8838,7 +8917,7 @@ func RegisterAllProcs() {
 	//       This can be ignored if the effect has already been implemented.
 	//       With next db run the item will be removed if implemented.
 	//
-	// Sear your target's flesh dealing 84 Fire damage.
+	// Sear your target's flesh, dealing 84 Fire damage.
 	// https://www.wowhead.com/forever/spell=1316039
 	// unsupported: states no rate
 	// trigger 1316039 (0%, core.CallbackEmpty, core.ProcMaskUnknown)
@@ -9139,7 +9218,7 @@ func RegisterAllProcs() {
 			{ItemID: 272838, ItemName: "Premier Grand Marshal's Aegis"},
 		})
 
-	// Harmful spell casts sear the target for 3 Fire damage.
+	// Harmful spell casts sear the target for 7 Fire damage.
 	// https://www.wowhead.com/forever/spell=1291570
 	// trigger 1291568 (every time, core.CallbackOnCastComplete, core.ProcMaskSpellDamage) -> buff 1291570
 	shared.NewSpellDataDamageProc(shared.SpellDataProc{TriggerSpellID: 1291568, BuffSpellID: 1291570},
@@ -9172,7 +9251,7 @@ func RegisterAllProcs() {
 			{ItemID: 274290, ItemName: "Painwalker Buckler"},
 		})
 
-	// Melee attacks deal 98 Fire additional damage against Frozen targets.
+	// Melee attacks deal 98 additional Fire damage against Frozen targets.
 	// https://www.wowhead.com/forever/spell=1300130
 	// trigger 1300128 (every time, core.CallbackOnSpellHitDealt, core.ProcMaskMeleeMHAuto | core.ProcMaskMeleeOHAuto) -> buff 1300130
 	shared.NewSpellDataDamageProc(shared.SpellDataProc{TriggerSpellID: 1300128, BuffSpellID: 1300130},

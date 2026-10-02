@@ -27,10 +27,6 @@ const (
 	fakeOHSwingSpeed = 1.8
 )
 
-// The crit bonus the fake warrior's bar is built with. Warrior and Bear Form use CritAutoAttackRageBonus;
-// a test that needs a bar without it (Cat Form) sets this to 0 before SetupFakeRageSim.
-var fakeCritRageBonus = CritAutoAttackRageBonus
-
 type FakeRageWarrior struct {
 	Character
 }
@@ -54,7 +50,6 @@ func NewFakeRageWarrior(char *Character, _ *proto.Player, _ *proto.Raid) Agent {
 	fw.EnableRageBar(RageBarOptions{
 		MaxRage:            100,
 		BaseRageMultiplier: 1,
-		CritRageBonus:      fakeCritRageBonus,
 		StartingRage:       0,
 	})
 

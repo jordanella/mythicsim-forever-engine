@@ -11,7 +11,7 @@
       "masterApl": "ui/balance_druid/apls/launch",                "nextApl": "ui/specs/druid/balance/apls/launch",
       "gear": "ui/specs/druid/balance/gear_sets/p0.bis" },
     { "name": "feral_druid",         "race": "RaceTauren",   "profile": "melee", "mh": 15267,
-      "talents": "-55210032020132012051-05503",
+      "talents": "-55210032021132212051-05503",
       "masterApl": "ui/feral_druid/apls/feral",                   "nextApl": "ui/specs/druid/feralcat/apls/default",
       "gear": "ui/specs/druid/feralcat/gear_sets/p0.bis" },
     { "name": "feral_tank_druid",    "race": "RaceTauren",   "profile": "melee", "mh": 15267, "tank": true,
@@ -59,11 +59,11 @@
       "masterApl": "ui/warlock/apls/forever_affliction",          "nextApl": "ui/specs/warlock/dps/apls/affliction",
       "gear": "ui/specs/warlock/dps/gear_sets/prebis" },
     { "name": "warrior",             "race": "RaceOrc",      "profile": "melee", "mh": 15256,
-      "talents": "30305213-550501015050010051",
+      "talents": "30305213-55051105050010501",
       "masterApl": "ui/warrior/apls/dps_reck",                    "nextApl": "ui/specs/warrior/dps/apls/dps_reck",
       "gear": "ui/specs/warrior/dps/gear_sets/p0.bis" },
     { "name": "tank_warrior",        "race": "RaceOrc",      "profile": "melee", "mh": 15256, "tank": true,
-      "talents": "1--552531233331212531",
+      "talents": "1--255533123331221351",
       "masterApl": "ui/tank_warrior/apls/protection",             "nextApl": "ui/specs/warrior/protection/apls/protection",
       "gear": "ui/specs/warrior/protection/gear_sets/launch" }
   ]

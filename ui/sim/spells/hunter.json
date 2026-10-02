@@ -90,7 +90,7 @@
 	"1310786": {
 		"ability": "Sniper Shot",
 		"file": "sim/hunter/sniper_shot.go",
-		"note": "Client 70009: talent spell rank 3 (level 58), the only rank the sim casts. #311 dropped the 0.5 sec shot wind-up the sim added to the 4 sec cast. Client 70170 adds the range bonus on the next 3 Shots, which the sim does not model.",
+		"note": "Client 70009: talent spell rank 3 (level 58), the only rank the sim casts. #311 dropped the 0.5 sec shot wind-up the sim added to the 4 sec cast. The 70170 hotfixes widened it to 45 yd and made it lengthen the next 3 shots' range.",
 		"source": "forever",
 		"tooltip": "365 Mana\n8-45 yd range\n4 sec cast\n15 sec cooldown\nA long-range shot that deals ranged damage plus 295 and increases the range of your next 3 Shots by 10 yards for 10 sec."
 	},

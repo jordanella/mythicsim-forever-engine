@@ -6,8 +6,8 @@ import (
 	"github.com/wowsims/forever/sim/core"
 )
 
-// The reference Fury build: Dual Wield Specialization 5/5.
-const dualWieldSpecTalents = "20315003-250500035151310051"
+// A Fury build with Dual Wield Specialization 5/5 and no Furious Precision.
+const dualWieldSpecTalents = "20315003-25050005151010501"
 
 // Client 1.60.1.70170: "Queueing Heroic Strike will no longer increase off-hand hit chance". The sim never
 // did: Heroic Strike's own swing rolls on the special attack table, but the flag that drops the dual wield
@@ -42,17 +42,21 @@ func TestQueuedHeroicStrikeDoesNotRaiseOffHandHitChance(t *testing.T) {
 	}
 }
 
-// Dual Wield Specialization's hit chance (spell 23584, curve 2/4/6/8/10) is the off-hand's alone. The
-// 70170 client lists it as a known issue that the aura currently reaches both hands; the sim applies the
-// intended off-hand-only bonus, so the two hands differ by exactly the talent's 10% at 5/5.
-func TestDualWieldSpecializationHitChanceIsOffHandOnly(t *testing.T) {
-	sim, war := newRageWarrior(t, DualWieldGear.GearSet, dualWieldSpecTalents)
-	table := war.AttackTables[sim.Encounter.ActiveTargetUnits[0].UnitIndex]
+// The 70170 hotfixes moved Dual Wield Specialization's off-hand hit chance to Furious Precision (spell
+// 1323963, 4/7/10 at 1/2/3 ranks): it is the off hand's alone, so the two hands differ by exactly the
+// talent's 10% at 3/3, and Dual Wield Specialization on its own no longer separates them. The bonus is read
+// off the spells, because PhysicalHitChance clamps a hand's chance at zero (the target's hit suppression).
+func TestFuriousPrecisionHitChanceIsOffHandOnly(t *testing.T) {
+	handsDiffer := func(talents string) float64 {
+		_, war := newRageWarrior(t, DualWieldGear.GearSet, talents)
+		return war.AutoAttacks.OHAuto().BonusHitPercent - war.AutoAttacks.MHAuto().BonusHitPercent
+	}
 
-	mainHit := war.AutoAttacks.MHAuto().PhysicalHitChance(table)
-	offHit := war.AutoAttacks.OHAuto().PhysicalHitChance(table)
-
-	if !core.WithinToleranceFloat64(0.10, offHit-mainHit, 0.000001) {
-		t.Errorf("off hand hit chance %v against main hand %v: the difference is %v, want 0.10", offHit, mainHit, offHit-mainHit)
+	// DpsTalents spends Furious Precision 3/3 beside Dual Wield Specialization 5/5.
+	if got := handsDiffer(DpsTalents); !core.WithinToleranceFloat64(10, got, 0.000001) {
+		t.Errorf("with Furious Precision 3/3 the hands differ by %v hit percent, want 10", got)
+	}
+	if got := handsDiffer(dualWieldSpecTalents); got != 0 {
+		t.Errorf("Dual Wield Specialization alone separates the hands by %v hit percent, want 0", got)
 	}
 }

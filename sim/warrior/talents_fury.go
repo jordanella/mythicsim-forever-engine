@@ -15,14 +15,13 @@ func (warrior *Warrior) registerFuryTalents() {
 	warrior.registerCruelty()
 
 	// Tier 2
-	warrior.registerIronWill()
+	// Lingering Rage (1323964) delays out-of-combat Rage decay, which the sim does not model.
 	warrior.registerUnbridledWrath()
 
 	// Tier 3
-	warrior.registerImprovedCleave()
+	warrior.registerFuriousPrecision()
 	warrior.registerPiercingHowl()
 	warrior.registerBloodCraze()
-	// Boundless Rage: warrior.go, when it enables the rage bar
 
 	// Tier 4
 	warrior.registerDualWieldSpecialization()
@@ -31,13 +30,13 @@ func (warrior *Warrior) registerFuryTalents() {
 	warrior.registerImprovedExecute()
 
 	// Tier 5
-	warrior.registerPrecision()
+	// Improved Berserker Rage: berserker_rage.go
 	warrior.registerDeathWish()
 	warrior.registerImprovedIntercept()
 
 	// Tier 6
-	// Improved Berserker Rage: berserker_rage.go
 	warrior.registerFlurry()
+	// Gore Drinker (1323967) heals on melee attacks after an Enrage, which the sim does not model.
 
 	// Tier 7
 	warrior.registerBloodthirst()
@@ -87,19 +86,9 @@ func (warrior *Warrior) registerDualWieldSpecialization() {
 		FloatValue: spellData.DualWieldSpecialization.Effect(dbcenums.A_MOD_OFFHAND_DAMAGE_PCT, 0).FractionAt(warrior.Talents.DualWieldSpecialization),
 	})
 
-	warrior.AddStaticMod(core.SpellModConfig{
-		ProcMask:   core.ProcMaskMeleeOH,
-		Kind:       core.SpellMod_BonusHit_Percent,
-		FloatValue: spellData.DualWieldSpecialization.Effect(dbcenums.A_MOD_HIT_CHANCE, 0).ValueAt(warrior.Talents.DualWieldSpecialization),
-	})
-}
-
-func (warrior *Warrior) registerIronWill() {
-	if warrior.Talents.IronWill == 0 {
-		return
-	}
-	warrior.PseudoStats.FearDurationMultiplier = spellData.IronWill.Effect(dbcenums.A_MECHANIC_DURATION_MOD, 1).MultiplierAt(warrior.Talents.IronWill)
-	warrior.PseudoStats.StunDurationMultiplier = spellData.IronWill.Effect(dbcenums.A_MECHANIC_DURATION_MOD, 12).MultiplierAt(warrior.Talents.IronWill)
+	// The 70170 hotfixes moved the off-hand hit chance to Furious Precision and brought the off-hand
+	// Rage bonus back as a dummy effect, 10% a rank.
+	warrior.SetOffHandRageMultiplier(spellData.DualWieldSpecialization.Effect(dbcenums.A_DUMMY, 0).MultiplierAt(warrior.Talents.DualWieldSpecialization))
 }
 
 func (warrior *Warrior) registerImprovedExecute() {
@@ -189,13 +178,17 @@ func (warrior *Warrior) registerFlurry() {
 	})
 }
 
-func (warrior *Warrior) registerPrecision() {
-	if warrior.Talents.Precision == 0 {
+// Furious Precision: off-hand hit chance, in the same shape as Dual Wield Specialization's.
+func (warrior *Warrior) registerFuriousPrecision() {
+	if warrior.Talents.FuriousPrecision == 0 {
 		return
 	}
 
-	warrior.AddStat(stats.PhysicalHitPercent, spellData.Precision.Effect(dbcenums.A_MOD_HIT_CHANCE, 0).ValueAt(warrior.Talents.Precision))
-	warrior.AddStat(stats.SpellHitPercent, spellData.Precision.Effect(dbcenums.A_MOD_SPELL_HIT_CHANCE, 0).ValueAt(warrior.Talents.Precision))
+	warrior.AddStaticMod(core.SpellModConfig{
+		ProcMask:   core.ProcMaskMeleeOH,
+		Kind:       core.SpellMod_BonusHit_Percent,
+		FloatValue: spellData.FuriousPrecision.Effect(dbcenums.A_MOD_HIT_CHANCE, 0).ValueAt(warrior.Talents.FuriousPrecision),
+	})
 }
 
 func (warrior *Warrior) registerBloodthirst() {
@@ -408,16 +401,5 @@ func (warrior *Warrior) registerImprovedIntercept() {
 		ClassMask: SpellMaskIntercept,
 		Kind:      core.SpellMod_Cooldown_Flat,
 		TimeValue: time.Duration(spellData.ImprovedIntercept.ValueAt(warrior.Talents.ImprovedIntercept)) * time.Millisecond,
-	})
-}
-
-func (warrior *Warrior) registerImprovedCleave() {
-	if warrior.Talents.ImprovedCleave == 0 {
-		return
-	}
-	warrior.AddStaticMod(core.SpellModConfig{
-		ClassMask: SpellMaskCleave,
-		Kind:      core.SpellMod_PowerCost_Flat,
-		IntValue:  int32(spellData.ImprovedCleave.TenthsAt(warrior.Talents.ImprovedCleave)),
 	})
 }

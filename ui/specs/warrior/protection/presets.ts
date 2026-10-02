@@ -23,8 +23,8 @@ export const ROTATION_PRESET_NO_RECK = PresetUtils.makePresetAPLRotation('DPS (N
 export const ROTATION_PRESET_RECK = PresetUtils.makePresetAPLRotation('DPS (With Reck)', ForeverReckApl);
 
 // The two builds our Forever sim ships for the tank.
-export const ProtectionTalents = PresetUtils.makePresetTalents('Protection', SavedTalents.create({ talentsString: '31--552531233330012531' }));
-export const DeepProtectionTalents = PresetUtils.makePresetTalents('Protection 1/0/50', SavedTalents.create({ talentsString: '1--552531233331212531' }));
+export const ProtectionTalents = PresetUtils.makePresetTalents('Protection', SavedTalents.create({ talentsString: '31--255533123330201351' }));
+export const DeepProtectionTalents = PresetUtils.makePresetTalents('Protection 1/0/50', SavedTalents.create({ talentsString: '1--255533123331221351' }));
 
 export const DefaultOptions = ProtectionWarriorOptions.create({
 	classOptions: {

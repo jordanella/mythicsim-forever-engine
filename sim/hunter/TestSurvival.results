@@ -983,7 +983,7 @@ dps_results: {
  key: "TestSurvival-AllItems-SearingDagger-273003"
  value: {
   dps: 287.1184
-  tps: 173.46615
+  tps: 173.46078
  }
 }
 dps_results: {

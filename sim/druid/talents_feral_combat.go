@@ -20,12 +20,13 @@ func (druid *Druid) registerFeralCombatTalents() {
 	druid.applyThickHide()
 
 	// Tier 3
+	druid.applyShreddingAttacks()
 	druid.applySavageFury()
 	druid.applyFeralCharge()
 	druid.applySharpenedClaws()
 
 	// Tier 4
-	druid.applyShreddingAttacks()
+	// Shifting Power implemented in shifting_power.go
 	// Primal Bite implemented in primal_bite.go
 	druid.applyPredatoryStrikes()
 	druid.applyBloodFrenzy()

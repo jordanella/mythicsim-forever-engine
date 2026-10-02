@@ -12,33 +12,33 @@ import (
 
 func (warrior *Warrior) registerProtectionTalents() {
 	// Tier 1
+	// Improved Bloodrage: bloodrage.go
 	warrior.registerShieldSpecialization()
-	warrior.registerAnticipation()
+	warrior.registerIronWill()
 
 	// Tier 2
-	// Improved Bloodrage: bloodrage.go
-	warrior.registerToughness()
+	warrior.registerAnticipation()
+	warrior.registerImprovedRevenge()
 	warrior.registerImprovedThunderClap()
 
 	// Tier 3
 	warrior.registerLastStand()
 	warrior.registerMasterOfDefense()
-	warrior.registerImprovedRevenge()
+	warrior.registerImprovedDisarm()
 	// Defiance: stances.go
 
 	// Tier 4
 	warrior.registerImprovedSunderArmor()
-	warrior.registerImprovedDisarm()
 	// Vanguard: charge.go
+	warrior.registerImprovedShieldBash()
 
 	// Tier 5
 	warrior.registerImprovedShieldWall()
 	warrior.registerConcussionBlow()
-	warrior.registerImprovedShieldBash()
-	warrior.registerBastion()
+	warrior.registerFocusedRage()
 
 	// Tier 6
-	warrior.registerFocusedRage()
+	warrior.registerBastion()
 
 	// Tier 7
 	warrior.registerShieldSlam()
@@ -87,15 +87,12 @@ func (warrior *Warrior) registerRageOnAvoid(name string, energize *spelldata.Spe
 	})
 }
 
-func (warrior *Warrior) registerToughness() {
-	if warrior.Talents.Toughness == 0 {
+func (warrior *Warrior) registerIronWill() {
+	if warrior.Talents.IronWill == 0 {
 		return
 	}
-
-	warrior.ApplyEquipScaling(
-		stats.Armor,
-		spellData.Toughness.Effect(dbcenums.A_MOD_BASE_RESISTANCE_PCT, 1).MultiplierAt(warrior.Talents.Toughness),
-	)
+	warrior.PseudoStats.FearDurationMultiplier = spellData.IronWill.Effect(dbcenums.A_MECHANIC_DURATION_MOD, 1).MultiplierAt(warrior.Talents.IronWill)
+	warrior.PseudoStats.StunDurationMultiplier = spellData.IronWill.Effect(dbcenums.A_MECHANIC_DURATION_MOD, 12).MultiplierAt(warrior.Talents.IronWill)
 }
 
 func (warrior *Warrior) registerLastStand() {

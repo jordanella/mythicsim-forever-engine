@@ -11,7 +11,7 @@ import (
 )
 
 // Dual Wield Specialization on top of the default protection talents.
-const shieldAndDualWieldTalents = "05-000000005-552531233311210531"
+const shieldAndDualWieldTalents = "05-00000005-255533121331021351"
 
 const (
 	mainHandSlot = 14
@@ -65,8 +65,9 @@ func shieldSpells(t *testing.T, war *core.Character) map[string]*core.Spell {
 	return spells
 }
 
-// Dual Wield Specialization's off-hand damage and hit are the off-hand weapon's: a shield's hits
-// take neither, and a real off-hand weapon's auto takes both.
+// Dual Wield Specialization's off-hand damage is the off-hand weapon's: a shield's hits don't take
+// it, and a real off-hand weapon's auto does. (The 70170 hotfixes moved its off-hand hit to Furious
+// Precision.)
 func TestDualWieldSpecializationLeavesTheShieldAlone(t *testing.T) {
 	_, bare, _ := shieldTestSim(t, DefaultProtectionTalents, 0)
 	_, specced, _ := shieldTestSim(t, shieldAndDualWieldTalents, 0)
@@ -88,9 +89,9 @@ func TestDualWieldSpecializationLeavesTheShieldAlone(t *testing.T) {
 		t.Fatal("the warrior with an off-hand axe does not dual-wield")
 	}
 	bareOH, speccedOH := bareWeapon.AutoAttacks.OHAuto(), speccedWeapon.AutoAttacks.OHAuto()
-	if speccedOH.BonusHitPercent <= bareOH.BonusHitPercent || speccedOH.DamageMultiplier <= bareOH.DamageMultiplier {
-		t.Errorf("the off-hand axe's auto with the talent: hit %v, damage %v; want both above the untalented %v and %v",
-			speccedOH.BonusHitPercent, speccedOH.DamageMultiplier, bareOH.BonusHitPercent, bareOH.DamageMultiplier)
+	if speccedOH.DamageMultiplier <= bareOH.DamageMultiplier {
+		t.Errorf("the off-hand axe's auto with the talent: damage %v; want above the untalented %v",
+			speccedOH.DamageMultiplier, bareOH.DamageMultiplier)
 	}
 }
 

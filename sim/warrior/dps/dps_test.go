@@ -17,8 +17,8 @@ func init() {
 
 // The three builds our Forever sim ships for the DPS warrior: its default DPS build, Fury 17/34/0
 // and Arms 39/12/0.
-var DpsTalents = "30305013-050520035150310051"
-var FuryTalents = "30305213-550501015050010051"
+var DpsTalents = "30305013-05553005150010501"
+var FuryTalents = "30305213-55051105050010501"
 var ArmsTalents = "32305213132515201-5502"
 
 func TestFury(t *testing.T) {

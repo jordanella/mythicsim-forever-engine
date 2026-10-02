@@ -18,7 +18,7 @@ func TestTalentsRoundTrip(t *testing.T) {
 	}
 
 	// The two community warrior builds, straight out of ui/specs/warrior/dps/presets.ts.
-	for _, talents := range []string{"30305213-550501015050010051", "32305213132515201-5502"} {
+	for _, talents := range []string{"30305213-55051105050010501", "32305213132515201-5502"} {
 		points := parseTalents(trees, talents)
 		if got := points.String(); got != talents {
 			t.Errorf("round trip changed the build: %s -> %s", talents, got)
@@ -37,7 +37,7 @@ func TestTalentsValidation(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	base := parseTalents(trees, "30305213-550501015050010051")
+	base := parseTalents(trees, "30305213-55051105050010501")
 
 	t.Run("over the rank cap", func(t *testing.T) {
 		broken := base.clone()

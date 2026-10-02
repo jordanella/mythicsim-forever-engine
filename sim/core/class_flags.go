@@ -45,3 +45,7 @@ func (f ClassFlags) Matches(o ClassFlags) bool {
 
 	return false
 }
+
+// The client's SpellClassOptions of a spell id. spelldata installs the lookup, as core cannot import
+// it; until then no spell carries any.
+var ClientClassFlags = func(int32) ClassFlags { return ClassFlags{} }

@@ -41,6 +41,11 @@ func main() {
 	}
 	defer helper.Close()
 
+	// The SQL overrides correct client rows the store reads too, and this runs before gen_db does.
+	if err := database.RunOverrides(helper, "tools/database/overrides"); err != nil {
+		log.Fatalf("failed to run overrides: %v", err)
+	}
+
 	if *check {
 		stale, err := database.CheckSpellDataFiles(helper)
 		if err != nil {

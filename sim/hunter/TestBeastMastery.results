@@ -982,8 +982,8 @@ dps_results: {
 dps_results: {
  key: "TestBeastMastery-AllItems-SearingDagger-273003"
  value: {
-  dps: 435.04645
-  tps: 250.60444
+  dps: 434.91565
+  tps: 250.83757
  }
 }
 dps_results: {

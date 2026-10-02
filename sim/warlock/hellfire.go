@@ -9,6 +9,9 @@ func (warlock *Warlock) registerHellfire() {
 	rank := spellData.Hellfire.Highest()
 	// The self-burn tick: effect 1 is the periodic trigger that fires Hellfire Effect.
 	tick := rank.Effect(dbcenums.A_PERIODIC_DAMAGE, 0)
+	// Each tick fires Hellfire Effect at the enemies around the warlock. Its row marked it Cannot Crit
+	// up to client 70124; 70170 dropped the flag, so the area hits crit wherever the row allows it.
+	burnCanCrit := !rank.Effect(dbcenums.A_PERIODIC_TRIGGER_SPELL, 0).Trigger().CannotCrit()
 
 	warlock.Hellfire = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rank.ID},
@@ -38,13 +41,15 @@ func (warlock *Warlock) registerHellfire() {
 			BonusCoefficient:     tick.Coeff(),
 
 			OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
-				// Rolled once: the warlock burns exactly what it deals, before any crit.
+				// Rolled once: the warlock burns exactly what it deals.
 				tickDamage := tick.Average(core.CharacterLevel)
 
-				// Hellfire Effect (5857, 11681, 11682) lost Cannot Crit in client 1.60.1.70170, so each target's
-				// hit rolls for a crit.
-				resultSlice := dot.Spell.CalcPeriodicAoeDamage(sim, tickDamage, dot.Spell.OutcomeTickMagicHitAndCrit)
-				if resultSlice[0].Damage > warlock.CurrentHealth() {
+				outcome := dot.Spell.OutcomeTickMagicHitNoHitCounter
+				if burnCanCrit {
+					outcome = dot.Spell.OutcomeTickMagicHitAndCrit
+				}
+				dot.Spell.CalcPeriodicAoeDamage(sim, tickDamage, outcome)
+				if tickDamage > warlock.CurrentHealth() {
 					dot.Deactivate(sim)
 				}
 

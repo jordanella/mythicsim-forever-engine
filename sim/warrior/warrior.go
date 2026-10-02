@@ -9,7 +9,7 @@ import (
 	"github.com/wowsims/forever/sim/core/stats"
 )
 
-var TalentTreeSizes = [3]int{17, 18, 18}
+var TalentTreeSizes = [3]int{17, 17, 18}
 
 type WarriorInputs struct {
 	UseBattleShout bool
@@ -228,9 +228,8 @@ func NewWarrior(character *core.Character, options *proto.WarriorOptions, talent
 	core.FillTalentsProto(warrior.Talents.ProtoReflect(), talents, TalentTreeSizes)
 
 	warrior.EnableRageBar(core.RageBarOptions{
-		MaxRage:            100 + spellData.BoundlessRage.TenthsAt(warrior.Talents.BoundlessRage),
+		MaxRage:            100,
 		BaseRageMultiplier: 1,
-		CritRageBonus:      core.CritAutoAttackRageBonus,
 		StartingRage:       inputs.StartingRage,
 	})
 

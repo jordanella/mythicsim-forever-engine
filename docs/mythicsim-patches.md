@@ -3,7 +3,7 @@
 MythicSim runs this engine from its fork (`sage3648/mythicsim-forever-engine`, branch
 `codex/forever-frostfire-omen`). The branch is ElliotWood/Forever master, which is built on the
 official wowsims/forever, plus the patches below. The first base was `442076902` (Merge
-wowsims/forever master ea5412873). The current base is `723ea18f32` (2026-10-01, client 1.60.1.70124). The 2026-10-01 syncs merged 113 upstream commits and then 28 more ("Upstream sync 2026-10-01, second merge" at the end of this file); the decisions are in "Upstream sync 2026-10-01" at the end of this file. The previous base was `8dc19a4241` (2026-09-27). It includes form-speed and actual spell cast-time Omen of Clarity proc corrections, life-drain weapon effects, Sword of Zeal, Argent Avenger, Fiery Weapon and Lifestealing enchants, Flurry Axe and Electrified Dagger, the 2026-09-27 client hotfix database, Stinging Viper and eight Classic weapon procs, Mage Scroll of Cryoblast, non-engineer explosives and SAF-T / EZ-Thro bombs, Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
+wowsims/forever master ea5412873). The current base is `ccfaacb5c3` (2026-10-02, client 1.60.1.70170 with the 2026-10-02 hotfix cache). The 2026-10-01 syncs merged 113 upstream commits and then 28 more ("Upstream sync 2026-10-01, second merge" below); the decisions are in "Upstream sync 2026-10-01". The 2026-10-02 sync merged the 12 commits #602 to #609 ("Upstream sync 2026-10-02, #602 to #609" at the end of this file): patches 50 and 61 are dropped, patch 63 is narrowed to Mystic Mushroom, and the interim 70170 regeneration is replaced by upstream's real one. The previous base was `8dc19a4241` (2026-09-27). It includes form-speed and actual spell cast-time Omen of Clarity proc corrections, life-drain weapon effects, Sword of Zeal, Argent Avenger, Fiery Weapon and Lifestealing enchants, Flurry Axe and Electrified Dagger, the 2026-09-27 client hotfix database, Stinging Viper and eight Classic weapon procs, Mage Scroll of Cryoblast, non-engineer explosives and SAF-T / EZ-Thro bombs, Deep Wounds weapon-only damage with outstanding bleed rollover, Raptor pet Savage Rend, Venomstrike procs, Defias Leather set effects, Barbaric Crossbow, Plaguefang and Wolfsbane weapon procs, the Stormshroud and Volcanic Armor proc chances, item effects below item level 50, the refreshed client database, Druid form Faerie Fire cost and timing, Hunter pet Lightning Breath scaling, Inspiration armor bonuses, the client hotfix databases, Hunter ranged scaling, Rogue Hack and Slash cooldown, Shaman Flametongue and Fire Nova fixes, and the merged Penance timing and cost fixes, Demonic Pact pre-pull sacrifice, Mana Tide Totem party restoration, Frost Mage talent fixes, and rank 4 Trueshot Aura. It also carries client 1.60.1.70009 and the earlier lower-rank spell, aura-cap, and consumable fixes.
 
 Keep the set small. Each patch exists because MythicSim needs something upstream does not do
 yet. Drop a patch as soon as upstream covers it; do not keep ours alongside an upstream version.
@@ -869,6 +869,11 @@ nothing named them.
 
 ## Client 1.60.1.70170 (2 October 2026), interim
 
+**Superseded on 2026-10-02 by upstream's own `[DB] Update to 1.60.1.70170 with hotfixes as of 2026-10-02` (#608).** The sync took upstream's
+`db.json` (merged per record with the fork's stat-index and armor corrections), `db.bin`, `leftover_db.*`, spell store inputs,
+store, class spell data, talent trees, protos and item procs, and `interimHotfixItemSpells` is gone (the real hotfix overlay
+roots those items again). The notes below stay as the history of what the regeneration changed.
+
 The branch `mythicsim/client-70170` merges upstream `696a6c4040` (4 commits: Master of Elements refunds once
 per cast, the 2026-10-01 Wowhead data refresh, Warrior Dual Wield Specialization no longer raises off-hand
 rage) and then regenerates the client data for build 1.60.1.70170. Upstream had not merged its own
@@ -944,11 +949,20 @@ Golden movements on the regenerated data (all explained, none from a silent misr
 Numbered from 50 so they do not collide with the other 70170 branches. Each patch states the reading it
 took of the patch notes, because for all three the client rows carry nothing the sim could read.
 
-## 50. A critical auto attack gives 75% more Rage
+## 50. A critical auto attack gives 75% more Rage (dropped, upstream #609)
 
-- **What it does.** `RageBarOptions.CritRageBonus` (0.75, `core.CritAutoAttackRageBonus`) multiplies the Rage a
-  swing gives by 1.75 when it crits. Warrior, Feral Bear and Feral Cat (whose Bear Form is the form that gets
-  it) set it. The Cat's rage bar is only ever used in Bear Form.
+- **Dropped in the 2026-10-02 sync, upstream #609.** Upstream multiplies a critical auto attack's Rage by
+  `core.CritRageMultiplier` (1.75) inside the shared rage bar, which every Rage user takes: Warrior, Feral Bear and
+  Feral Cat's Bear Form (the Cat's bar is only ever used in Bear Form). This patch made it an opt-in
+  `RageBarOptions.CritRageBonus` (0.75) that those three set, so with every user opted in the option protected
+  nothing and upstream's constant is the one mechanism. The tests stay, and each pays the bonus exactly once (a ratio
+  of 1.75, never 3.06): `sim/core/rage_crit_test.go`, `sim/warrior/dps/crit_rage_test.go`,
+  `sim/druid/feralbear/crit_rage_test.go` and the new `sim/druid/feralcat/crit_rage_test.go` (Bear Form aura on the
+  Cat). The merge moved the Fury golden only for #606's changes: with crit Rage off on both sides the merge moves Fury
+  +6.88% and Arms 0.00% (upstream's own range without #609: +6.9% and 0.0%), and #609 alone is +5.1% Fury and +7.1%
+  Arms. The text below is the history of the reading.
+- **What it did.** `RageBarOptions.CritRageBonus` (0.75, `core.CritAutoAttackRageBonus`) multiplied the Rage a
+  swing gives by 1.75 when it crits. Warrior, Feral Bear and Feral Cat set it.
 - **The notes.** Warrior: "Players now generate 75% increased Rage when landing a critical strike with a basic
   attack." Druid: "Bear Form and Dire Bear Form now generate 75% increased Rage when landing a Critical Strike."
 - **What the client says.** Nothing numeric. The 70124 to 70170 diff has no row with 75 on Rage. It does add the
@@ -973,12 +987,13 @@ took of the patch notes, because for all three the client rows carry nothing the
   rage-starved. Not taken: the client's proc mask is a melee auto attack, and Blood Frenzy's Rage is its own
   energize.
 - **Tests.** `sim/core/rage_crit_test.go` (1.75 times a hit in each hand and for a two-hander, 15.743 against
-  8.996 for a 2.6 speed main hand, a bar without the bonus pays a crit as a hit, damage taken unchanged),
+  8.996 for a 2.6 speed main hand, damage taken unchanged; the "bar without the bonus" case went with the option),
   `sim/core/rage_test.go` (the crit rows now pay 15.743), `sim/warrior/dps/crit_rage_test.go`,
   `sim/druid/feralbear/crit_rage_test.go`. The first and the crit rows of the second fail on the unpatched source.
 - **Default.** Warrior and Bear goldens move up (Average-Default DPS: Fury +6.6%, Arms +7.3%, Protection +0.3%,
   Feral Bear +1.1%); Feral Cat is unchanged.
-- **Drop it when** upstream models the client's Rule of Rage, or measures a different factor.
+- **Drop it when** (now moot) upstream models the client's Rule of Rage, or measures a different factor: then change
+  `core.CritRageMultiplier`.
 
 ## 51. Swipe gains 3% of attack power
 
@@ -1037,10 +1052,10 @@ Checked against the 70124 to 70170 diff and the engine; tests pin the current be
   rolled the intended chance. Read as a flat 100% at any rank, a 5/5 warrior gains Fury +0.7% / +0.5%, Arms +0.7% /
   +0.6%, Fury-Protection +0.5% / +0.4%, Protection +0.4% / +0.35% (120 s / 300 s). Not taken.
   `sim/warrior/unbridled_wrath_test.go`.
-- **Dual Wield Specialization.** The rage half went with upstream #601. The hit half is aura 54 on effect 1, read by aura
-  (`registerDualWieldSpecialization`) and applied as an off-hand-only mod, so the engine has the intended
-  off-hand-only 2/4/6/8/10%, not the both-hands behaviour the build lists as a known issue. Left as the intended
-  behaviour. `TestDualWieldSpecializationHitChanceIsOffHandOnly`.
+- **Dual Wield Specialization.** The rage half went with upstream #601 and came back in #606 as a dummy effect, 10% a
+  rank on the off hand's Rage. The hit half was aura 54 on effect 1, applied as an off-hand-only mod (the intended
+  2/4/6/8/10%, not the both-hands behaviour the build lists as a known issue); #606 moved it to Furious Precision
+  (4/7/10 at 1/2/3 ranks), which is the same off-hand-only mod. `TestFuriousPrecisionHitChanceIsOffHandOnly`.
 - **Rend and Sunder Armor tap enemies instantly.** Attributes_6 0x800000 (TAPS_IMMEDIATELY) on the Rend and Sunder
   Armor ranks. Tagging has no effect in a sim with one boss.
 
@@ -1066,9 +1081,14 @@ Checked against the 70124 to 70170 diff and the engine; tests pin the current be
   `TestEveryDevouringPlagueRankCarriesPeriodicCanCrit`; `TestDevouringPlagueTicksCrit` still passes.
 - **Drop it when** never: it follows the row. Patch 14's Shadowform half is the part that stays.
 
-## 61. `warlock: Hellfire's ticks can crit`
+## 61. `warlock: Hellfire's ticks can crit` (dropped, upstream #605)
 
-- **What it does.** Hellfire Effect (5857, 11681, 11682) lost Cannot Crit (Attributes_2 0x20000000) and gained Periodic
+- **Dropped in the 2026-10-02 sync, upstream #605.** Upstream reads the same flag off the Hellfire Effect row
+  (`burnCanCrit`, from `Cannot Crit` on the triggered spell, so a hotfix that flips it back is followed) and checks the
+  warlock's death against the base tick it burns instead of the first target's post-crit hit, which is the better rule.
+  The fork keeps `sim/warlock/client_70170_test.go` (`TestHellfireTicksCanCrit`), which passes on upstream's code.
+  The original reading follows.
+- **What it did.** Hellfire Effect (5857, 11681, 11682) lost Cannot Crit (Attributes_2 0x20000000) and gained Periodic
   Can Crit (Attributes_8 0x200) in client 70170. The sim deals Hellfire's hits as ticks of the channel, so
   `sim/warlock/hellfire.go` rolls `OutcomeTickMagicHitAndCrit` on each target instead of a plain hit. The warlock
   still burns the base tick, before any crit, as the client's self damage is its own spell.
@@ -1127,11 +1147,31 @@ Checked against the 70124 to 70170 diff and the engine; tests pin the current be
   (`sim/warlock`, patch 22) used Eureka! as its multiplier; it now raises Corruption's own damage multiplier, which
   is the number Eureka! raised. Patch 22's log evidence (a Gnome priest's Shadow Word: Pain stepping from 34 to 38) is
   client 70009's and no longer happens, while dots still tick on current stats.
+- **Merge decision, 2026-10-02 (upstream #602 and #607 do the same job): kept ours.** Upstream's `applyEureka` mirrors
+  the same three masks in core and tests each sim spell's client row (`ClientClassFlags`, installed by `spelldata`)
+  against them: cost on effect 0, +10% on the hit for effect 1, dots scaled back out for a spell on the direct list
+  alone. Its masks equal the ones copied into the class tests here, and for every spell the sim registers the two
+  mechanisms agree except three. Hellfire (11684) and Penance (1316995) are channels whose ticks are the hits of the
+  client's Hellfire Effect and Penance's bolts: the client names them on the damage list, so ours boosts their ticks and
+  upstream's, which scales a direct-list spell's dots back out, gives them nothing. Immolate's dot (its own spell on the
+  hit's id, tag 1) nets out to the same in both. No Gnome reference casts Hellfire or Penance (the Smite rotations cast Penance and
+  the Smite reference is Undead), so no reference moves between the two; it matters to a Gnome priest or warlock who
+  does. `ClientClassFlags` stays in `core` and the store
+  (it is upstream's, and nothing here reads it) so the files match upstream's. To retire this patch: take upstream's
+  `applyEureka` and add a per-class "dealt as ticks" mask for Hellfire and Penance, then convert the class tests to
+  behaviour checks. Upstream's `TestGnomeWarrior` additions are not merged (they assume a core without the class
+  lists); the core file is the fork's.
 - **Drop it when** never: it follows the rows. Re-check the masks in the tests when the client changes them.
 
-## 63. `spelldata: Insight and Increased Spirit read as Spirit`
+## 63. `spelldata: Insight and Increased Spirit read as Spirit` (narrowed to Mystic Mushroom)
 
-- **What it does.** Client 70170 moved Insight's buff 1299796 (Enchant Weapon - Insight, "Increases your Spirit by
+- **Narrowed in the 2026-10-02 sync.** Upstream #606 puts Insight's 70124 row back in SQL (`tools/database/overrides/2.sql`,
+  which `gen_spelldata` now runs before it reads the tables), so the store has Insight's buff as Spirit again and
+  `percentStatRowsNamingNoStat` lost its 1299796 entry (the test said so: the client names a stat now). Mystic Mushroom's
+  Increased Spirit (1248751) has no override upstream, so its entry stays and the fork's parser still reads it as
+  Spirit. `TestInsightMultipliesSpirit` passes on upstream's row; `TestPercentStatRowsNamingNoStatReadAsSpirit` now
+  covers the Mushroom only. The original reading follows.
+- **What it did.** Client 70170 moved Insight's buff 1299796 (Enchant Weapon - Insight, "Increases your Spirit by
   100%" for 10 s) and Mystic Mushroom's Increased Spirit 1248751 ("Increases Spirit by 5%") from
   `A_MOD_PERCENT_STAT` on Spirit (misc 4) to `A_MOD_TOTAL_STAT_PERCENTAGE` with MiscValue_0 0 and no stat mask in
   MiscValue_1. Every other row of that aura names its stat in one of the two (Spirit Tap: misc 4 and mask 16;
@@ -1197,12 +1237,81 @@ Each was read against the engine; the tests below pin the behaviour so a later h
 
 ## Client 1.60.1.70170 adopted (2 October 2026)
 
-`assets/db_inputs/forever_client_build.txt` now reads 1.60.1.70170: the spell store, class spell data, talent
-trees and protos are the build's, and the patches 40 to 63 above implement what the client rows do not carry
-(Shifting Power, Rage on crits, Swipe attack power, Hellfire, Eureka!, Insight). The item database
-(`db.json`, `db.bin`, `leftover_db`, enchant and proc files) is still the 70124 one because the hotfix cache was not
-applied (see the interim note above), so item stats and item procs are as of 70124 plus the 77 pinned roots.
-Merge upstream's own `[DB] Update to 1.60.1.70170` when it lands and drop `interimHotfixItemSpells`.
+`assets/db_inputs/forever_client_build.txt` reads 1.60.1.70170, and since the 2026-10-02 sync everything generated is upstream's
+real regeneration with the hotfix cache (#608): the item database (`db.json`, `db.bin`, `leftover_db.*`), the spell store
+and its inputs, the class spell data, the talent trees, the protos, the enchant and item proc files. Patches 40 to 42, 51,
+52, 60, 62 and 63 implement what the client rows do not carry (Shifting Power, Swipe attack power, Spearing Strike's stance,
+Inner Focus, Eureka!, Mystic Mushroom); the Rage on crits (50) and Hellfire (61) patches went to upstream.
 
 The alternate "Simple Vaelastrasz" Feral Cat rotation (`ui/specs/druid/feralcat/apls/simple_vael.apl.json`) cast and
 refreshed Tiger's Fury (9846), which 70170 removed; those two lines are gone.
+
+## Upstream sync 2026-10-02, #602 to #609
+
+Merged `ccfaacb5c3` into `mythicsim/release-20261002` (7325f41ecb), merge base `696a6c4040`: #602 Gnome Eureka! only affects the
+spells the client names, #603 and #604 data, #605 Hellfire's area hits crit, #606 talent trees for client 70170 and the
+hotfixes (Shifting Power, Furious Precision, Heating Up, the Warrior tree reshape, Bloodthirst 45%, Dual Wield
+Specialization's dummy Rage, Flametongue's attack spells, Insight's override), #607 Eureka! hit against DoT, #608 the
+`[DB] Update to 1.60.1.70170 with hotfixes as of 2026-10-02` regeneration, #609 critical auto attacks pay 75% more Rage and
+Champion of the Light drops healing, and the changelog bot commits.
+
+**Data.** `db.json` and `leftover_db.json` are a three-way merge (base `696a6c4040`, fork tip, upstream) with the fork's stat
+index and planner armor corrections kept; `scripts/forever-merge-db.py` needed two extensions for this range, both applied to a
+patched copy: a section only upstream changed is taken whole (`consumables`: 29 rows moved to category 2593 and Major Troll's
+Blood Elixir went), and an upstream deletion of a record the fork never touched is applied (items 274978, 276765, 285326,
+263411 and 263412 in the leftover file, and five spell icons). A stats map the base lacked merges field by field (the three
+Rotmender's items gained real stats upstream and the fork had added their armor). `db.bin` and `leftover_db.bin` come from
+`go run ./tools/sync_db_binary`. The store, `spell_store_inputs.json`, the talent trees, protos, enchant and proc files are
+upstream's; the store was re-rendered from the committed inputs with the fork's extras and differs from upstream's only by
+Tiger's Fury (5217), which `extra_spells.go` no longer pins (patch 41), and the Druid class file only by the Shifting Power
+ladder (patch 40). `interimHotfixItemSpells` and the interim regeneration notes are gone: the real overlay roots those items.
+
+**Decisions per patch.**
+
+| Patch | Decision | Why |
+|---|---|---|
+| 50 Rage on crits | dropped, upstream #609 | One constant in the shared bar, paid by Warrior, Bear and the Cat's Bear Form exactly once; the opt-in option protected nothing. Tests kept, a Cat Bear Form test added. |
+| 61 Hellfire crits | dropped, upstream #605 | Same behaviour, read off the row and with the better death check. Our test kept. |
+| 62 Eureka! lists | kept | Equal masks, but upstream's mask handling gives Hellfire's and Penance's ticks no bonus; ours does what the client lists. |
+| 63 Insight and Increased Spirit | narrowed | #606 restores Insight's row in SQL; Mystic Mushroom has no override. |
+| Flametongue ladder pin (`ByID(16344)`) | equal to upstream's | Same line. |
+| 40 talent-granted ladder, 41 Shifting Power, 42 Cat APL | kept | Upstream also registers Shifting Power but keeps Tiger's Fury, has no Wolfshead Energy move and no tests; see the table below. |
+| 30 to 33, 51, 52, 60 | kept | Unrelated to the range. |
+
+Upstream's Shifting Power (`sim/druid/shifting_power.go`) and the fork's name the same spell: the merged file is the fork's
+(reads the cost and cooldown the same way, gives Wolfshead Helm's 20 Energy, drops Tiger's Fury) and the fork's Improved
+Shifting Power. Natural Shapeshifter's mask change was identical on both sides.
+
+**Cat rotation.** Upstream's default APL (Tiger's Fury first, the powershift lines, then Shifting Power at 60 Energy or less
+after the finishers) against the fork's, on the Cat reference (`050022-55000032121032212051-052`, 10,000 iterations, seed
+4242, the worker's request with the rotation swapped; "adjusted" is what `forever-rotation-adjustments.mjs` leaves, with the
+powershift lines and Rune of Metamorphosis removed):
+
+| Engine | Rotation | 120 s | 300 s |
+|---|---|---|---|
+| merged | fork's | 564.29 | 530.65 |
+| merged | upstream's, adjusted | 544.45 | 510.43 |
+| merged | upstream's, raw | 531.98 | 506.63 |
+| upstream master | upstream's, adjusted | 539.81 | 502.56 |
+| upstream master | upstream's, raw | 523.82 | 495.95 |
+| upstream master | fork's | 542.05 | 507.49 |
+
+The fork's rotation on the fork's engine is 3.6% and 4.0% ahead of the best upstream pairing, so it stays.
+
+**Golden movements** (Average-Default DPS, each explained; upstream's own goldens over the same range are the check):
+
+| Golden | Fork before to after | Upstream over the range | Cause |
+|---|---|---|---|
+| TestFury | 293.66 to 309.28 (+5.3%) | +12.4% | #606: Furious Precision, Dual Wield Specialization's Rage, Bloodthirst 45%. The fork already had Rage on crits, so only +6.9% of upstream's +12.4% applies: with crit Rage off on both engines the merge moves Fury +6.88% (upstream +6.9%), and crit Rage on top is +5.1% (upstream's #609 alone is +5.1%). |
+| TestArms | 253.00 unchanged | +7.3% | All of upstream's is #609, which the fork had. |
+| TestProtectionWarrior | DPS and TPS unchanged, DTPS +2.6% | +0.3% (#609) | Toughness (armor) left the tree and the preset spends Iron Will instead: armor 4118.8 to 3872 (upstream's golden has no armor to move). |
+| TestRetribution | unchanged DPS, CharacterStats row moved | -4.1% | Champion of the Light 60% of Intellect and no healing (#609); the fork already had the damage cut, so only the healing power stat moved. |
+| TestFeralCat, TestFeralBear, TestFire, TestProtection, Balance, Hunter, Mage, Priest, Shaman, Warlock suites | one or two AllItems rows (Searing Dagger 1291568, Plaguefang 1309315, Vile Protector, Mystic Mushroom dropped from the enumeration) | the same rows | #608's item data. Where the fork's gear matches upstream's the new numbers are equal (Balance, Arcane, Frost, Fire Searing Dagger rows). |
+
+Nothing moved without an upstream cause.
+
+**Tests.** `go test --tags=with_db` over every `./sim/...` package except `sim/web`, `./tools/database/...` (green: the
+hotfix cache that failed it before is in the data now), `./tools/spelldata`, `./tools/db2tool/...` and `./cmd/wowsimcli/...`
+pass. Tests this sync changed: the off-hand hit test (now Furious Precision), the max Rage log test (Gnome's Expansive Mind
+is the only source above 100 now), the crit Rage tests (Dual Wield Specialization pays the off hand 1.5 times at 5/5), the
+percent-stat test (Mystic Mushroom only), and the talent strings of the Warrior tests that were not upstream's.

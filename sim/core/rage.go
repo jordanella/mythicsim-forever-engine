@@ -10,16 +10,17 @@ const ThreatPerRageGained = 5
 
 // TODO: Ingame test needed at higher levels
 const DamageTakenRageFactor = 10
+
+// A critical auto attack generates 75% more rage. Server side, so no client table carries it:
+// Blizzard put it back with the beta build of 2026-10-01 for warriors and druids (WoW: Forever
+// Podcast episode 2, "it won't be double rage on crits, it's 75% increase").
+const CritRageMultiplier = 1.75
+
 const (
 	BaseRageHitFactor     = 3.46
 	TwoHandRageHitFactor  = 4.5
 	TwoHandRageMultiplier = TwoHandRageHitFactor / BaseRageHitFactor
 )
-
-// Client 1.60.1.70170: "Players now generate 75% increased Rage when landing a critical strike with a
-// basic attack" (Warrior) and "Bear Form and Dire Bear Form now generate 75% increased Rage when landing a
-// Critical Strike". The number is only in the patch notes: no client row carries it.
-const CritAutoAttackRageBonus = 0.75
 
 type rageBar struct {
 	unit *Unit
@@ -39,10 +40,6 @@ type RageBarOptions struct {
 	MaxRage            float64
 	StartingRage       float64
 	BaseRageMultiplier float64
-
-	// CritRageBonus is the share of extra Rage a critical auto attack pays: 0.75 makes it 1.75 times
-	// the Rage the same swing pays as a plain hit. Zero keeps a crit equal to a hit.
-	CritRageBonus float64
 }
 
 func (unit *Unit) EnableRageBar(options RageBarOptions) {
@@ -86,7 +83,7 @@ func (unit *Unit) EnableRageBar(options RageBarOptions) {
 			// rage is normalized so it only depends on weapon swing speed and some multipliers
 			generatedRage := hitFactor * weapon.SwingSpeed * options.BaseRageMultiplier * handMultiplier
 			if result.DidCrit() {
-				generatedRage *= 1 + options.CritRageBonus
+				generatedRage *= CritRageMultiplier
 			}
 
 			var metrics *ResourceMetrics

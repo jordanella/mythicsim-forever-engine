@@ -173,8 +173,8 @@ func TestShieldEnchantBuffDropsWithItsShield(t *testing.T) {
 // gains while it is up.
 func TestInsightMultipliesSpirit(t *testing.T) {
 	// Client 1.60.1.70170 changed 1299796's effect from A_MOD_PERCENT_STAT on Spirit (misc 4) to
-	// A_MOD_TOTAL_STAT_PERCENTAGE with no stat named. The tooltip still says Spirit, and the parser reads
-	// the row as Spirit (percentStatRowsNamingNoStat in sim/core/spelldata, patch 64).
+	// A_MOD_TOTAL_STAT_PERCENTAGE with no stat named. The tooltip still says Spirit, and upstream's
+	// tools/database/overrides/2.sql puts the 70124 row back, so the store carries Spirit again.
 	weapon := testOneHander(insightWeaponID)
 	core.AddToDatabase(&proto.SimDatabase{
 		Items: []*proto.SimItem{weapon},

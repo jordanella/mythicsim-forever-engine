@@ -16,8 +16,8 @@ func init() {
 }
 
 // The two builds our Forever sim ships for the tank: its default Protection build and 1/0/50.
-var DefaultProtectionTalents = "31--552531233330012531"
-var ProtectionTalents = "1--552531233331212531"
+var DefaultProtectionTalents = "31--255533123330201351"
+var ProtectionTalents = "1--255533123331221351"
 
 func TestProtectionWarrior(t *testing.T) {
 	core.RunTestSuite(t, t.Name(), core.FullCharacterTestSuiteGenerator([]core.CharacterSuiteConfig{

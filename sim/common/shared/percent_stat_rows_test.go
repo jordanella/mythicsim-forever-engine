@@ -8,11 +8,12 @@ import (
 	"github.com/wowsims/forever/sim/core/spelldata"
 )
 
-// Client 1.60.1.70170 moved Insight's buff and Mystic Mushroom's Increased Spirit to
-// A_MOD_TOTAL_STAT_PERCENTAGE with no stat named. Their tooltips say Spirit, so the parser reads Spirit; a
-// row of that aura that names a stat, or an A_MOD_PERCENT_STAT row, reads as it states.
+// Client 1.60.1.70170 moved Mystic Mushroom's Increased Spirit to A_MOD_TOTAL_STAT_PERCENTAGE with no stat
+// named. Its tooltip says Spirit, so the parser reads Spirit; a row of that aura that names a stat, or an
+// A_MOD_PERCENT_STAT row, reads as it states. Insight's buff (1299796) moved the same way and upstream's
+// overrides/2.sql restores its row, so it is covered by TestInsightMultipliesSpirit instead.
 func TestPercentStatRowsNamingNoStatReadAsSpirit(t *testing.T) {
-	for id, want := range map[int32]float64{1299796: 2, 1248751: 1.05} {
+	for id, want := range map[int32]float64{1248751: 1.05} {
 		row := spelldata.MustFind(id)
 		effect := row.EffectN(1)
 		if effect.Aura != dbcenums.A_MOD_TOTAL_STAT_PERCENTAGE || effect.Misc != 0 || effect.Misc2 != 0 {

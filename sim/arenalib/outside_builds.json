@@ -2,12 +2,12 @@
 	"warrior": [
 		{
 			"name": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"source": "https://mythicsim.com/wow-forever/tier-list"
 		},
 		{
 			"name": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"source": "https://mythicsim.com/wow-forever/tier-list"
 		}
 	],
@@ -98,7 +98,7 @@
 	"feral_druid": [
 		{
 			"name": "MythicSim Feral 9/35/7",
-			"talents": "050022-55000032120032012051-052",
+			"talents": "050022-55000032121032212051-052",
 			"source": "https://mythicsim.com/wow-forever/tier-list"
 		}
 	],
@@ -119,7 +119,7 @@
 	"tank_warrior": [
 		{
 			"name": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"source": "https://mythicsim.com/wow-forever/tier-list"
 		}
 	]

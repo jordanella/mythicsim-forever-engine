@@ -223,7 +223,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "phase_1",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -473,7 +473,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "phase_1",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -492,7 +492,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "phase_2",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -823,7 +823,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "phase_1",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -862,7 +862,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "p0.bis",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -901,7 +901,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "phase_2",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -998,7 +998,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "launch",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -1076,7 +1076,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "phase_1",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -1215,7 +1215,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "phase_2",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -1410,7 +1410,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "p0.bis",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -1895,7 +1895,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "launch",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -1954,7 +1954,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "p0.bis",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -1993,7 +1993,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "phase_2",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -2190,7 +2190,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "launch",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -2734,7 +2734,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "p0.bis",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -3180,7 +3180,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "launch",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -5171,7 +5171,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "arms_launch",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -5209,7 +5209,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "arms_launch",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -5578,7 +5578,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "Feral Cat 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "p2.pre-bis",
 			"rotation": "default",
 			"consumables": "Arena-Melee",
@@ -5597,7 +5597,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "MythicSim Feral 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "p2.pre-bis",
 			"rotation": "default",
 			"consumables": "Arena-Melee",
@@ -5674,7 +5674,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "Feral Cat 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "p2.bis",
 			"rotation": "default",
 			"consumables": "Arena-Melee",
@@ -5693,7 +5693,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "MythicSim Feral 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "p2.bis",
 			"rotation": "default",
 			"consumables": "Arena-Melee",
@@ -6215,7 +6215,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "arms_launch",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -6234,7 +6234,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "arms_launch",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -6253,7 +6253,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "arms_launch",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -6666,7 +6666,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "Feral Cat 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "launch",
 			"rotation": "default",
 			"consumables": "Arena-Melee",
@@ -6685,7 +6685,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "MythicSim Feral 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "launch",
 			"rotation": "default",
 			"consumables": "Arena-Melee",
@@ -6763,7 +6763,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "phase_1",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -7157,7 +7157,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "arms_launch",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -7569,7 +7569,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "phase_1",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -8692,7 +8692,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "launch",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -8806,7 +8806,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "phase_2",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -10164,7 +10164,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "phase_2",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -10222,7 +10222,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "launch",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -10550,7 +10550,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "launch",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -10782,7 +10782,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "p0.bis",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -11677,7 +11677,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "p0.bis",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -11889,7 +11889,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "launch",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -12278,7 +12278,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "launch",
 			"rotation": "protection",
 			"consumables": "Arena-Melee",
@@ -12877,7 +12877,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "launch",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -13073,7 +13073,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "p1_fury",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -13575,7 +13575,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "Feral Cat 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "launch",
 			"rotation": "simple_vael",
 			"consumables": "Arena-Melee",
@@ -13594,7 +13594,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "MythicSim Feral 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "launch",
 			"rotation": "simple_vael",
 			"consumables": "Arena-Melee",
@@ -14100,7 +14100,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "launch",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -14119,7 +14119,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "launch",
 			"rotation": "protection",
 			"consumables": "Arena-Melee",
@@ -14177,7 +14177,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "p1_arms",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -14235,7 +14235,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "p1_fury",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -14273,7 +14273,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "p1_arms",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -14370,7 +14370,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "p1_fury",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -14446,7 +14446,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "Feral Cat 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "p2.pre-bis",
 			"rotation": "simple_vael",
 			"consumables": "Arena-Melee",
@@ -14465,7 +14465,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "MythicSim Feral 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "p2.pre-bis",
 			"rotation": "simple_vael",
 			"consumables": "Arena-Melee",
@@ -14484,7 +14484,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "Feral Cat 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "p2.bis",
 			"rotation": "simple_vael",
 			"consumables": "Arena-Melee",
@@ -14503,7 +14503,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "MythicSim Feral 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "p2.bis",
 			"rotation": "simple_vael",
 			"consumables": "Arena-Melee",
@@ -14675,7 +14675,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "p1_arms",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -14963,7 +14963,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "p1_arms",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -15176,7 +15176,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Fury 15/36/0",
-			"talents": "30305013-250500035150310051",
+			"talents": "30305013-25353005150010501",
 			"gear": "p1_arms",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -15331,7 +15331,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "p1_fury",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -15446,7 +15446,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "MythicSim Feral 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "p0.bis",
 			"rotation": "default",
 			"consumables": "Arena-Melee",
@@ -15465,7 +15465,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "Feral Cat 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "p0.bis",
 			"rotation": "default",
 			"consumables": "Arena-Melee",
@@ -15561,7 +15561,7 @@
 		{
 			"spec": "warrior",
 			"build": "Fury 17/34/0",
-			"talents": "30305213-550501015050010051",
+			"talents": "30305213-55051105050010501",
 			"gear": "p1_arms",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -15637,7 +15637,7 @@
 		{
 			"spec": "feral_tank_druid",
 			"build": "31 Feral Combat",
-			"talents": "-5003232120132010501-0550325",
+			"talents": "-50032302120132010501-0550325",
 			"gear": "launch",
 			"rotation": "default",
 			"consumables": "Arena-Melee",
@@ -15657,7 +15657,7 @@
 		{
 			"spec": "feral_tank_druid",
 			"build": "31 Feral Combat / 20 Restoration",
-			"talents": "-5003232120132010501-0550325",
+			"talents": "-50032302120132010501-0550325",
 			"gear": "launch",
 			"rotation": "default",
 			"consumables": "Arena-Melee",
@@ -15677,7 +15677,7 @@
 		{
 			"spec": "feral_tank_druid",
 			"build": "Bear Tank 0/31/20",
-			"talents": "-5003232120132010501-0550325",
+			"talents": "-50032302120132010501-0550325",
 			"gear": "launch",
 			"rotation": "default",
 			"consumables": "Arena-Melee",
@@ -16200,7 +16200,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "p1_bis",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -16219,7 +16219,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "preraid",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -16508,7 +16508,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "p1_bis",
 			"rotation": "protection",
 			"consumables": "Arena-Melee",
@@ -16527,7 +16527,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "preraid",
 			"rotation": "protection",
 			"consumables": "Arena-Melee",
@@ -16724,7 +16724,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "p1_bis",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -16743,7 +16743,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "preraid",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -16934,7 +16934,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "preraid",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -16953,7 +16953,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "p1_bis",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -17012,7 +17012,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "p1_fury",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -17107,7 +17107,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "p1_bis",
 			"rotation": "protection",
 			"consumables": "Arena-Melee",
@@ -17126,7 +17126,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "preraid",
 			"rotation": "protection",
 			"consumables": "Arena-Melee",
@@ -17184,7 +17184,7 @@
 		{
 			"spec": "warrior",
 			"build": "MythicSim Arms 34/17/0",
-			"talents": "30305213032515001-250500030002",
+			"talents": "30305213032515001-25053000002",
 			"gear": "p1_fury",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -17282,7 +17282,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "preraid",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -17301,7 +17301,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "p1_bis",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -17586,7 +17586,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "MythicSim Feral 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "p0.bis",
 			"rotation": "simple_vael",
 			"consumables": "Arena-Melee",
@@ -17605,7 +17605,7 @@
 		{
 			"spec": "feral_druid",
 			"build": "Feral Cat 9/35/7",
-			"talents": "050022-5500002123032213051-052",
+			"talents": "050022-55000032121032212051-052",
 			"gear": "p0.bis",
 			"rotation": "simple_vael",
 			"consumables": "Arena-Melee",
@@ -17796,7 +17796,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "p1.bis",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -18599,7 +18599,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "p1.bis",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -18736,7 +18736,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "p0.bis",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -18989,7 +18989,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "p1.bis",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -19426,7 +19426,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "p0.bis",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -19826,7 +19826,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "p1.bis",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -19845,7 +19845,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "p0.bis",
 			"rotation": "dps_reck",
 			"consumables": "Arena-Melee",
@@ -20646,7 +20646,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "p0.bis",
 			"rotation": "dps_no_reck",
 			"consumables": "Arena-Melee",
@@ -20703,7 +20703,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "p1.bis",
 			"rotation": "protection",
 			"consumables": "Arena-Melee",
@@ -21123,7 +21123,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "p1.bis",
 			"rotation": "protection",
 			"consumables": "Arena-Melee",
@@ -21370,7 +21370,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "MythicSim Prot 0/20/31",
-			"talents": "-05052030005-502031233100210521",
+			"talents": "-0505203005-250033120310021251",
 			"gear": "p0.bis",
 			"rotation": "protection",
 			"consumables": "Arena-Melee",
@@ -21389,7 +21389,7 @@
 		{
 			"spec": "tank_warrior",
 			"build": "Protection 1/0/50",
-			"talents": "1--552531233331212531",
+			"talents": "1--255533123331221351",
 			"gear": "p0.bis",
 			"rotation": "protection",
 			"consumables": "Arena-Melee",

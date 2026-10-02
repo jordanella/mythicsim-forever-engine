@@ -913,8 +913,8 @@ dps_results: {
 dps_results: {
  key: "TestSurvivalMelee-AllItems-Plaguefang-279876"
  value: {
-  dps: 468.06702
-  tps: 303.56181
+  dps: 466.34049
+  tps: 302.35324
  }
 }
 dps_results: {
@@ -984,7 +984,7 @@ dps_results: {
  key: "TestSurvivalMelee-AllItems-SearingDagger-273003"
  value: {
   dps: 266.51793
-  tps: 162.99553
+  tps: 162.97956
  }
 }
 dps_results: {

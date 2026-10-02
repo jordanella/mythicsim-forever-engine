@@ -660,8 +660,8 @@ dps_results: {
 dps_results: {
  key: "TestAffliction-AllItems-SearingDagger-273003"
  value: {
-  dps: 238.69946
-  tps: 145.81707
+  dps: 237.96111
+  tps: 145.05623
  }
 }
 dps_results: {

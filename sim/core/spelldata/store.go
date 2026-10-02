@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sort"
 
+	"github.com/wowsims/forever/sim/core"
 	"github.com/wowsims/forever/sim/core/dbcenums"
 )
 
@@ -91,6 +92,11 @@ func addDriver(triggered int32, driver int32) {
 		return
 	}
 	drivers[triggered] = append(ids, driver)
+}
+
+// Core reads a spell's family mask by id through this: the sim's own spells mostly carry none.
+func init() {
+	core.ClientClassFlags = func(id int32) core.ClassFlags { return Find(id).ClassFlags }
 }
 
 // The row for an id, or Nil when the store does not carry it. Nil reads as zeroes rather than

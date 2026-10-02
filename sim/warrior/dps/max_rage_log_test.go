@@ -9,9 +9,9 @@ import (
 	"github.com/wowsims/forever/sim/core/proto"
 )
 
-// Rage log lines name the bar's real maximum, as energy's do. Boundless Rage and the Gnome racial
-// raise it above 100, and anything reading resources from the log (MythicSim's timeline) otherwise
-// shows a 100 cap the warrior does not have.
+// Rage log lines name the bar's real maximum, as energy's do. The Gnome racial (Expansive Mind) raises it
+// above 100, and anything reading resources from the log (MythicSim's timeline) otherwise shows a 100 cap
+// the warrior does not have. Boundless Rage, the other source, left the tree in client 70170.
 func TestRageLogNamesTheRealMaximum(t *testing.T) {
 	for _, tc := range []struct {
 		race    proto.Race
@@ -19,8 +19,7 @@ func TestRageLogNamesTheRealMaximum(t *testing.T) {
 		max     float64
 	}{
 		{proto.Race_RaceHuman, ArmsTalents, 100},
-		{proto.Race_RaceHuman, "32305213132515201-55020003", 130},        // Boundless Rage 3/3
-		{proto.Race_RaceGnome, "32305213132515201-55020003", 130 * 1.05}, // and Expansive Mind
+		{proto.Race_RaceGnome, ArmsTalents, 100 * 1.05}, // Expansive Mind
 	} {
 		player := core.WithSpec(&proto.Player{
 			Race:          tc.race,

@@ -1661,9 +1661,9 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-VileProtector-7747"
  value: {
-  dps: 260.04267
-  tps: 266.57668
-  dtps: 1373.22892
+  dps: 260.29821
+  tps: 266.76723
+  dtps: 1373.21571
  }
 }
 dps_results: {

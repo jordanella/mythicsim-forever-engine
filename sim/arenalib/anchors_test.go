@@ -120,7 +120,7 @@ func TestReshapeLeavesAGoodShapeAlone(t *testing.T) {
 	}
 
 	// Fury 17/34/0: 34 points in the Fury tree, 51 in total.
-	build := parseTalents(trees, "30305213-550501015050010051")
+	build := parseTalents(trees, "30305213-55051105050010501")
 	for _, shape := range []anchor{
 		{holds: []hold{{1, 34}}, label: "34 Fury"},
 		{holds: []hold{{0, 17}, {1, 34}, {2, 0}}, label: "17 Arms / 34 Fury"},

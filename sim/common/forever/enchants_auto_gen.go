@@ -199,10 +199,10 @@ func RegisterAllEnchants() {
 	//       With next db run the item will be removed if implemented.
 	//
 	// Permanently enchant a Melee Weapon to have a chance to trigger Revelation when a non-periodic spell fails
-	// to critically strike. Revelation grants 100% increased critical strike chance to the next spell cast.
-	// Revelation's chance to trigger is diminished as your critical strike chance increases.
+	// to critically strike. Revelation grants 100% increased critical strike chance to the next non-periodic
+	// spell cast. Revelation's chance to trigger is diminished as your critical strike chance increases.
 	// https://www.wowhead.com/forever/spell=1248805
-	// unsupported: states no rate; the enchant's effect entry resolves no stats from 1248808 (A_MOD_CRIT_PCT)
+	// unsupported: states no rate; the enchant's effect entry resolves no stats from 1248806 (A_PROC_TRIGGER_SPELL)
 	// trigger 1248806 (no stated rate, core.CallbackOnSpellHitDealt | core.CallbackOnHealDealt, core.ProcMaskSpellDamage | core.ProcMaskSpellHealing)
 	// shared.NewSpellDataProc(shared.SpellDataProc{
 	//	Name:           "Enchant Weapon - Revelation",

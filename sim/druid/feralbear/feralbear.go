@@ -46,7 +46,6 @@ func NewFeralBearDruid(character *core.Character, options *proto.Player) *Guardi
 	})
 	bear.EnableRageBar(core.RageBarOptions{
 		BaseRageMultiplier: 1,
-		CritRageBonus:      core.CritAutoAttackRageBonus,
 		StartingRage:       tankOptions.Options.GetStartingRage(),
 	})
 	bear.EnableAutoAttacks(bear, core.AutoAttackOptions{
