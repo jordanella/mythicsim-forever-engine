@@ -60,8 +60,8 @@ func probePlayer(t *testing.T, playerJSON string, mainHand ...int32) (*core.Simu
 }
 
 const (
-	catJSON      = `{"name":"cat","class":"ClassDruid","race":"RaceNightElf","talentsString":"-5521002023132213051-05503","feralCatDruid":{"options":{}}}`
-	bearJSON     = `{"name":"bear","class":"ClassDruid","race":"RaceNightElf","talentsString":"-5003232120132010501-0550325","feralBearDruid":{"options":{"classOptions":{}}}}`
+	catJSON      = `{"name":"cat","class":"ClassDruid","race":"RaceNightElf","talentsString":"-55210032020132012051-05503","feralCatDruid":{"options":{}}}`
+	bearJSON     = `{"name":"bear","class":"ClassDruid","race":"RaceNightElf","talentsString":"-50032302120132010501-0550325","feralBearDruid":{"options":{"classOptions":{}}}}`
 	balanceJSON  = `{"name":"owl","class":"ClassDruid","race":"RaceNightElf","talentsString":"5532220115001351--505302","balanceDruid":{"options":{"classOptions":{}}}}`
 	rogueJSON    = `{"name":"rogue","class":"ClassRogue","race":"RaceHuman","talentsString":"00530310551021051-302303202004","rogue":{"options":{"classOptions":{}}}}`
 	warriorJSON  = `{"name":"warr","class":"ClassWarrior","race":"RaceHuman","talentsString":"32305213132515201-5502","dpsWarrior":{"options":{"classOptions":{}}}}`

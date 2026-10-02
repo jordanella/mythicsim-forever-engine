@@ -154,7 +154,11 @@ func (shaman *Shaman) RegisterWindfuryImbue(procMask core.ProcMask) {
 }
 
 var windfuryImbue = spellData.WindfuryWeaponTriggered.Highest()
-var flametongueImbue = spellData.FlametongueWeaponTriggered.Highest()
+
+// Rank 6's proc, picked by id. Client 1.60.1.70170 rewrote the Flametongue Weapon tooltips to name a
+// Flametongue Attack spell (10444, 29469, 29470) next to each rank's proc, which makes the generated
+// triggered ladder nine spells in id order, so Highest() is no longer the rank 6 proc.
+var flametongueImbue = spellData.FlametongueWeaponTriggered.ByID(16344)
 var frostbrandImbue = spellData.FrostbrandWeaponTriggered.Highest()
 
 func (shaman *Shaman) newFlametongueImbueSpell(weapon *core.Item) *core.Spell {

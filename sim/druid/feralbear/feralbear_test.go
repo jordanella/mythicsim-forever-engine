@@ -72,7 +72,7 @@ func TestFeralBear(t *testing.T) {
 }
 
 // Our Forever sim's Bear Tank build, 0/31/20.
-const DefaultTalents = "-5003232120132010501-0550325"
+const DefaultTalents = "-50032302120132010501-0550325"
 
 var DefaultSpecOptions = &proto.Player_FeralBearDruid{
 	FeralBearDruid: &proto.FeralBearDruid{

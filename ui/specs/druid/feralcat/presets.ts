@@ -53,8 +53,8 @@ export const SIMPLE = PresetUtils.makePresetSimpleRotation('Simple', Spec.SpecFe
 export const APL = PresetUtils.makePresetAPLRotation('Feral', DefaultApl);
 export const APL_SIMPLE_VAEL = PresetUtils.makePresetAPLRotation('Simple Vaelastrasz', SimpleVaelApl);
 
-export const FeralTalents = PresetUtils.makePresetTalents('Feral', SavedTalents.create({ talentsString: '-5521002023132213051-05503' }));
-export const FeralCatTalents = PresetUtils.makePresetTalents('Feral Cat 9/35/7', SavedTalents.create({ talentsString: '050022-5500002123032213051-052' }));
+export const FeralTalents = PresetUtils.makePresetTalents('Feral', SavedTalents.create({ talentsString: '-55210032020132012051-05503' }));
+export const FeralCatTalents = PresetUtils.makePresetTalents('Feral Cat 9/35/7', SavedTalents.create({ talentsString: '050022-55000032120032012051-052' }));
 
 // Our Forever sim's gear presets (master ui/<spec>/gear_sets).
 export const GEAR_LAUNCH = PresetUtils.makePresetGear('Launch', LaunchGear);

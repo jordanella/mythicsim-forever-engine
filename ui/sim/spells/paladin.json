@@ -253,23 +253,23 @@
 	"20925": {
 		"ability": "Holy Shield",
 		"file": "sim/paladin/holy_shield.go",
-		"note": "Beta client 1.60.1.70009: 65 -> 110 damage a block at 0.08 (Classic 0.05), block chance 30% -> 20%. The block damage is its own metrics line under the same id.",
+		"note": "Beta client 1.60.1.70009: 65 -> 110 damage a block at 0.08 (Classic 0.05), block chance 30% -> 20%, then back to 30% in 70170. The block damage is its own metrics line under the same id.",
 		"source": "forever",
-		"tooltip": "150 Mana\nInstant\n10 sec cooldown\nIncreases chance to block by 20% for 10 sec and deals 110 Holy damage for each attack blocked while active. Damage caused by Holy Shield causes 20% additional threat. Each block expends a charge. 4 charges."
+		"tooltip": "150 Mana\nInstant\n10 sec cooldown\nIncreases chance to block by 30% for 10 sec and deals 110 Holy damage for each attack blocked while active. Damage caused by Holy Shield causes 20% additional threat. Each block expends a charge. 4 charges."
 	},
 	"20927": {
 		"ability": "Holy Shield",
 		"file": "sim/paladin/holy_shield.go",
-		"note": "Beta client 1.60.1.70009: 95 -> 153 damage a block at 0.08 (Classic 0.05), block chance 30% -> 20%. The block damage is its own metrics line under the same id.",
+		"note": "Beta client 1.60.1.70009: 95 -> 153 damage a block at 0.08 (Classic 0.05), block chance 30% -> 20%, then back to 30% in 70170. The block damage is its own metrics line under the same id.",
 		"source": "forever",
-		"tooltip": "195 Mana\nInstant\n10 sec cooldown\nIncreases chance to block by 20% for 10 sec and deals 153 Holy damage for each attack blocked while active. Damage caused by Holy Shield causes 20% additional threat. Each block expends a charge. 4 charges."
+		"tooltip": "195 Mana\nInstant\n10 sec cooldown\nIncreases chance to block by 30% for 10 sec and deals 153 Holy damage for each attack blocked while active. Damage caused by Holy Shield causes 20% additional threat. Each block expends a charge. 4 charges."
 	},
 	"20928": {
 		"ability": "Holy Shield",
 		"file": "sim/paladin/holy_shield.go",
-		"note": "Beta client 1.60.1.70009: 130 -> 221 damage a block at 0.08 (Classic 0.05), block chance 30% -> 20%. The block damage is its own metrics line under the same id.",
+		"note": "Beta client 1.60.1.70009: 130 -> 221 damage a block at 0.08 (Classic 0.05), block chance 30% -> 20%, then back to 30% in 70170. The block damage is its own metrics line under the same id.",
 		"source": "forever",
-		"tooltip": "240 Mana\nInstant\n10 sec cooldown\nIncreases chance to block by 20% for 10 sec and deals 221 Holy damage for each attack blocked while active. Damage caused by Holy Shield causes 20% additional threat. Each block expends a charge. 4 charges."
+		"tooltip": "240 Mana\nInstant\n10 sec cooldown\nIncreases chance to block by 30% for 10 sec and deals 221 Holy damage for each attack blocked while active. Damage caused by Holy Shield causes 20% additional threat. Each block expends a charge. 4 charges."
 	},
 	"20929": {
 		"ability": "Holy Shock",

@@ -200,11 +200,11 @@ func (mage *Mage) registerImprovedFireWard() {
 // build 70009), stack cap and per-stack cast time cut are read from the row. Frostfire Bolt, which
 // the tooltip also names, builds stacks too.
 func (mage *Mage) registerHotStreak() {
-	if !mage.Talents.HotStreak {
+	if !mage.Talents.HeatingUp {
 		return
 	}
 
-	buff := spellData.HotStreakTriggered.Highest()
+	buff := spellData.HeatingUpTriggered.Highest()
 	perStack := buff.Effect(dbcenums.A_ADD_PCT_MODIFIER, int32(dbcenums.SPELLMOD_CASTING_TIME)).Percent()
 
 	castTimeMod := mage.AddDynamicMod(core.SpellModConfig{

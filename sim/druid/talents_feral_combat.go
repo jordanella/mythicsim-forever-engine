@@ -33,7 +33,6 @@ func (druid *Druid) registerFeralCombatTalents() {
 	// Tier 5
 	druid.applyPredatoryInstincts()
 	// Leader of the Pack implemented in druid.go
-	druid.applyKingOfTheJungle()
 
 	// Tier 6
 	druid.applyNaturalReaction()
@@ -256,10 +255,6 @@ func (druid *Druid) applyFeralCharge() {
 	if !druid.Talents.FeralCharge {
 		return
 	}
-}
-
-// King of the Jungle grants Energy on Tiger's Fury; applied in tigers_fury.go.
-func (druid *Druid) applyKingOfTheJungle() {
 }
 
 // Natural Reaction, new in Forever: dodge chance, and a chance at Rage on every dodge.

@@ -81,6 +81,9 @@ var tooltipAllowed = map[int32][]float64{
 	19577:   {8},                          // Intimidation: base mana share
 	1310703: {3, 4, 5, 9, 12, 15, 18, 21}, // Venom: per combo point durations
 	16488:   {20},                         // Blood Craze: the 20% health condition
+	20925:   {20},                         // Holy Shield: the 20% extra threat is not in the client
+	20927:   {20},                         // Holy Shield
+	20928:   {20},                         // Holy Shield
 	2687:    {25},                         // Bloodrage: Improved Bloodrage per point                                    // Shield Wall: Improved Shield Wall per point
 }
 

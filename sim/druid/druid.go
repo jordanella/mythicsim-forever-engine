@@ -9,7 +9,7 @@ import (
 	"github.com/wowsims/forever/sim/core/stats"
 )
 
-var TalentTreeSizes = [3]int{16, 19, 16}
+var TalentTreeSizes = [3]int{16, 20, 16}
 
 type Druid struct {
 	core.Character
