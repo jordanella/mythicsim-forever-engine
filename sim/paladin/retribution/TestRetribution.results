@@ -472,8 +472,8 @@ dps_results: {
 dps_results: {
  key: "TestRetribution-AllItems-EnchantWeapon-Insight-8216"
  value: {
-  dps: 393.58628
-  tps: 237.34878
+  dps: 388.85888
+  tps: 234.73687
  }
 }
 dps_results: {

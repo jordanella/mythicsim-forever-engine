@@ -415,7 +415,25 @@ func skipRow(_ *parser, _ *Effect, _ float64) *attachment {
 	return nil
 }
 
+// Rows whose stat the client left unnamed, with the stat their own tooltip gives. Client 1.60.1.70170
+// moved Insight's buff 1299796 ("Increases your Spirit by 100%", Enchant Weapon - Insight) and Mystic
+// Mushroom's Increased Spirit 1248751 ("Increases Spirit by 5%") from A_MOD_PERCENT_STAT on Spirit (misc 4)
+// to A_MOD_TOTAL_STAT_PERCENTAGE with MiscValue_0 0 and no stat mask in MiscValue_1. Every other row of that
+// aura names its stat in one of the two, so these read as Strength, which no tooltip says and no caster
+// uses. 70170's Coward! (422978), a debuff the sim does not apply, lost its all-stats -1 the same way, so it
+// looks like a client data error rather than a change of stat. Drop an entry when the client names the
+// stat. See patch 64 in docs/mythicsim-patches.md.
+var percentStatRowsNamingNoStat = map[int32]stats.Stat{
+	1299796: stats.Spirit,
+	1248751: stats.Spirit,
+}
+
 func percentStatRow(p *parser, e *Effect, v float64) *attachment {
+	if e.Aura == dbcenums.A_MOD_TOTAL_STAT_PERCENTAGE && e.Misc == 0 && e.Misc2 == 0 {
+		if stat, ok := percentStatRowsNamingNoStat[e.SpellID]; ok {
+			return p.statMultiplier([]stats.Stat{stat}, percentMultiplier(v))
+		}
+	}
 	return p.statMultiplier(clientStatList(e.Misc), percentMultiplier(v))
 }
 

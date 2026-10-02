@@ -587,9 +587,9 @@ dps_results: {
 dps_results: {
  key: "TestProtection-AllItems-EnchantWeapon-Insight-8216"
  value: {
-  dps: 263.58891
-  tps: 268.68653
-  dtps: 1096.90024
+  dps: 259.54648
+  tps: 265.327
+  dtps: 1091.53172
  }
 }
 dps_results: {
