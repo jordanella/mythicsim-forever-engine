@@ -1194,3 +1194,12 @@ Each was read against the engine; the tests below pin the behaviour so a later h
   the row.
 - **No sim effect**, as the notes say: scrolls from comprehension cannot be cast while moving, and pets in
   aggressive mode.
+
+## Client 1.60.1.70170 adopted (2 October 2026)
+
+`assets/db_inputs/forever_client_build.txt` now reads 1.60.1.70170: the spell store, class spell data, talent
+trees and protos are the build's, and the patches 40 to 63 above implement what the client rows do not carry
+(Shifting Power, Rage on crits, Swipe attack power, Hellfire, Eureka!, Insight). The item database
+(`db.json`, `db.bin`, `leftover_db`, enchant and proc files) is still the 70124 one because the hotfix cache was not
+applied (see the interim note above), so item stats and item procs are as of 70124 plus the 77 pinned roots.
+Merge upstream's own `[DB] Update to 1.60.1.70170` when it lands and drop `interimHotfixItemSpells`.
