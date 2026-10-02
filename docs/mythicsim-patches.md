@@ -1469,3 +1469,15 @@ finite weight and reference EP of one. `TestStatWeightsRequestValidation` checks
 and missing fields, iterations and stats.
 
 Drop this adapter when upstream exposes the equivalent CLI command.
+
+## 74. `core: concurrent sims honour GOMAXPROCS`
+
+The concurrent runner used `runtime.NumCPU()` even when a caller bounded Go concurrency.
+A tank stat-weights calculation therefore allocated twelve simulations inside the application's
+one GiB container and was killed for memory use. The runner now caps the split count at
+`min(runtime.NumCPU(), runtime.GOMAXPROCS(0))`. The stat-weights worker supplies `GOMAXPROCS=2`
+and `GOMEMLIMIT=512MiB`. Iterations, seeds, encounter and weight calculations stay the same.
+Test-mode simulations keep their existing three splits. The normal default remains the host's
+available Go concurrency. The real caster and tank image checks cover the worker budget.
+
+Drop this when upstream respects the caller's concurrency limit.

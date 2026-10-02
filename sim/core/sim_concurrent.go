@@ -497,7 +497,10 @@ func runSimConcurrent(request *proto.RaidSimRequest, progress chan *proto.Progre
 		}
 	}()
 
-	splitRes := SplitSimRequestForConcurrency(request, TernaryInt32(request.SimOptions.IsTest, 3, int32(runtime.NumCPU())))
+	// Honour a caller's Go concurrency limit instead of allocating a simulation
+	// for every host CPU inside a container with a smaller resource budget.
+	concurrency := min(runtime.NumCPU(), runtime.GOMAXPROCS(0))
+	splitRes := SplitSimRequestForConcurrency(request, TernaryInt32(request.SimOptions.IsTest, 3, int32(concurrency)))
 
 	if splitRes.ErrorResult != "" {
 		panic(splitRes.ErrorResult)
