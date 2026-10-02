@@ -1203,3 +1203,6 @@ trees and protos are the build's, and the patches 40 to 63 above implement what 
 (`db.json`, `db.bin`, `leftover_db`, enchant and proc files) is still the 70124 one because the hotfix cache was not
 applied (see the interim note above), so item stats and item procs are as of 70124 plus the 77 pinned roots.
 Merge upstream's own `[DB] Update to 1.60.1.70170` when it lands and drop `interimHotfixItemSpells`.
+
+The alternate "Simple Vaelastrasz" Feral Cat rotation (`ui/specs/druid/feralcat/apls/simple_vael.apl.json`) cast and
+refreshed Tiger's Fury (9846), which 70170 removed; those two lines are gone.
