@@ -797,3 +797,72 @@ nothing named them.
 - **Default.** Every build with a weapon in each swinging slot behaves exactly as before; the melee, ranged and
   caster suites pass unchanged.
 - **Drop it when** upstream guards zero-speed weapons in the swing loop.
+
+## Client 1.60.1.70170 (2 October 2026), interim
+
+The branch `mythicsim/client-70170` merges upstream `696a6c4040` (4 commits: Master of Elements refunds once
+per cast, the 2026-10-01 Wowhead data refresh, Warrior Dual Wield Specialization no longer raises off-hand
+rage) and then regenerates the client data for build 1.60.1.70170. Upstream had not merged its own
+`[DB] Update to 1.60.1.70170` when this was cut, and its Update DB workflow would fail on this build
+at `gen_spelldata` for the reasons below.
+
+**The regeneration is interim.** `db2tool --cdn` ran without a hotfix cache (`DBCache.bin`), because the
+workflow's download was not available to the run. Without it the CDN tables carry no ItemSparse rows for
+about 70 spells' worth of items that `db.json` holds, so the store lost 77 item roots, and `gen_db` would
+rewrite the item procs, enchants and `leftover_db` with those items gone. So only what does not depend on
+item rows was kept: the spell store (`spells_auto_gen.go`, `spell_store_inputs.json`), the class
+`spell_data_auto_gen.go` files, the talent trees and `proto/*.proto`. `db.json`, `db.bin`, `leftover_db.*`,
+`enchants_auto_gen.go`, `stat_bonus_*_auto_gen.go`, `missing_effects_auto_gen.ts` and
+`forever_client_build.txt` are the 70124 ones. The 77 lost roots are pinned in
+`tools/database/overrides/extra_spells.go` (`interimHotfixItemSpells`). To finish: download the mirror the
+workflow uses into `tools/db2tool/caches/DBCache.bin`, run `make db DB2TOOL_FLAGS="--cdn --dbcache
+tools/db2tool/caches/DBCache.bin"`, then `make basestats`, `go run ./tools/database/gen_spelldata`,
+`make proto`, `go run ./tools/database/gen_db -gen=go-to-ts`, drop `interimHotfixItemSpells`, and re-bless.
+`tools/database` `TestEveryReachableProcIsSupportedOrListed` fails until then: the capture lacks the pinned
+roots, and Rotmending (1321587) and Siphon the Grave (1321560) are new unsupported procs.
+
+What the regeneration changed that the sim read by position or by name:
+
+- **Renamed talents.** The client renamed Hot Streak to Heating Up and Soul Harvesting to Soul Harvest, so the
+  proto fields, the generated ladders (`HeatingUp`, `SoulHarvest`) and the tree `fieldName`s changed.
+- **Druid tree.** King of the Jungle is gone, Shifting Power (1322605) and Improved Shifting Power (1322670, 2
+  ranks) are in, Shredding Attacks moved up a row and Predatory Instincts to (4,3). The Feral tab is 20
+  talents, not 19, and every proto field number after Shredding Attacks moved. Talent strings read by position,
+  so `TalentTreeSizes` in `sim/druid/druid.go` is now `{16, 20, 16}` (a stale size shifts every Restoration
+  talent by one), and the Feral section of every druid string in the engine was translated by talent name:
+  `-5521002023132213051-05503` is `-55210032020132012051-05503`, `-5003232120132010501-0550325` is
+  `-50032302120132010501-0550325`, `050022-5500002123032213051-052` is
+  `050022-55000032120032012051-052`. King of the Jungle's 3 points are unspent in the two Feral presets.
+- **Tiger's Fury stays registered.** The client dropped it from the spell book and tree but kept the rows, so
+  `extra_spells.go` pins 5217 and 417045 and `sim/druid/tigers_fury.go` reads 5217 by id. Its King of the
+  Jungle energy (20 a rank) is gone with the talent, which is the whole -9.9% on the Feral Cat golden. The
+  Shifting Power work should replace it, Wolfshead Helm (patch 24) included.
+- **Flametongue Weapon ladder (patches 20 and 31).** The 70170 tooltips name a Flametongue Attack spell (10444,
+  29469, 29470) beside each rank's proc, so the generated `FlametongueWeaponTriggered` ladder is nine spells in
+  id order and `Highest()` became a spell with no damage. `sim/shaman/weapon_imbues.go` takes 16344 by id.
+  Any ladder built from `triggeredSpells` can shift this way when a tooltip gains a `$id` reference.
+- **Insight and Increased Spirit.** Insight's buff 1299796 and Increased Spirit 1248751 (Mystic Mushroom) went
+  from `A_MOD_PERCENT_STAT` on Spirit to `A_MOD_TOTAL_STAT_PERCENTAGE` with no stat named, which the engine
+  reads as Strength. The tooltips still say Spirit. `TestInsightMultipliesSpirit` is skipped and the
+  Mystic Mushroom and Insight rows in the goldens moved with Strength. Decide or wait for a hotfix.
+- **Hard-coded mirrors that ignore the row.** Gnome Eureka! (`sim/core/racials.go`, patch 2 reads it) now
+  applies to non-periodic abilities only, and Elemental Focus's Clearcasting mask
+  (`sim/shaman/talents_elemental.go`) lost two class bits (word 1 0x40000, word 3 0x40000000) and gained Fire
+  Nova's; neither is followed.
+- **Fork patches.** Patch 14's Devouring Plague half is now in the client data (Periodic Can Crit set on 2944 and
+  19276 to 19280), so `priestTickOutcome(true, dot)` in `sim/priest/devouring_plague.go` duplicates it; the
+  Shadowform mask half still stands. Patch 27 reads the form passives only by hard-coded behaviour. Patch 24
+  names Tiger's Fury, which the client replaces with Shifting Power.
+- **Tooltips.** Holy Shield's block chance is 30 again (was 20) and Sniper Shot is 8 to 45 yd with a range bonus
+  on the next 3 shots; both `ui/sim/spells` rows and the tooltip manifest's allow list follow.
+
+Golden movements on the regenerated data (all explained, none from a silent misread):
+
+| Golden | Average-Default DPS | Cause |
+|---|---|---|
+| TestFeralCat | 235.46 to 212.08 (-9.9%) | King of the Jungle removed (restoring its 60 energy gives the old number exactly) |
+| TestFire | 189.89 to 185.79 (-2.2%) | Combustion charges 4 to 3 (restoring the row gives the old number) |
+| TestRetribution | 408.98 to 391.64 (-4.2%) | Champion of the Light 33/66/100 to 20/40/60 (restoring the curve gives the old number) |
+| TestProtection | 258.72 to 260.78 (+0.8%) | Holy Shield block 20 to 30 (+6.0) and Redoubt 6..30 to 4..20 (-4.1) |
+| TestSurvival | 290.26 unchanged | Deflection parry 10 to 5 only |
+| TestBalance, FeralBear, FeralCat, SurvivalMelee, Arcane, Frost, Shadow, Smite, Elemental, Enhancement, Affliction, Destruction, Arms | unchanged | one to three AllItems rows each: Searing Dagger (Sear 1291568), Mystic Mushroom (Increased Spirit), Plaguefang (Poison 1309315), Insight enchant |
