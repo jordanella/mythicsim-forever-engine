@@ -766,8 +766,8 @@ dps_results: {
 dps_results: {
  key: "TestFeralCat-AllItems-MysticMushroom-249396"
  value: {
-  dps: 260.74415
-  tps: 148.56507
+  dps: 258.64728
+  tps: 147.47234
  }
 }
 dps_results: {

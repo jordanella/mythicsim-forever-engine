@@ -235,11 +235,14 @@ func (warlock *Warlock) registerAmplifyCurse() {
 	})
 }
 
-// applySoulHarvesting implements Soul Harvesting, new in Forever.
+// applySoulHarvesting implements Soul Harvest (named Soul Harvesting before client 1.60.1.70170), new in
+// Forever.
 //
 // Client 437032: a kill under Drain Soul grants Soul Harvest (1242853) for 10 sec, +50/100% mana
-// regeneration and 50/100% of it kept while casting. Nothing dies under Drain Soul in the sim's
-// encounters, so there is nothing to model.
+// regeneration and 50/100% of it kept while casting. Client 70170 changed the first effect from aura 379 to
+// A_MOD_POWER_REGEN_PERCENT (110) on mana, which is the fix for "now correctly grants its mana regeneration
+// increase". Nothing dies under Drain Soul in the sim's encounters, so the buff never starts and there is
+// nothing to model.
 func (warlock *Warlock) applySoulHarvesting() {
 	if warlock.Talents.SoulHarvest == 0 {
 		return

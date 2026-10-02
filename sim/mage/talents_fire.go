@@ -195,8 +195,10 @@ func (mage *Mage) registerImprovedFireWard() {
 	}
 }
 
-// Fireball, Frostfire Bolt, Fire Blast and Scorch crits each take 25% off Pyroblast's cast time, stacking 3 times,
-// so the stacks are worth holding rather than spending. The buff is 400625: its duration (20 sec since
+// Heating Up (Hot Streak before client 1.60.1.70170, which renamed the talent and reworded the tooltip but
+// changed no row): Fireball, Frostfire Bolt, Fire Blast and Scorch crits each take 25% off Pyroblast's cast time,
+// stacking 3 times, so the stacks are worth holding rather than spending. Every crit stacks, so nothing here
+// depends on a streak of crits. The buff is 400625: its duration (20 sec since
 // build 70009), stack cap and per-stack cast time cut are read from the row. Frostfire Bolt, which
 // the tooltip also names, builds stacks too.
 func (mage *Mage) registerHotStreak() {
@@ -213,7 +215,7 @@ func (mage *Mage) registerHotStreak() {
 	})
 
 	mage.HotStreakAura = mage.RegisterAura(core.Aura{
-		Label:     "Hot Streak",
+		Label:     "Heating Up",
 		ActionID:  core.ActionID{SpellID: buff.ID},
 		Duration:  buff.Duration(),
 		MaxStacks: int32(buff.MaxStack),
@@ -235,7 +237,7 @@ func (mage *Mage) registerHotStreak() {
 	})
 
 	mage.MakeProcTriggerAura(core.ProcTrigger{
-		Name:               "Hot Streak Trigger",
+		Name:               "Heating Up Trigger",
 		Callback:           core.CallbackOnSpellHitDealt,
 		ClassSpellMask:     MageSpellFireball | MageSpellFrostfireBolt | MageSpellFireBlast | MageSpellScorch,
 		Outcome:            core.OutcomeCrit,

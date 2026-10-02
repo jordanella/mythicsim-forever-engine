@@ -173,10 +173,8 @@ func TestShieldEnchantBuffDropsWithItsShield(t *testing.T) {
 // gains while it is up.
 func TestInsightMultipliesSpirit(t *testing.T) {
 	// Client 1.60.1.70170 changed 1299796's effect from A_MOD_PERCENT_STAT on Spirit (misc 4) to
-	// A_MOD_TOTAL_STAT_PERCENTAGE with no stat named, so the engine now reads a 100% rise in Strength,
-	// while the tooltip still says Spirit. Skipped until the client row is corrected or a rule for
-	// the stat is decided; see docs/mythicsim-patches.md, "Client 1.60.1.70170".
-	t.Skip("1299796 no longer names Spirit in client 1.60.1.70170")
+	// A_MOD_TOTAL_STAT_PERCENTAGE with no stat named. The tooltip still says Spirit, and the parser reads
+	// the row as Spirit (percentStatRowsNamingNoStat in sim/core/spelldata, patch 64).
 	weapon := testOneHander(insightWeaponID)
 	core.AddToDatabase(&proto.SimDatabase{
 		Items: []*proto.SimItem{weapon},

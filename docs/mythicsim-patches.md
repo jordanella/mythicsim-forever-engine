@@ -913,15 +913,17 @@ What the regeneration changed that the sim read by position or by name:
   Any ladder built from `triggeredSpells` can shift this way when a tooltip gains a `$id` reference.
 - **Insight and Increased Spirit.** Insight's buff 1299796 and Increased Spirit 1248751 (Mystic Mushroom) went
   from `A_MOD_PERCENT_STAT` on Spirit to `A_MOD_TOTAL_STAT_PERCENTAGE` with no stat named, which the engine
-  reads as Strength. The tooltips still say Spirit. `TestInsightMultipliesSpirit` is skipped and the
-  Mystic Mushroom and Insight rows in the goldens moved with Strength. Decide or wait for a hotfix.
-- **Hard-coded mirrors that ignore the row.** Gnome Eureka! (`sim/core/racials.go`, patch 2 reads it) now
-  applies to non-periodic abilities only, and Elemental Focus's Clearcasting mask
-  (`sim/shaman/talents_elemental.go`) lost two class bits (word 1 0x40000, word 3 0x40000000) and gained Fire
-  Nova's; neither is followed.
+  read as Strength while the tooltips say Spirit. Resolved by patch 63: the parser reads both rows as Spirit,
+  `TestInsightMultipliesSpirit` runs again, and the Mystic Mushroom and Insight rows in the goldens that moved
+  with Strength move back.
+- **Hard-coded mirrors that ignore the row.** Gnome Eureka! (`sim/core/racials.go`) applies to non-periodic
+  abilities only: resolved by patch 62, which states each class's three lists from the client rows. Elemental
+  Focus's Clearcasting mask (`sim/shaman/talents_elemental.go`) lost two class bits (word 1 0x40000, word 3
+  0x40000000) and gained Fire Nova's: not a change to the spells it names (see "Caster rows that needed no
+  engine change" below), and `TestClearcastingNamesTheSpellsTheClientRowDoes` holds the sim's list to the row.
 - **Fork patches.** Patch 14's Devouring Plague half is now in the client data (Periodic Can Crit set on 2944 and
-  19276 to 19280), so `priestTickOutcome(true, dot)` in `sim/priest/devouring_plague.go` duplicates it; the
-  Shadowform mask half still stands. Patch 27 reads the form passives only by hard-coded behaviour. Patch 24
+  19276 to 19280), so patch 60 reads it from the rank instead of rolling unconditionally; the Shadowform mask half
+  still stands. Patch 27 reads the form passives only by hard-coded behaviour. Patch 24
   names Tiger's Fury, which the client replaces with Shifting Power.
 - **Tooltips.** Holy Shield's block chance is 30 again (was 20) and Sniper Shot is 8 to 45 yd with a range bonus
   on the next 3 shots; both `ui/sim/spells` rows and the tooltip manifest's allow list follow.
@@ -1041,3 +1043,154 @@ Checked against the 70124 to 70170 diff and the engine; tests pin the current be
   behaviour. `TestDualWieldSpecializationHitChanceIsOffHandOnly`.
 - **Rend and Sunder Armor tap enemies instantly.** Attributes_6 0x800000 (TAPS_IMMEDIATELY) on the Rend and Sunder
   Armor ranks. Tagging has no effect in a sim with one boss.
+
+## 60. `priest: Inner Focus's crit follows the client's non-periodic list, Devouring Plague reads its crit from the row`
+
+- **What it does.** Inner Focus (14751) raises the crit of the next spell by 25. Its effect 1 names the spells by class
+  mask, and client 1.60.1.70170 ("non-periodic" in its tooltip) took Devouring Plague and Shadow Word: Pain off the
+  mask and put Mind Flay and Starshards on it; Shadow Word: Death was never on it. `applyInnerFocus`
+  (`sim/priest/talents_discipline.go`) now leaves out Shadow Word: Death, Devouring Plague and Shadow Word: Pain
+  (it left out Mind Flay, Shadow Word: Death and Starshards). Mind Flay and Starshards gain nothing in practice: the
+  buff is spent by the cast that starts their channel, before the first tick. The Devouring Plague half of patch
+  14 is retired: `priestTickOutcome(rank.PeriodicCanCrit(), dot)` replaces the unconditional roll, because every
+  rank now carries Periodic Can Crit (2944 and 19276 to 19280). The two are bit-identical (the same output at the
+  same seed on the Shadow and Smite references), and `TestEveryDevouringPlagueRankCarriesPeriodicCanCrit` fails the
+  day a rank loses the attribute. The Shadowform half of patch 14 (Shadow Word: Death's crit damage) stands.
+- **Why.** The Shadow rotation casts Inner Focus ahead of a Mind Blast hard cast, and the buff stays up until that
+  cast completes, so the Shadow Word: Pain and Devouring Plague ticks that land in that window used to roll 25%
+  more crit.
+- **Measured** (same seed, 200,000 iterations, 120 s and 300 s): Shadow Priest 613.58 to 613.03 and 611.77 to
+  611.29 (-0.09% and -0.08%); Smite Priest 440.17 to 439.74 and 416.16 to 415.84 (-0.10% and -0.08%). The
+  Devouring Plague line alone moves nothing.
+- **Tests.** `sim/priest/client_70170_test.go`: `TestInnerFocusCritIsNonPeriodic`,
+  `TestEveryDevouringPlagueRankCarriesPeriodicCanCrit`; `TestDevouringPlagueTicksCrit` still passes.
+- **Drop it when** never: it follows the row. Patch 14's Shadowform half is the part that stays.
+
+## 61. `warlock: Hellfire's ticks can crit`
+
+- **What it does.** Hellfire Effect (5857, 11681, 11682) lost Cannot Crit (Attributes_2 0x20000000) and gained Periodic
+  Can Crit (Attributes_8 0x200) in client 70170. The sim deals Hellfire's hits as ticks of the channel, so
+  `sim/warlock/hellfire.go` rolls `OutcomeTickMagicHitAndCrit` on each target instead of a plain hit. The warlock
+  still burns the base tick, before any crit, as the client's self damage is its own spell.
+- **Measured.** No reference casts Hellfire (none of the presets or the engine's APLs name 1949, 11683 or 11684),
+  so no reference moves. A Hellfire tick gains the crit chance times half again its damage.
+- **Tests.** `sim/warlock/client_70170_test.go` (`TestHellfireTicksCanCrit`, which fails without the change).
+- **Drop it when** never: it follows the row.
+
+## 62. `core: Eureka! states each class's lists, and leaves periodic effects out`
+
+- **What it does.** Gnome Eureka! (rows 1259812 Rogue, 1259813 Warrior, 1259817 Mage, 1259821 Warlock, 1259823 Priest)
+  gives the next three casts of its listed abilities -10% cost and +10% damage. Client 70170 ("no longer
+  benefits periodic effects at all. Channeled spells do not count as periodics") rewrote the lists:
+  effect 0 (cost) and effect 1 (damage) lost every dot, effect 2 (the periodic bonus) kept only the channels
+  (priest: Mind Flay, Penance, Starshards; warlock: Drain Life, Drain Soul, Wrack; rogue and warrior: a dummy now;
+  mage: no mask at all), and the lists gained spells (mage: Pyroblast, Frost Nova, the Arcane Missile tick;
+  warlock: Hellfire, Haunt; warrior: Intercept, Pummel, Revenge, Shield Bash, Spearing Strike; rogue: Hemorrhage;
+  priest: Shadow Word: Death). Core used to take every class ability that deals damage and could not see the
+  masks. `core.EurekaSpells` is now the three lists as class masks, which each class states in `eureka.go` next to
+  its spells (`sim/mage`, `sim/warlock`, `sim/priest`, `sim/rogue`, `sim/warrior`), and `applyEureka` builds from
+  them: the cost cut on the cost list, +10% on the damage and tick lists, the dots of a spell on the damage list
+  alone give the 10% back (a spell's multiplier covers its hits and its ticks), and a charge is spent by a cast of
+  any spell on any of the lists (assumed to be the client's own proc rule, a charge following the union of the
+  effect masks as a talent proc's class mask does; alternative 1 below prices the other reading). A cast of Corruption,
+  Curse of Agony, Siphon Life, Shadow Word: Pain or Rend now neither costs less nor spends a charge, and no tick of
+  them gains anything.
+- **The sim's lists match the rows.** The racial rows are not in the spell store, so each class test copies the
+  70170 masks (family and four words) from the client and checks every spell the class registers against them,
+  so a hotfix that moves a list fails there. The few differences are the sim's own shape and are named in the tests:
+  Immolate's dot is its own spell, Hellfire's hits are ticks of the channel, Penance's bolts come from a channel
+  spell the sim folds into the cast.
+- **Measured** (same seed, 200,000 iterations, 120 s and 300 s, base is the regenerated 70170 data):
+
+  | Reference (Gnome) | 120 s before | 120 s after | 300 s before | 300 s after |
+  |---|---|---|---|---|
+  | Affliction Warlock | 542.22 | 540.53 (-0.31%) | 534.35 | 533.21 (-0.21%) |
+  | Demonology Warlock | 611.78 | 610.30 (-0.24%) | 598.46 | 597.69 (-0.13%) |
+  | Fire Mage | 588.90 | 588.84 (-0.01%) | 575.09 | 574.97 (-0.02%) |
+  | Frostfire Mage | 596.41 | 596.37 (-0.01%) | 567.53 | 567.38 (-0.03%) |
+
+  Those four are the only Gnome references, and Arcane, Frost and the Destruction Warlock do not race Gnome.
+  Goldens: `TestFire` Average-Default 185.791 to 185.769 (-0.01%); the Gnome rows of `TestAffliction` and
+  `TestDestruction` (naked, no gear to spend) move between -0.06% and +3.9% (Affliction without buffs, short fight,
+  169.11 to 175.75), because the charges are no longer spent on Corruption and the curses.
+- **Alternative readings.**
+  (1) Spend a charge on any class spell, as the old code did: identical at 120 s and 0.08% (Affliction) to 0.14%
+  (Demonology) lower at 300 s, where a second Eureka! window opens.
+  (2) The Mage's third effect keeps aura 108 and misc 22 with an empty mask. If an empty mask meant the whole
+  family, as TrinityCore reads it, every Mage dot would gain 10% again, against the patch note. The Rogue and
+  Warrior rows turn the same effect into a dummy, which settles the intent; the Mage mask is read as empty.
+  (3) The client lists the channels (Mind Flay, Drain Life) on both the damage and the periodic effect where the
+  damage one only matters for a hit of a triggered spell; the sim gives them the 10% once.
+- **Tests.** `TestEurekaListsMatchTheClientRow` in `sim/mage`, `sim/warlock`, `sim/priest`, `sim/rogue` and
+  `sim/warrior/dps`, `TestEurekaRaisesHitsButNotDots` (mage), `TestEurekaPassesOverTheDots` (warlock, priest),
+  `TestEurekaChargesGoToListedSpellsOnly` (mage). `TestDotTicksReadTheDamageMultiplierAtTheTick`
+  (`sim/warlock`, patch 22) used Eureka! as its multiplier; it now raises Corruption's own damage multiplier, which
+  is the number Eureka! raised. Patch 22's log evidence (a Gnome priest's Shadow Word: Pain stepping from 34 to 38) is
+  client 70009's and no longer happens, while dots still tick on current stats.
+- **Drop it when** never: it follows the rows. Re-check the masks in the tests when the client changes them.
+
+## 63. `spelldata: Insight and Increased Spirit read as Spirit`
+
+- **What it does.** Client 70170 moved Insight's buff 1299796 (Enchant Weapon - Insight, "Increases your Spirit by
+  100%" for 10 s) and Mystic Mushroom's Increased Spirit 1248751 ("Increases Spirit by 5%") from
+  `A_MOD_PERCENT_STAT` on Spirit (misc 4) to `A_MOD_TOTAL_STAT_PERCENTAGE` with MiscValue_0 0 and no stat mask in
+  MiscValue_1. Every other row of that aura names its stat in one of the two (Spirit Tap: misc 4 and mask 16;
+  Arcane Mind: misc 0 and mask 8), and the parser read these two as Strength. Both tooltips still say Spirit, and
+  Coward! (422978) lost its all-stats -1 in the same way, which looks like a data error rather than a change of
+  stat, so `percentStatRow` (`sim/core/spelldata/parse_effects_table.go`) reads exactly these two rows as Spirit
+  while they name no stat. A row that gains a stat, or goes back to `A_MOD_PERCENT_STAT`, reads as it states.
+- **Measured.** No reference wields Insight or the Mystic Mushroom (a Warrior's ranged slot item), so no reference
+  moves. The Insight enchant on the main hand of four caster references, same seed, 100,000 iterations (standard
+  error 0.05 to 0.15), DPS with Insight minus DPS without it on the same engine:
+
+  | Reference | 120 s, Strength read | 120 s, Spirit read | 300 s, Strength read | 300 s, Spirit read |
+  |---|---|---|---|---|
+  | Shadow Priest | -0.10 | +2.51 (+0.41%) | -0.07 | +0.14 (+0.02%) |
+  | Smite Priest | +0.05 | +1.45 (+0.33%) | -0.04 | +3.32 (+0.80%) |
+  | Fire Mage | +0.43 | +0.16 (+0.03%) | +0.06 | +2.41 (+0.42%) |
+  | Affliction Warlock | +0.04 | +1.88 (+0.35%) | +0.10 | +2.76 (+0.52%) |
+
+  So the Strength read made Insight worth nothing to a caster (the +0.43 is within two standard errors), and the
+  Spirit read makes it worth up to 0.8%, which is what the enchant's tooltip sells. The goldens' Insight and Mystic
+  Mushroom rows (`TestBalance`, `TestFeralBear`, `TestFeralCat`, `TestSurvivalMelee`, `TestProtection`,
+  `TestRetribution`) move back to their 70124 numbers.
+- **Alternative reading.** Follow the row: Insight and the Mushroom raise Strength. Nothing in the tooltips,
+  enchant text or the earlier client supports it, so it is read as a client error. If a hotfix names the stat,
+  the entry stops applying (the parser checks the misc values), and `TestPercentStatRowsNamingNoStatReadAsSpirit`
+  fails to say the table can lose the entry.
+- **Tests.** `TestInsightMultipliesSpirit` (re-enabled), `TestPercentStatRowsNamingNoStatReadAsSpirit` and
+  `TestPercentStatRowsThatNameAStatAreUnchanged` in `sim/common/shared`.
+- **Drop it when** the client names Spirit in the two rows.
+
+## Caster rows of client 1.60.1.70170 that needed no engine change
+
+Each was read against the engine; the tests below pin the behaviour so a later hotfix shows up.
+
+- **Shadow Word: Death and Early Demise.** The talent (1310076) states 30 crit at rank 2 on effect 1 and a health
+  threshold of 20 on effect 2. `shadow_word_death.go` already adds the crit only in the 20% execute phase, so the
+  bug the notes describe is not in the sim. `TestEarlyDemiseOnlyBelowItsHealthThreshold` measures 3.2% crits above
+  20% health and 32.8% at or below.
+- **Shadow Weaving.** The stack aura 15258 gained Always Hit: the debuff no longer rolls to land. The sim applies the
+  stack to the priest on every landed Shadow hit the talent's own chance picks (33, 67 or 100%), with no second
+  roll. `TestShadowWeavingAppliesOnEveryHitAtRankThree`.
+- **Improved Scorch and Winter's Chill.** Fire Vulnerability (22959) and Winter's Chill (12579) gained Always Hit
+  the same way. Both stacks are applied after the talent's chance and nothing else
+  (`TestImprovedScorchRollsOnlyTheTalentChance`, `TestWintersChillStacksOnEveryLandedFrostHit`).
+- **Heating Up.** The client renamed Hot Streak to Heating Up and reworded it ("reduce the cast time of your next
+  Pyroblast cast within 20 sec"); no row's numbers changed, and the sim already adds a stack for every non-periodic
+  crit, so nothing depends on a streak. The aura label, the log name and the `ui/sim/spells/mage.json` entry
+  follow the name. Rotations name 400625 by id, which still resolves.
+- **Combustion.** Three charges are read from the row (`ProcCharges` 4 to 3), so the engine already has them:
+  Fire Mage 598.67 to 588.84 at 120 s and 582.80 to 574.97 at 300 s (-1.6% and -1.3%, 200,000 iterations);
+  Frostfire has no Combustion. `TestCombustionEndsAfterThreeCrits`.
+- **Soul Harvest.** Renamed from Soul Harvesting, and its first effect moved from aura 379 to
+  `A_MOD_POWER_REGEN_PERCENT` on mana, which is the "now correctly grants" fix. The buff starts on a kill under
+  Drain Soul, which no encounter has, so the sim never applies it and has nothing to change.
+- **Elemental Focus's Clearcasting mask.** Of the two class bits it lost, word 1 0x40000 was Fire Nova's old bit
+  (Fire Nova now sits on word 0 bit 27, beside Fire Nova Totem, and the mask names that instead) and word 3
+  0x40000000 was Molten Blast (425339), a Season of Discovery rune with no talent in the sim. The spells the mask
+  names are unchanged: Lightning Bolt, Chain Lightning, Lava Burst, the three shocks and Fire Nova.
+  `TestClearcastingNamesTheSpellsTheClientRowDoes` (`sim/shaman/elemental`) holds the sim's consumption list to
+  the row.
+- **No sim effect**, as the notes say: scrolls from comprehension cannot be cast while moving, and pets in
+  aggressive mode.

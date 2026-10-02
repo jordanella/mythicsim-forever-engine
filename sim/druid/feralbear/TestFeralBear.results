@@ -859,8 +859,8 @@ dps_results: {
 dps_results: {
  key: "TestFeralBear-AllItems-MysticMushroom-249396"
  value: {
-  dps: 173.68945
-  tps: 445.57378
+  dps: 172.14924
+  tps: 442.0607
   dtps: 1626.56518
  }
 }

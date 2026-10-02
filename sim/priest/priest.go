@@ -123,7 +123,8 @@ type PriestAgent interface {
 
 // The outcome a priest dot tick rolls. Every priest dot rolls its hit once, when the spell is cast,
 // so a tick only rolls the critical strike the client's Periodic Can Crit attribute allows - Shadow
-// Word: Pain, Mind Flay, Holy Fire and Starshards carry it, Devouring Plague does not.
+// Word: Pain, Mind Flay, Holy Fire and Starshards carry it, and since client 1.60.1.70170 so does
+// Devouring Plague (it did not in 70009, and patch 14 rolled its ticks anyway).
 // shared.PeriodicTickOutcome cannot serve: its magic branches roll the hit again on every tick, which
 // would charge the miss twice.
 func priestTickOutcome(canCrit bool, dot *core.Dot) core.OutcomeApplier {

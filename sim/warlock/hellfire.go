@@ -38,10 +38,12 @@ func (warlock *Warlock) registerHellfire() {
 			BonusCoefficient:     tick.Coeff(),
 
 			OnTick: func(sim *core.Simulation, _ *core.Unit, dot *core.Dot) {
-				// Rolled once: the warlock burns exactly what it deals.
+				// Rolled once: the warlock burns exactly what it deals, before any crit.
 				tickDamage := tick.Average(core.CharacterLevel)
 
-				resultSlice := dot.Spell.CalcPeriodicAoeDamage(sim, tickDamage, dot.Spell.OutcomeTickMagicHitNoHitCounter)
+				// Hellfire Effect (5857, 11681, 11682) lost Cannot Crit in client 1.60.1.70170, so each target's
+				// hit rolls for a crit.
+				resultSlice := dot.Spell.CalcPeriodicAoeDamage(sim, tickDamage, dot.Spell.OutcomeTickMagicHitAndCrit)
 				if resultSlice[0].Damage > warlock.CurrentHealth() {
 					dot.Deactivate(sim)
 				}
