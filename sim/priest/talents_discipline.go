@@ -153,11 +153,13 @@ func (priest *Priest) applyInnerFocus() {
 		return
 	}
 
-	// The cost cut (14751 e0) covers every priest spell; the crit (e1) leaves out Mind Flay,
-	// Shadow Word: Death and Starshards.
+	// The cost cut (14751 e0) covers every priest spell. The crit (e1) is the client's own list: client
+	// 1.60.1.70170 ("non-periodic" in its tooltip) took Devouring Plague and Shadow Word: Pain off it and put
+	// the channels Mind Flay and Starshards on, which do not count as periodic. Shadow Word: Death was never
+	// on it. See patch 60 in docs/mythicsim-patches.md.
 	rank := spellData.InnerFocus.Highest()
 	critMod := priest.AddDynamicMod(core.SpellModConfig{
-		ClassMask:  PriestSpellsAll &^ (PriestSpellMindFlay | PriestSpellShadowWordDeath | PriestSpellStarshards),
+		ClassMask:  PriestSpellsAll &^ (PriestSpellShadowWordDeath | PriestSpellDevouringPlague | PriestSpellShadowWordPain),
 		FloatValue: rank.Effect(dbcenums.A_ADD_FLAT_MODIFIER, int32(dbcenums.SPELLMOD_CRITICAL_CHANCE)).Average(core.CharacterLevel),
 		Kind:       core.SpellMod_BonusCrit_Percent,
 	})

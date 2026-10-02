@@ -9,8 +9,8 @@ import (
 
 // Devouring Plague is an Undead racial in Classic. The Forever beta client teaches it to priests of
 // every race (SkillLineAbility race mask -1), so priest.go registers it for all of them. The ticks
-// heal the priest for what they deal. Beta client 1.60.1.70009 leaves Periodic Can Crit off, but
-// Forever has since changed the ticks to crit, so they crit regardless of the client flag.
+// heal the priest for what they deal. Client 1.60.1.70170 sets Periodic Can Crit on every rank (2944 and
+// 19276 to 19280), so the ticks crit by the row, as patch 14 had them do while the flag was off.
 var DevouringPlagueRankMap = spellData.DevouringPlague
 
 func (priest *Priest) registerDevouringPlagueSpell(rank *spelldata.Spell, cdTimer *core.Timer) {
@@ -57,7 +57,7 @@ func (priest *Priest) registerDevouringPlagueSpell(rank *spelldata.Spell, cdTime
 				dot.Snapshot(target, tick.Average(core.CharacterLevel))
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, priestTickOutcome(true, dot))
+				result := dot.CalcAndDealPeriodicSnapshotDamage(sim, target, priestTickOutcome(rank.PeriodicCanCrit(), dot))
 				priest.GainHealth(sim, result.Damage, healthMetrics)
 			},
 		},
