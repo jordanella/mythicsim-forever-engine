@@ -7,6 +7,12 @@ import (
 	"github.com/wowsims/forever/sim/core"
 )
 
+// Whether the effect's class mask names the spell: the spell is in the effect's family and carries one of
+// the mask's bits. An effect with an empty mask names none, which the client uses to switch an effect off.
+func (e *Effect) Covers(s *Spell) bool {
+	return e.ClassFlags.Matches(s.ClassFlags)
+}
+
 // The client's own number, before any unit the aura gives it.
 func (e *Effect) BaseValue() float64 {
 	return e.BasePoints
