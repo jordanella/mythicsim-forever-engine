@@ -132,6 +132,9 @@ func (aura *Aura) reset(sim *Simulation) {
 		panic("Aura nonzero stacks during reset: " + aura.Label)
 	}
 	aura.metrics.reset()
+	for _, effect := range aura.ExclusiveEffects {
+		effect.uptime = 0
+	}
 	aura.fadeTime = -NeverExpires
 
 	if aura.OnReset != nil {
@@ -666,6 +669,10 @@ restart:
 
 	for _, aura := range at.auras {
 		aura.metrics.doneIteration()
+		for _, effect := range aura.ExclusiveEffects {
+			effect.uptimeSum += effect.uptime
+			effect.iterations++
+		}
 	}
 }
 
@@ -782,6 +789,14 @@ func (aura *Aura) Activate(sim *Simulation) {
 func (aura *Aura) Deactivate(sim *Simulation) {
 	if !aura.IsActive() {
 		return
+	}
+	// Close applied intervals before expires is cleared. Lazy expiration must
+	// stop at the aura's expiry rather than the later cleanup timestamp.
+	for _, effect := range aura.ExclusiveEffects {
+		if effect.IsActive() {
+			effect.uptime += max(0, min(sim.CurrentTime, aura.expires)-max(0, effect.activeSince))
+			effect.activeSince = sim.CurrentTime
+		}
 	}
 	aura.active = false
 
@@ -1031,7 +1046,16 @@ func (at *auraTracker) GetMetricsProto() []*proto.AuraMetrics {
 
 	for _, aura := range at.auras {
 		if !aura.metrics.ID.IsEmptyAction() {
-			metrics = append(metrics, aura.metrics.ToProto())
+			metric := aura.metrics.ToProto()
+			for _, effect := range aura.ExclusiveEffects {
+				if effect.iterations > 0 {
+					metric.Effects = append(metric.Effects, &proto.AuraEffectMetrics{
+						Category:         effect.Category.Name,
+						UptimeSecondsAvg: effect.uptimeSum.Seconds() / float64(effect.iterations),
+					})
+				}
+			}
+			metrics = append(metrics, metric)
 		}
 	}
 

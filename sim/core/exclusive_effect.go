@@ -17,8 +17,12 @@ type ExclusiveEffect struct {
 	OnGain   func(*ExclusiveEffect, *Simulation)
 	OnExpire func(*ExclusiveEffect, *Simulation)
 
-	Category  *ExclusiveCategory
-	isEnabled bool
+	Category    *ExclusiveCategory
+	isEnabled   bool
+	activeSince time.Duration
+	uptime      time.Duration
+	uptimeSum   time.Duration
+	iterations  int
 }
 
 func (ee *ExclusiveEffect) IsActive() bool {
@@ -64,10 +68,16 @@ func (ec *ExclusiveCategory) SetActive(sim *Simulation, newActiveEffect *Exclusi
 	}
 
 	if ec.activeEffect != nil {
+		end := sim.CurrentTime
+		if ec.activeEffect.Aura.IsActive() {
+			end = min(end, ec.activeEffect.Aura.expires)
+		}
+		ec.activeEffect.uptime += max(0, end-max(0, ec.activeEffect.activeSince))
 		ec.activeEffect.OnExpire(ec.activeEffect, sim)
 	}
 	ec.activeEffect = newActiveEffect
 	if newActiveEffect != nil {
+		newActiveEffect.activeSince = sim.CurrentTime
 		newActiveEffect.OnGain(newActiveEffect, sim)
 	}
 }
