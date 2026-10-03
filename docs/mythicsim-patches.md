@@ -1568,3 +1568,24 @@ strict sequences and nested sequences with unsupported, constant-false and missi
 conditions. Constant-true controls still cast Arcane Power, and the fallback Frostbolt still runs.
 
 Drop this patch when upstream removes nested cooldowns from pruned APL actions.
+
+## 78. `core: state a class changes outside an aura's lifecycle is reset by the unit`
+
+The sim resets every spell and aura in place between iterations. Some class state lives in closures
+or aura fields and was cleared by the wrong owner:
+
+- **Slice and Dice and Venom durations leaked between iterations.** Each cast writes the
+  combo-point duration onto the aura and nothing restored it, so an aura activated without the
+  cast (an APL Activate Aura) used the previous iteration's last duration. A unit reset effect now
+  restores the default. No preset activates either aura directly, so no result moved.
+- **The Maul and Heroic Strike/Cleave queue flags** were cleared only by the queue aura's OnReset.
+  An iteration that ends inside the queue's realism delay leaves the flag set without activating
+  the aura. Today's full reset always runs that OnReset, so this is not a live bug, but any reset
+  that skips untouched auras would leave queuing dead for the rest of the run. The flags are now
+  cleared by a unit reset effect, which always runs.
+
+Validation: `TestSliceAndDiceDurationResetsBetweenIterations` in `sim/rogue`. Unpatched, the next
+iteration starts Slice and Dice at 13.05 s (the 1 combo point cast) instead of the default 21 s. No
+suite golden moves.
+
+Drop this when upstream resets these through the unit.

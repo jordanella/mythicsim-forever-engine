@@ -30,6 +30,14 @@ func (rogue *Rogue) registerSliceAndDice() {
 		},
 	})
 
+	// The cast sets the aura's duration from its combo points. Restore the default every
+	// iteration, or an aura activated without the cast (an APL Activate Aura) inherits whatever
+	// the previous iteration last cast.
+	defaultSliceAndDiceDuration := rogue.SliceAndDiceAura.Duration
+	rogue.RegisterResetEffect(func(_ *core.Simulation) {
+		rogue.SliceAndDiceAura.Duration = defaultSliceAndDiceDuration
+	})
+
 	rogue.SliceAndDice = rogue.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		Flags:          SpellFlagFinisher | core.SpellFlagAPL,

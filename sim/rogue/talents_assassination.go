@@ -370,6 +370,12 @@ func (rogue *Rogue) registerVenom() {
 		FloatValue: damageBonus,
 	})
 
+	// As with Slice and Dice: the cast sets the duration, so restore the default every iteration.
+	defaultVenomDuration := rogue.VenomAura.Duration
+	rogue.RegisterResetEffect(func(_ *core.Simulation) {
+		rogue.VenomAura.Duration = defaultVenomDuration
+	})
+
 	rogue.Venom = rogue.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		Flags:          SpellFlagFinisher | core.SpellFlagAPL,

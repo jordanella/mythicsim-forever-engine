@@ -60,14 +60,16 @@ func (druid *Druid) registerMaulSpell() {
 // the warrior Heroic Strike queue pattern.
 func (druid *Druid) makeMaulQueueSpellAndAura(maulSpell *DruidSpell) *DruidSpell {
 	isMaulQueued := false
+	// Cleared by the unit, not by the queue aura's OnReset: an iteration that ends inside the
+	// realism delay leaves the flag set without ever activating the aura.
+	druid.RegisterResetEffect(func(_ *core.Simulation) {
+		isMaulQueued = false
+	})
 
 	druid.maulQueueAura = druid.RegisterAura(core.Aura{
 		Label:    "Maul Queue Aura",
 		ActionID: maulSpell.ActionID.WithTag(1),
 		Duration: core.NeverExpires,
-		OnReset: func(aura *core.Aura, sim *core.Simulation) {
-			isMaulQueued = false
-		},
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
 			druid.maulQueueSpell = maulSpell.Spell
 		},

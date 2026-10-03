@@ -116,14 +116,16 @@ func (warrior *Warrior) calcQueuedSwing(sim *core.Simulation, spell *core.Spell,
 
 func (warrior *Warrior) makeQueueSpellsAndAura(srcSpell *core.Spell) *core.Spell {
 	isQueueQueued := false
+	// Cleared by the unit, not by the queue aura's OnReset: an iteration that ends inside the
+	// realism delay leaves the flag set without ever activating the aura.
+	warrior.RegisterResetEffect(func(_ *core.Simulation) {
+		isQueueQueued = false
+	})
 
 	queueAura := warrior.RegisterAura(core.Aura{
 		Label:    "HS/Cleave Queue Aura-" + srcSpell.ActionID.String(),
 		ActionID: srcSpell.ActionID.WithTag(1),
 		Duration: core.NeverExpires,
-		OnReset: func(aura *core.Aura, sim *core.Simulation) {
-			isQueueQueued = false
-		},
 		OnGain: func(aura *core.Aura, sim *core.Simulation) {
 			if warrior.curQueueAura != nil {
 				warrior.curQueueAura.Deactivate(sim)
