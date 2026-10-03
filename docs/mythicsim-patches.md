@@ -1481,3 +1481,16 @@ Test-mode simulations keep their existing three splits. The normal default remai
 available Go concurrency. The real caster and tank image checks cover the worker budget.
 
 Drop this when upstream respects the caller's concurrency limit.
+
+## 75. `core: measure applied exclusive effect uptime`
+
+Aura uptime includes time an aura remains active while another effect in its category wins.
+Each exclusive effect now measures only its applied intervals after the pull. Aura metrics
+export these intervals by category, including a measured zero when fully suppressed.
+Concurrent results combine the averages with the same iteration weights as aura uptime.
+Selection, callbacks and damage calculations are unchanged.
+
+Tests cover equal-strength suppression, resuming after the winner expires, iteration resets,
+prepull time, lazy expiration and unequal concurrent result weights.
+
+Drop this when upstream exports equivalent per-effect uptime metrics.

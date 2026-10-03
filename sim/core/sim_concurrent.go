@@ -122,6 +122,9 @@ func (rsrc *raidSimResultCombiner) newUnitMetrics(baseUnit *proto.UnitMetrics) *
 			Id:             aura.Id,
 			AggregatorData: &proto.AggregatorData{},
 		}
+		for _, effect := range aura.Effects {
+			newUm.Auras[i].Effects = append(newUm.Auras[i].Effects, &proto.AuraEffectMetrics{Category: effect.Category})
+		}
 	}
 
 	for i, pet := range baseUnit.Pets {
@@ -255,6 +258,20 @@ func (rsrc *raidSimResultCombiner) addActionMetrics(unit *proto.UnitMetrics, add
 }
 
 func (rsrc *raidSimResultCombiner) combineAuraMetrics(base *proto.AuraMetrics, add *proto.AuraMetrics, weight float64, isLast bool) {
+	for _, effect := range add.Effects {
+		var combined *proto.AuraEffectMetrics
+		for _, candidate := range base.Effects {
+			if candidate.Category == effect.Category {
+				combined = candidate
+				break
+			}
+		}
+		if combined == nil {
+			combined = &proto.AuraEffectMetrics{Category: effect.Category}
+			base.Effects = append(base.Effects, combined)
+		}
+		combined.UptimeSecondsAvg += effect.UptimeSecondsAvg * weight
+	}
 	base.UptimeSecondsAvg += add.UptimeSecondsAvg * weight
 	base.ProcsAvg += add.ProcsAvg * weight
 

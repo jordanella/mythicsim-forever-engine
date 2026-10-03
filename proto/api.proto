@@ -299,6 +299,13 @@ message AuraMetrics {
 	double procs_avg = 4;
 
 	AggregatorData aggregator_data = 5;
+	repeated AuraEffectMetrics effects = 6;
+}
+
+// Time an exclusive effect actually applies, distinct from its aura's uptime.
+message AuraEffectMetrics {
+	string category = 1;
+	double uptime_seconds_avg = 2;
 }
 
 message ResourceMetrics {
@@ -841,4 +848,3 @@ message BulkCandidatesResult {
 	int32 combinations = 3;
 	ErrorOutcome error = 4;
 }
-
