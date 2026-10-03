@@ -611,9 +611,14 @@ func (rot *APLRotation) newAPLActionWithGroupVars(config *proto.APLAction, group
 
 	if action.impl == nil {
 		return nil
-	} else {
-		return action
 	}
+	// As in newAPLAction: a condition that could not be built must not leave the action unconditional.
+	if action.condition == nil && aplValueIsSet(config.Condition) {
+		rot.ValidationMessage(proto.LogLevel_Warning, "Its condition cannot be evaluated, so this action never runs")
+		rot.prunedActions = append(rot.prunedActions, action.impl)
+		return nil
+	}
+	return action
 }
 
 // Re-resolve variable references in an APLValue with updated group variables

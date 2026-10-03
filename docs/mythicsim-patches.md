@@ -1515,3 +1515,43 @@ Fury and Protection presets, adding only the Retribution seal fallback.
 Client metadata advances to 1.60.1.70178. Upstream's client diff reports no changes
 in the simulator tables, and the merged item database, spell store, talent trees
 and proto sources remain identical to the previous MythicSim release.
+
+## 76. `core: an APL condition that cannot be built no longer fires its action every time`
+
+A condition the engine could not build came back as nothing, and an action with no condition runs
+whenever it is ready. The commonest cause is a rotation that names an aura or spell the character
+does not have: the Enhancement preset's "Lightning Bolt at 5 Maelstrom Weapon stacks" cast Lightning
+Bolt on cooldown for a Shaman without Maelstrom Weapon. An And lost the clause instead (the same
+thing, one clause at a time), and a kind the engine has no handler for did the same with no warning.
+
+- **A missing spell or dot reads as never there**, as the 2026-10-03 sync made missing auras do:
+  `spellIsReady`/`spellCanCast` false, `spellTimeToReady` never, `dotIsActive` false,
+  `dotRemainingTime` 0. These are constants, so they fold: an And on one prunes its action.
+  "Whirlwind while Bloodthirst is more than 1.5 s away" still casts Whirlwind for a warrior without
+  Bloodthirst. The "does not know spell" warning is unchanged.
+- **Anything else that cannot be built disables its action** with the warning "Its condition cannot
+  be evaluated, so this action never runs". That covers an unsupported kind, a type error, an unset
+  aura or spell field, and an And, Or, Min or Max with such an operand, unless a constant decides the
+  operation without it (an And with a false clause, an Or with a true one). An unset value (`{}`) is
+  still no condition.
+- **Unsupported kinds warn.** An action or value kind with no handler reports "<kind> is not
+  supported by this sim". The editor stops offering the ones the proto carries without a handler:
+  Solar Energy, Lunar Energy, Eclipse Phase, Generic Resource, Dot Crit Chance Increase and Protection
+  Paladin Damage Taken Last Global (`notSupportedBySim` in `ui/features/apl/model/value_kinds.ts`).
+  `sim/druid/balance/_apl_values.go`, which Go never compiled and which named Cataclysm Eclipse
+  methods the druid no longer has, is deleted.
+- **Files.** `sim/core/apl.go`, `apl_action.go`, `apl_value.go`, `apl_values_operators.go`,
+  `apl_values_spell.go`, `apl_values_dot.go`.
+
+Validation: `TestAPLConditionsThatCannotBeBuilt` in `sim/mage`. On the 2026-10-03 sync without this
+patch, the missing-aura cases already pass; a Fireball conditioned on an unsupported kind, or on an
+And or Or holding one, is cast 8.6 times a fight with no warning. Patched, never. No suite golden
+moves.
+
+Nothing in the arena moves either: a same-seed run at 500 iterations over all 6155 rows, patched
+against the 2026-10-03 sync, changed none. Every arena difference this patch made on the 2026-10-02
+base (Enhancement without Maelstrom Weapon, Balance without Eclipse, Arcane without Arcane Blast) came
+from missing auras, which the sync now reads the same way. What remains guards rotations the presets
+do not exercise: missing spells and dots, unsupported kinds and type errors.
+
+Drop this patch when upstream stops treating an unbuildable condition as no condition.

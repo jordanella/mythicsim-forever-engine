@@ -149,6 +149,14 @@ func (rot *APLRotation) newAPLAction(config *proto.APLAction) *APLAction {
 
 	condition := rot.coerceTo(rot.newAPLValue(config.Condition), proto.APLValueType_ValueTypeBool)
 
+	// A condition that could not be built would otherwise read as no condition, and the action
+	// would fire every time it is ready. Prune it like a const false condition.
+	if condition == nil && aplValueIsSet(config.Condition) {
+		rot.ValidationMessage(proto.LogLevel_Warning, "Its condition cannot be evaluated, so this action never runs")
+		rot.prunedActions = append(rot.prunedActions, impl)
+		return nil
+	}
+
 	// If condition is const false, this action can never fire — prune it.
 	// Track the impl so its spells are still removed from MCD auto-casting.
 	if condition != nil {
@@ -249,6 +257,7 @@ func (rot *APLRotation) newAPLActionImpl(config *proto.APLAction) APLActionImpl 
 		return rot.newActionGroupReference(config.GetGroupReference())
 
 	default:
+		rot.ValidationMessage(proto.LogLevel_Warning, "%s is not supported by this sim", aplKindName(config.ProtoReflect(), "action"))
 		return nil
 	}
 }

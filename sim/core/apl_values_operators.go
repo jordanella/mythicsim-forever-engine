@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 	"time"
@@ -68,6 +69,41 @@ func (rot *APLRotation) newValueConst(config *proto.APLValueConst, _ *proto.UUID
 	}
 	return result
 }
+
+// Constants for what a value reads as when the spell, aura or dot it names does not exist on this
+// character (a talent not taken, an item not worn): never active, no stacks, never ready. Being
+// constants, they fold like literals, so "aura is active" on an aura that cannot exist prunes its
+// action instead of leaving the condition out.
+func newAPLConstBool(val bool) APLValue {
+	return &APLValueConst{
+		valType:   proto.APLValueType_ValueTypeBool,
+		boolVal:   val,
+		stringVal: Ternary(val, "true", "false"),
+	}
+}
+
+func newAPLConstInt(val int32) APLValue {
+	return &APLValueConst{
+		valType:     proto.APLValueType_ValueTypeInt,
+		intVal:      val,
+		floatVal:    float64(val),
+		durationVal: time.Second * time.Duration(val),
+		boolVal:     val != 0,
+		stringVal:   strconv.Itoa(int(val)),
+	}
+}
+
+func newAPLConstDuration(val time.Duration) APLValue {
+	return &APLValueConst{
+		valType:     proto.APLValueType_ValueTypeDuration,
+		durationVal: val,
+		floatVal:    val.Seconds(),
+		intVal:      int32(min(val.Seconds(), math.MaxInt32)),
+		boolVal:     val != 0,
+		stringVal:   val.String(),
+	}
+}
+
 func (value *APLValueConst) Type() proto.APLValueType {
 	return value.valType
 }
@@ -874,12 +910,36 @@ func (rot *APLRotation) newValueMath(config *proto.APLValueMath, uuid *proto.UUI
 	}
 }
 
+// Reports whether an operand was set but could not be built. Leaving such an operand out would
+// quietly change what the operation means: an And missing a clause fires more often than written.
+func hasInvalidOperand(configs []*proto.APLValue, vals []APLValue) bool {
+	for i, val := range vals {
+		if val == nil && aplValueIsSet(configs[i]) {
+			return true
+		}
+	}
+	return false
+}
+
+// Builds nothing from an operation with an invalid operand, but still finalizes the operands that
+// were built, since building a value can register aura callbacks.
+func (rot *APLRotation) invalidOperation(vals []APLValue) APLValue {
+	for _, val := range vals {
+		rot.orphanValue(val)
+	}
+	return nil
+}
+
 func (rot *APLRotation) newValueMax(config *proto.APLValueMax, _ *proto.UUID, groupVariables map[string]*proto.APLValue) APLValue {
 	vals := MapSlice(config.Vals, func(val *proto.APLValue) APLValue {
 		return rot.newAPLValueWithContext(val, groupVariables)
 	})
 	vals = rot.coerceAllToSameType(vals)
+	invalid := hasInvalidOperand(config.Vals, vals)
 	vals = FilterSlice(vals, func(val APLValue) bool { return val != nil })
+	if invalid {
+		return rot.invalidOperation(vals)
+	}
 	if len(vals) == 0 {
 		return nil
 	} else if len(vals) == 1 {
@@ -895,7 +955,11 @@ func (rot *APLRotation) newValueMin(config *proto.APLValueMin, _ *proto.UUID, gr
 		return rot.newAPLValueWithContext(val, groupVariables)
 	})
 	vals = rot.coerceAllToSameType(vals)
+	invalid := hasInvalidOperand(config.Vals, vals)
 	vals = FilterSlice(vals, func(val APLValue) bool { return val != nil })
+	if invalid {
+		return rot.invalidOperation(vals)
+	}
 	if len(vals) == 0 {
 		return nil
 	} else if len(vals) == 1 {
@@ -910,13 +974,10 @@ func (rot *APLRotation) newValueAnd(config *proto.APLValueAnd, _ *proto.UUID, gr
 	vals := MapSlice(config.Vals, func(val *proto.APLValue) APLValue {
 		return rot.coerceTo(rot.newAPLValueWithContext(val, groupVariables), proto.APLValueType_ValueTypeBool)
 	})
+	invalid := hasInvalidOperand(config.Vals, vals)
 	vals = FilterSlice(vals, func(val APLValue) bool { return val != nil })
-	if len(vals) == 0 {
-		return nil
-	} else if len(vals) == 1 {
-		return vals[0]
-	}
-	// Short-circuit: if any child is const false, the whole And is false.
+	// Short-circuit: if any child is const false, the whole And is false, even with an invalid
+	// operand beside it, so a clause guarded by "aura is known" can name an aura that may not exist.
 	// Orphan the other children so they still get Finalize() called.
 	for _, val := range vals {
 		if constVal, ok := val.(*APLValueConst); ok && constVal.valType == proto.APLValueType_ValueTypeBool && !constVal.boolVal {
@@ -928,6 +989,14 @@ func (rot *APLRotation) newValueAnd(config *proto.APLValueAnd, _ *proto.UUID, gr
 			return constVal
 		}
 	}
+	if invalid {
+		return rot.invalidOperation(vals)
+	}
+	if len(vals) == 0 {
+		return nil
+	} else if len(vals) == 1 {
+		return vals[0]
+	}
 	return &APLValueAnd{
 		vals: vals,
 	}
@@ -937,13 +1006,10 @@ func (rot *APLRotation) newValueOr(config *proto.APLValueOr, _ *proto.UUID, grou
 	vals := MapSlice(config.Vals, func(val *proto.APLValue) APLValue {
 		return rot.coerceTo(rot.newAPLValueWithContext(val, groupVariables), proto.APLValueType_ValueTypeBool)
 	})
+	invalid := hasInvalidOperand(config.Vals, vals)
 	vals = FilterSlice(vals, func(val APLValue) bool { return val != nil })
-	if len(vals) == 0 {
-		return nil
-	} else if len(vals) == 1 {
-		return vals[0]
-	}
-	// Short-circuit: if any child is const true, the whole Or is true.
+	// Short-circuit: if any child is const true, the whole Or is true, even with an invalid
+	// operand beside it.
 	// Orphan the other children so they still get Finalize() called.
 	for _, val := range vals {
 		if constVal, ok := val.(*APLValueConst); ok && constVal.valType == proto.APLValueType_ValueTypeBool && constVal.boolVal {
@@ -954,6 +1020,14 @@ func (rot *APLRotation) newValueOr(config *proto.APLValueOr, _ *proto.UUID, grou
 			}
 			return constVal
 		}
+	}
+	if invalid {
+		return rot.invalidOperation(vals)
+	}
+	if len(vals) == 0 {
+		return nil
+	} else if len(vals) == 1 {
+		return vals[0]
 	}
 	return &APLValueOr{
 		vals: vals,

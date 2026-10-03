@@ -20,9 +20,12 @@ type APLValueSpellCanCast struct {
 }
 
 func (rot *APLRotation) newValueSpellCanCast(config *proto.APLValueSpellCanCast, _ *proto.UUID) APLValue {
+	if config.SpellId == nil {
+		return nil
+	}
 	spell := rot.GetAPLSpell(config.SpellId)
 	if spell == nil {
-		return nil
+		return newAPLConstBool(false)
 	}
 	return &APLValueSpellCanCast{
 		spell: spell,
@@ -44,9 +47,12 @@ type APLValueSpellIsReady struct {
 }
 
 func (rot *APLRotation) newValueSpellIsReady(config *proto.APLValueSpellIsReady, _ *proto.UUID) APLValue {
+	if config.SpellId == nil {
+		return nil
+	}
 	spell := rot.GetAPLSpell(config.SpellId)
 	if spell == nil {
-		return nil
+		return newAPLConstBool(false)
 	}
 	return &APLValueSpellIsReady{
 		spell: spell,
@@ -68,9 +74,13 @@ type APLValueSpellTimeToReady struct {
 }
 
 func (rot *APLRotation) newValueSpellTimeToReady(config *proto.APLValueSpellTimeToReady, _ *proto.UUID) APLValue {
+	if config.SpellId == nil {
+		return nil
+	}
 	spell := rot.GetAPLSpell(config.SpellId)
 	if spell == nil {
-		return nil
+		// A spell the character does not know is never ready.
+		return newAPLConstDuration(NeverExpires)
 	}
 	return &APLValueSpellTimeToReady{
 		spell: spell,

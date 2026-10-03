@@ -14,9 +14,12 @@ type APLValueDotIsActive struct {
 }
 
 func (rot *APLRotation) newValueDotIsActive(config *proto.APLValueDotIsActive, _ *proto.UUID) APLValue {
+	if config.SpellId == nil {
+		return nil
+	}
 	dot := rot.NewDotReference(rot.GetTargetUnit(config.TargetUnit), config.SpellId)
 	if dot.Get() == nil {
-		return nil
+		return newAPLConstBool(false)
 	}
 
 	return &APLValueDotIsActive{
@@ -92,9 +95,12 @@ type APLValueDotRemainingTime struct {
 }
 
 func (rot *APLRotation) newValueDotRemainingTime(config *proto.APLValueDotRemainingTime, _ *proto.UUID) APLValue {
+	if config.SpellId == nil {
+		return nil
+	}
 	dot := rot.NewDotReference(rot.GetTargetUnit(config.TargetUnit), config.SpellId)
 	if dot.Get() == nil {
-		return nil
+		return newAPLConstDuration(0)
 	}
 	return &APLValueDotRemainingTime{
 		dot: dot,
