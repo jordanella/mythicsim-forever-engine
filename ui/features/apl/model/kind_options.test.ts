@@ -1,5 +1,6 @@
 import { makePlayer } from '@features/apl/testing';
 import { APLRotation } from '@generated/proto/apl';
+import { Spec } from '@generated/proto/common';
 import { describe, expect, it, vi } from 'vitest';
 
 import { actionKinds } from './action_kinds';
@@ -43,19 +44,24 @@ describe('kind tooltip', () => {
 	});
 });
 
-describe('valueKindOptions dynamicStringResolver', () => {
-	it('is included whenever not prepull, and resolves through the always-empty resolver', () => {
-		const options = valueKindOptions(player(), false, false);
-		const generic = options.find(option => option.value === 'currentGenericResource');
+describe('kinds the engine has no handler for', () => {
+	// Each is kept in the table so an old rotation naming one still renders, but none is offered:
+	// the engine disables any action whose condition uses one.
+	const unsupported = [
+		'currentSolarEnergy',
+		'currentLunarEnergy',
+		'druidCurrentEclipsePhase',
+		'currentGenericResource',
+		'dotCritPercentIncrease',
+		'protectionPaladinDamageTakenLastGlobal',
+	] as const;
 
-		expect(generic).toBeDefined();
-		expect(generic?.label).toBe('');
-		expect(generic?.tooltip).toBe('');
-	});
-
-	it('is excluded during prepull', () => {
-		const options = valueKindOptions(player(), true, false);
-		expect(options.map(option => option.value)).not.toContain('currentGenericResource');
+	it.each([Spec.SpecBalanceDruid, Spec.SpecProtectionPaladin, Spec.SpecMage])('are never offered to %s', spec => {
+		const offered = valueKindOptions({ ...player(), getSpec: () => spec }, false, false).map(option => option.value);
+		for (const kind of unsupported) {
+			expect(valueKinds[kind]).toBeDefined();
+			expect(offered).not.toContain(kind);
+		}
 	});
 });
 

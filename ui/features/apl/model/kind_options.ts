@@ -33,13 +33,7 @@ export const valueKindOptions = (player: Player<any>, isPrepull: boolean, isGrou
 		.filter(kind => valueKinds[kind].includeIf?.(player, isPrepull, isGroup) ?? true)
 		.map(kind => {
 			const model = valueKinds[kind];
-			const resolve = model.dynamicStringResolver || ((value: string) => value);
-			return {
-				value: kind,
-				label: resolve(model.label, player),
-				submenu: model.submenu,
-				tooltip: kindTooltip(resolve(model.shortDescription, player), model.fullDescription && resolve(model.fullDescription, player)),
-			};
+			return { value: kind, label: model.label, submenu: model.submenu, tooltip: kindTooltip(model.shortDescription, model.fullDescription) };
 		});
 
 export const actionKindOptions = (player: Player<any>, isPrepull: boolean): Array<KindOption<NonNullable<APLActionKind>>> =>

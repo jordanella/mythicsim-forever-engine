@@ -156,13 +156,18 @@ export type ValueKindModel<T> = {
 	fullDescription?: string;
 	newValue: () => T;
 	includeIf?: (player: Player<any>, isPrepull: boolean, isGroup: boolean) => boolean;
-	dynamicStringResolver?: (value: string, player: Player<any>) => string;
 	fields: Array<ValueFieldDescriptor>;
 };
 
 function inputBuilder<T extends APLValueImplType>(config: ValueKindModel<T>): ValueKindModel<T> {
 	return config;
 }
+
+// For kinds the proto still carries but the engine has no handler for (Cataclysm and Mists
+// resources, and values upstream never ported). The editor keeps them so an old rotation that
+// names one still renders, but does not offer them: the engine disables any action whose condition
+// uses one.
+const notSupportedBySim = () => false;
 
 export const valueKinds: { [f in ValidAPLValueKind]: ValueKindModel<APLValueImplMap[f]> } = {
 	// Operators
@@ -497,7 +502,7 @@ export const valueKinds: { [f in ValidAPLValueKind]: ValueKindModel<APLValueImpl
 		submenu: ['resources', 'eclipse'],
 		shortDescription: i18n.t('rotation_tab.apl.values.solar_energy.tooltip'),
 		newValue: APLValueCurrentSolarEnergy.create,
-		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull && player.getSpec() == Spec.SpecBalanceDruid,
+		includeIf: notSupportedBySim,
 		fields: [],
 	}),
 	currentLunarEnergy: inputBuilder({
@@ -505,7 +510,7 @@ export const valueKinds: { [f in ValidAPLValueKind]: ValueKindModel<APLValueImpl
 		submenu: ['resources', 'eclipse'],
 		shortDescription: i18n.t('rotation_tab.apl.values.lunar_energy.tooltip'),
 		newValue: APLValueCurrentLunarEnergy.create,
-		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull && player.getSpec() == Spec.SpecBalanceDruid,
+		includeIf: notSupportedBySim,
 		fields: [],
 	}),
 	druidCurrentEclipsePhase: inputBuilder({
@@ -513,7 +518,7 @@ export const valueKinds: { [f in ValidAPLValueKind]: ValueKindModel<APLValueImpl
 		submenu: ['resources', 'eclipse'],
 		shortDescription: i18n.t('rotation_tab.apl.values.current_eclipse_phase.tooltip'),
 		newValue: APLValueCurrentEclipsePhase.create,
-		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull && player.getSpec() == Spec.SpecBalanceDruid,
+		includeIf: notSupportedBySim,
 		fields: [eclipseTypeFieldConfig('eclipsePhase')],
 	}),
 	currentGenericResource: inputBuilder({
@@ -522,8 +527,7 @@ export const valueKinds: { [f in ValidAPLValueKind]: ValueKindModel<APLValueImpl
 		shortDescription: i18n.t('rotation_tab.apl.values.generic_resource.tooltip'),
 		newValue: APLValueCurrentGenericResource.create,
 		fields: [],
-		includeIf: (_player: Player<any>, isPrepull: boolean) => !isPrepull,
-		dynamicStringResolver: (_value: string, _player: Player<any>) => '',
+		includeIf: notSupportedBySim,
 	}),
 
 	// GCD
@@ -1027,7 +1031,7 @@ export const valueKinds: { [f in ValidAPLValueKind]: ValueKindModel<APLValueImpl
 		submenu: ['dot'],
 		shortDescription: "How much higher a new DoT's Critical Strike Chance would be compared to the old.",
 		newValue: APLValueDotPercentIncrease.create,
-		includeIf: (_: Player<any>, isPrepull: boolean) => !isPrepull,
+		includeIf: notSupportedBySim,
 		fields: [unitFieldConfig('targetUnit', 'targets'), actionIdFieldConfig('spellId', 'expected_dot_spells', ''), makeUseDotBaseValueCheckbox()],
 	}),
 	dotTickRatePercentIncrease: inputBuilder({
@@ -1093,7 +1097,7 @@ export const valueKinds: { [f in ValidAPLValueKind]: ValueKindModel<APLValueImpl
 		submenu: ['tank'],
 		shortDescription: i18n.t('rotation_tab.apl.values.protection_paladin_damage_taken_last_global.tooltip'),
 		newValue: APLValueProtectionPaladinDamageTakenLastGlobal.create,
-		includeIf: (player: Player<any>, isPrepull: boolean) => !isPrepull && player.getSpec() === Spec.SpecProtectionPaladin,
+		includeIf: notSupportedBySim,
 		fields: [],
 	}),
 	variableRef: inputBuilder({

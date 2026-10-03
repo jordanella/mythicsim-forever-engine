@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/wowsims/forever/sim/core/proto"
+	"google.golang.org/protobuf/reflect/protoreflect"
 )
 
 type APLValue interface {
@@ -57,8 +58,22 @@ func (rot *APLRotation) newAPLValue(config *proto.APLValue) APLValue {
 	return rot.newAPLValueWithContext(config, nil)
 }
 
+// Reports whether a value names a kind. An unset value (no field, or an empty one the editor left
+// behind) is the same as no value: an action with one has no condition.
+func aplValueIsSet(config *proto.APLValue) bool {
+	return config != nil && config.Value != nil
+}
+
+// The JSON name of the kind a value or action names, for warnings.
+func aplKindName(msg protoreflect.Message, oneofName protoreflect.Name) string {
+	if field := msg.WhichOneof(msg.Descriptor().Oneofs().ByName(oneofName)); field != nil {
+		return field.JSONName()
+	}
+	return "an empty kind"
+}
+
 func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVariables map[string]*proto.APLValue) APLValue {
-	if config == nil {
+	if !aplValueIsSet(config) {
 		return nil
 	}
 
@@ -301,6 +316,7 @@ func (rot *APLRotation) newAPLValueWithContext(config *proto.APLValue, groupVari
 		value = rot.newValueSelectedConjured(config.GetSelectedConjured(), config.Uuid)
 
 	default:
+		rot.ValidationMessage(proto.LogLevel_Warning, "%s is not supported by this sim", aplKindName(config.ProtoReflect(), "value"))
 		value = nil
 	}
 
