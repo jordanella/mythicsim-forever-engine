@@ -354,12 +354,12 @@ func (unit *Unit) NewGenericMetric(actionID ActionID) *ResourceMetrics {
 }
 
 // Adds the results of a spell to the character metrics.
-func (unitMetrics *UnitMetrics) addSpellMetrics(spell *Spell, actionID ActionID, spellMetrics []SpellMetrics) {
+func (unitMetrics *UnitMetrics) addSpellMetrics(spell *Spell, actionID ActionID, spellMetrics []SpellMetrics) *ActionMetrics {
 	actionMetrics, ok := unitMetrics.actions[actionID]
 
 	// no targets, nothing to add here
 	if len(spell.Unit.AttackTables) == 0 {
-		return
+		return nil
 	}
 
 	if !ok {
@@ -379,55 +379,61 @@ func (unitMetrics *UnitMetrics) addSpellMetrics(spell *Spell, actionID ActionID,
 		}
 	}
 
-	for i, spellTargetMetrics := range spellMetrics {
-		tam := &actionMetrics.Targets[i]
-		if !spell.Flags.Matches(SpellFlagPassiveSpell) {
-			tam.Casts += spellTargetMetrics.Casts
-		}
-		tam.Misses += spellTargetMetrics.Misses
-		tam.Hits += spellTargetMetrics.Hits
-		tam.ResistedHits += spellTargetMetrics.ResistedHits
-		tam.Crits += spellTargetMetrics.Crits
-		tam.ResistedCrits += spellTargetMetrics.ResistedCrits
-		tam.Ticks += spellTargetMetrics.Ticks
-		tam.ResistedTicks += spellTargetMetrics.ResistedTicks
-		tam.CritTicks += spellTargetMetrics.CritTicks
-		tam.ResistedCritTicks += spellTargetMetrics.ResistedCritTicks
-		tam.Dodges += spellTargetMetrics.Dodges
-		tam.Parries += spellTargetMetrics.Parries
-		tam.Blocks += spellTargetMetrics.Blocks
-		tam.BlockedCrits += spellTargetMetrics.BlockedCrits
-		tam.Glances += spellTargetMetrics.Glances
-		tam.Crushes += spellTargetMetrics.Crushes
-		tam.Damage += spellTargetMetrics.TotalDamage
-		tam.ResistedDamage += spellTargetMetrics.TotalResistedDamage
-		tam.CritDamage += spellTargetMetrics.TotalCritDamage
-		tam.ResistedCritDamage += spellTargetMetrics.TotalResistedCritDamage
-		tam.TickDamage += spellTargetMetrics.TotalTickDamage
-		tam.ResistedTickDamage += spellTargetMetrics.TotalResistedTickDamage
-		tam.CritTickDamage += spellTargetMetrics.TotalCritTickDamage
-		tam.ResistedCritTickDamage += spellTargetMetrics.TotalResistedCritTickDamage
-		tam.GlanceDamage += spellTargetMetrics.TotalGlanceDamage
-		tam.BlockDamage += spellTargetMetrics.TotalBlockDamage
-		tam.BlockedCritDamage += spellTargetMetrics.TotalBlockedCritDamage
-		tam.CrushDamage += spellTargetMetrics.TotalCrushDamage
-		tam.Threat += spellTargetMetrics.TotalThreat
-		tam.Healing += spellTargetMetrics.TotalHealing
-		tam.CritHealing += spellTargetMetrics.TotalCritHealing
-		tam.Shielding += spellTargetMetrics.TotalShielding
-		if !spell.Flags.Matches(SpellFlagPassiveSpell) {
-			tam.CastTime += spellTargetMetrics.TotalCastTime
-		}
+	for i := range spellMetrics {
+		unitMetrics.addSpellTargetMetrics(spell, actionMetrics, i, &spellMetrics[i])
+	}
+	return actionMetrics
+}
 
-		target := spell.Unit.AttackTables[i].Defender
-		target.Metrics.dtps.Total += spellTargetMetrics.TotalDamage
+// Folds one target's metrics for one iteration into the run's totals.
+func (unitMetrics *UnitMetrics) addSpellTargetMetrics(spell *Spell, actionMetrics *ActionMetrics, i int, spellTargetMetrics *SpellMetrics) {
+	tam := &actionMetrics.Targets[i]
+	if !spell.Flags.Matches(SpellFlagPassiveSpell) {
+		tam.Casts += spellTargetMetrics.Casts
+	}
+	tam.Misses += spellTargetMetrics.Misses
+	tam.Hits += spellTargetMetrics.Hits
+	tam.ResistedHits += spellTargetMetrics.ResistedHits
+	tam.Crits += spellTargetMetrics.Crits
+	tam.ResistedCrits += spellTargetMetrics.ResistedCrits
+	tam.Ticks += spellTargetMetrics.Ticks
+	tam.ResistedTicks += spellTargetMetrics.ResistedTicks
+	tam.CritTicks += spellTargetMetrics.CritTicks
+	tam.ResistedCritTicks += spellTargetMetrics.ResistedCritTicks
+	tam.Dodges += spellTargetMetrics.Dodges
+	tam.Parries += spellTargetMetrics.Parries
+	tam.Blocks += spellTargetMetrics.Blocks
+	tam.BlockedCrits += spellTargetMetrics.BlockedCrits
+	tam.Glances += spellTargetMetrics.Glances
+	tam.Crushes += spellTargetMetrics.Crushes
+	tam.Damage += spellTargetMetrics.TotalDamage
+	tam.ResistedDamage += spellTargetMetrics.TotalResistedDamage
+	tam.CritDamage += spellTargetMetrics.TotalCritDamage
+	tam.ResistedCritDamage += spellTargetMetrics.TotalResistedCritDamage
+	tam.TickDamage += spellTargetMetrics.TotalTickDamage
+	tam.ResistedTickDamage += spellTargetMetrics.TotalResistedTickDamage
+	tam.CritTickDamage += spellTargetMetrics.TotalCritTickDamage
+	tam.ResistedCritTickDamage += spellTargetMetrics.TotalResistedCritTickDamage
+	tam.GlanceDamage += spellTargetMetrics.TotalGlanceDamage
+	tam.BlockDamage += spellTargetMetrics.TotalBlockDamage
+	tam.BlockedCritDamage += spellTargetMetrics.TotalBlockedCritDamage
+	tam.CrushDamage += spellTargetMetrics.TotalCrushDamage
+	tam.Threat += spellTargetMetrics.TotalThreat
+	tam.Healing += spellTargetMetrics.TotalHealing
+	tam.CritHealing += spellTargetMetrics.TotalCritHealing
+	tam.Shielding += spellTargetMetrics.TotalShielding
+	if !spell.Flags.Matches(SpellFlagPassiveSpell) {
+		tam.CastTime += spellTargetMetrics.TotalCastTime
+	}
 
-		if spell.Unit.IsOpponent(target) {
-			unitMetrics.dps.Total += spellTargetMetrics.TotalDamage
-			unitMetrics.threat.Total += spellTargetMetrics.TotalThreat
-		} else {
-			unitMetrics.hps.Total += spellTargetMetrics.TotalHealing + spellTargetMetrics.TotalShielding
-		}
+	target := spell.Unit.AttackTables[i].Defender
+	target.Metrics.dtps.Total += spellTargetMetrics.TotalDamage
+
+	if spell.Unit.IsOpponent(target) {
+		unitMetrics.dps.Total += spellTargetMetrics.TotalDamage
+		unitMetrics.threat.Total += spellTargetMetrics.TotalThreat
+	} else {
+		unitMetrics.hps.Total += spellTargetMetrics.TotalHealing + spellTargetMetrics.TotalShielding
 	}
 }
 

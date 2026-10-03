@@ -179,6 +179,7 @@ type Spell struct {
 	FlatThreatBonus float64
 
 	resultCache SpellResultCache
+	metricsFolds []spellMetricsFold
 	resultSlice SpellResultSlice
 
 	dots   DotArray
@@ -580,10 +581,38 @@ func (spell *Spell) doneIteration() {
 	}
 
 	if len(spell.splitSpellMetrics) == 1 {
-		spell.Unit.Metrics.addSpellMetrics(spell, spell.ActionID, spell.SpellMetrics)
+		spell.foldMetrics(0, spell.ActionID, spell.SpellMetrics)
 	} else {
 		for i, spellMetrics := range spell.splitSpellMetrics {
-			spell.Unit.Metrics.addSpellMetrics(spell, spell.ActionID.WithTag(int32(i)), spellMetrics)
+			spell.foldMetrics(i, spell.ActionID.WithTag(int32(i)), spellMetrics)
+		}
+	}
+}
+
+// The action metrics entry a split last folded into, so later iterations skip the map lookup.
+type spellMetricsFold struct {
+	actionID      ActionID
+	actionMetrics *ActionMetrics
+}
+
+// Folds one metrics split into the unit's totals. The first fold of a split creates its entry, so a
+// spell that is never used still reports a row of zeros. After that, a target whose metrics are all
+// zero is skipped: most registered spells (every rank of every ability) do nothing in a given
+// iteration, and adding zero leaves every total exactly as it was.
+func (spell *Spell) foldMetrics(split int, actionID ActionID, spellMetrics []SpellMetrics) {
+	if spell.metricsFolds == nil {
+		spell.metricsFolds = make([]spellMetricsFold, len(spell.splitSpellMetrics))
+	}
+	fold := &spell.metricsFolds[split]
+	if fold.actionMetrics == nil || fold.actionID != actionID {
+		fold.actionID = actionID
+		fold.actionMetrics = spell.Unit.Metrics.addSpellMetrics(spell, actionID, spellMetrics)
+		return
+	}
+
+	for i := range spellMetrics {
+		if spellMetrics[i] != (SpellMetrics{}) {
+			spell.Unit.Metrics.addSpellTargetMetrics(spell, fold.actionMetrics, i, &spellMetrics[i])
 		}
 	}
 }

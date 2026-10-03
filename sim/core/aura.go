@@ -418,6 +418,10 @@ type auraTracker struct {
 	// All registered auras, both active and inactive.
 	auras []*Aura
 
+	// Counts activations of this unit's auras, so the end-of-iteration expiry pass can tell whether
+	// a deactivation started another aura.
+	activations int
+
 	aurasByTag map[string][]*Aura
 
 	// IDs of Auras that may expire and are currently active, in no particular order.
@@ -651,12 +655,16 @@ restart:
 }
 
 func (at *auraTracker) doneIteration(sim *Simulation) {
-	// deactivate all auras, even permanent ones
-restart:
-	for _, aura := range at.auras {
-		if aura.active {
+	// Deactivate all auras, even permanent ones, first in list order. A deactivation can activate
+	// another aura earlier in the list, so the scan starts over then; when it activated nothing,
+	// every aura before this one is still inactive and the scan carries on from here.
+	for i := 0; i < len(at.auras); i++ {
+		if aura := at.auras[i]; aura.active {
+			activations := at.activations
 			aura.Deactivate(sim)
-			goto restart
+			if at.activations != activations {
+				i = -1
+			}
 		}
 	}
 
@@ -705,6 +713,7 @@ func (aura *Aura) Activate(sim *Simulation) {
 	}
 
 	aura.active = true
+	aura.Unit.activations++
 	aura.startTime = sim.CurrentTime
 	aura.Refresh(sim)
 
