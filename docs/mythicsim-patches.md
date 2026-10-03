@@ -1555,3 +1555,16 @@ from missing auras, which the sync now reads the same way. What remains guards r
 do not exercise: missing spells and dots, unsupported kinds and type errors.
 
 Drop this patch when upstream stops treating an unbuildable condition as no condition.
+
+## 77. `core: pruned sequences keep their nested cooldowns out of autocasting`
+
+When an APL sequence or strict sequence was pruned, only its container was checked for major
+cooldown removal. Its nested spells remained eligible for `Autocast Other Cooldowns`, allowing
+them to cast despite the container's false or unevaluable condition. Cooldown removal now walks
+the nested actions as well.
+
+Validation: `TestAPLPrunedSequenceCooldownsDoNotAutocast` covers direct spells, normal sequences,
+strict sequences and nested sequences with unsupported, constant-false and missing-spell
+conditions. Constant-true controls still cast Arcane Power, and the fallback Frostbolt still runs.
+
+Drop this patch when upstream removes nested cooldowns from pruned APL actions.

@@ -179,6 +179,10 @@ func (rot *APLRotation) newAPLAction(config *proto.APLAction) *APLAction {
 }
 
 func removeFromMajorCooldowns(action APLActionImpl, character *Character) {
+	// A pruned container is no longer in allAPLActions, so inspect its nested actions too.
+	for _, inner := range action.GetInnerActions() {
+		removeFromMajorCooldowns(inner.impl, character)
+	}
 	if castSpellAction, ok := action.(*APLActionCastSpell); ok {
 		character.removeInitialMajorCooldown(castSpellAction.spell.ActionID)
 	} else if castFriendlySpellAction, ok := action.(*APLActionCastFriendlySpell); ok {
