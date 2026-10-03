@@ -1568,3 +1568,19 @@ strict sequences and nested sequences with unsupported, constant-false and missi
 conditions. Constant-true controls still cast Arcane Power, and the fallback Frostbolt still runs.
 
 Drop this patch when upstream removes nested cooldowns from pruned APL actions.
+
+## 80. `warlock: each target's Bane of Agony ramps by its own step`
+
+Numbered after #78 and #79 (PR #23), which are on a separate branch.
+
+Bane of Agony ramps every four ticks by half its base tick, a step taken when it lands, and Amplify
+Curse raises the base for the one application it is spent on. The step was one variable shared by
+every target, so landing Agony on a second target rewrote the first target's step: an amplified
+Agony followed by a plain one on another target ramped by the plain step. Each target now keeps its
+own step, indexed by its unit index. It only matters with Agony on more than one target.
+
+Validation: `TestAgonyRampsByItsOwnTargetsStep` in `sim/warlock`. Unpatched, an amplified Agony
+followed by a plain one on a second target ramps by 23 per step, the plain step, instead of its own
+34.5. No suite golden moves: no suite puts Agony on two targets with Amplify Curse.
+
+Drop this when upstream keeps the ramp per target.

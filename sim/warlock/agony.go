@@ -13,7 +13,15 @@ func (warlock *Warlock) registerCurseOfAgony() {
 	tick := rank.PeriodicEffect()
 	amplify := 1 + spellData.AmplifyCurse.EffectAt(1).FractionAt(1)
 
-	rampStep := 0.0
+	// Each target's Agony ramps by its own step: Amplify Curse raises one application's step and not
+	// another's, so one shared step let a later cast on one target change the ramp on every other.
+	var rampSteps []float64
+	rampStep := func(target *core.Unit) *float64 {
+		for int(target.UnitIndex) >= len(rampSteps) {
+			rampSteps = append(rampSteps, 0)
+		}
+		return &rampSteps[target.UnitIndex]
+	}
 
 	warlock.CurseOfAgony = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: rank.ID},
@@ -51,13 +59,14 @@ func (warlock *Warlock) registerCurseOfAgony() {
 					warlock.AmplifyCurseAura.Deactivate(sim)
 				}
 
-				rampStep = base * 0.5
-				dot.Snapshot(target, rampStep)
+				step := rampStep(target)
+				*step = base * 0.5
+				dot.Snapshot(target, *step)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, periodicTickOutcome(rank, dot))
 				if dot.TickCount()%4 == 0 {
-					dot.SnapshotBaseDamage += rampStep
+					dot.SnapshotBaseDamage += *rampStep(target)
 				}
 			},
 		},
