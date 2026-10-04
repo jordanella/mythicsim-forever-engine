@@ -80,30 +80,36 @@ func (spell *Spell) CanQueue(sim *Simulation, target *Unit) bool {
 		return false
 	}
 
-	if !spell.CanCompleteCast(sim, target, false) {
+	// The timer checks come first: they are a few comparisons, and most rotation checks of a spell
+	// find it on cooldown or behind the GCD. CanCompleteCast runs the cast conditions and the cost
+	// check, and the mana cost check also opens and closes out-of-mana stretches, so those count
+	// only spells that are otherwise ready.
+	if spell.timersBlockQueue(sim) {
 		return false
 	}
 
+	return spell.CanCompleteCast(sim, target, false)
+}
+
+// Whether the spell's timers alone keep it from being cast or queued now: an un-equipped item, a
+// channel still running, or the GCD or its cooldown more than one spell queue window away.
+func (spell *Spell) timersBlockQueue(sim *Simulation) bool {
 	if spell.Flags.Matches(SpellFlagSwapped) {
-		return false
+		return true
 	}
 
 	// Apply SQW leniency to any pending hardcasts
 	if spell.Flags.Matches(SpellFlagChanneled) && spell.Unit.Hardcast.Expires > sim.CurrentTime+MaxSpellQueueWindow {
-		return false
+		return true
 	}
 
 	// Apply SQW leniency to GCD timer
 	if spell.DefaultCast.GCD > 0 && spell.Unit.GCD.TimeToReady(sim) > MaxSpellQueueWindow {
-		return false
+		return true
 	}
 
 	// Spells that are within one SQW of coming off cooldown can also be queued
-	if MaxTimeToReady(spell.CD.Timer, spell.SharedCD.Timer, sim) > MaxSpellQueueWindow {
-		return false
-	}
-
-	return true
+	return MaxTimeToReady(spell.CD.Timer, spell.SharedCD.Timer, sim) > MaxSpellQueueWindow
 }
 
 // Helper function for APL checks to prevent infinite loops

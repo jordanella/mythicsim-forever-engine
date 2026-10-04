@@ -649,10 +649,7 @@ func (spell *Spell) CanCast(sim *Simulation, target *Unit) bool {
 		return false
 	}
 
-	if !spell.CanCompleteCast(sim, target, false) {
-		return false
-	}
-
+	// The timer checks come first, as in CanQueue: they are cheap and usually decide.
 	if spell.Flags.Matches(SpellFlagSwapped) {
 		//if sim.Log != nil {
 		//	sim.Log("Cant cast because of item swap")
@@ -676,7 +673,7 @@ func (spell *Spell) CanCast(sim *Simulation, target *Unit) bool {
 		return false
 	}
 
-	if ((spell.DefaultCast.GCD > 0) || (spell.Flags.Matches(SpellFlagMCD) && spell.Unit.Rotation.inSequence)) && !spell.Unit.GCD.IsReady(sim) {
+	if ((spell.DefaultCast.GCD > 0) || (spell.Flags.Matches(SpellFlagMCD) && spell.Unit.Rotation != nil && spell.Unit.Rotation.inSequence)) && !spell.Unit.GCD.IsReady(sim) {
 		//if sim.Log != nil {
 		//	sim.Log("Cant cast because of GCD")
 		//}
@@ -695,7 +692,7 @@ func (spell *Spell) CanCast(sim *Simulation, target *Unit) bool {
 		return false
 	}
 
-	return true
+	return spell.CanCompleteCast(sim, target, false)
 }
 
 // Returns whether the spell being cast can be completed.

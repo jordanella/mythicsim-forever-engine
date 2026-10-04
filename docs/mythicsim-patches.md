@@ -1613,3 +1613,36 @@ the most (about 165 spells and 107 auras against 50 to 110 objects for other spe
 gain measurably more. DPS matched to six decimals in every run, and no suite golden moves.
 
 Drop this when upstream folds iteration metrics selectively.
+
+## 81. `core: a rotation checks a spell's timers before its conditions and cost`
+
+Numbered after #80 (the Agony fix, PR #24), which is on a separate branch.
+
+A rotation looks for something to do on every global cooldown and, while nothing is ready, a
+reaction time apart. Each look asks every priority item whether it can run, and most of the answers
+are no because the spell is on cooldown. The engine found that out last:
+
+- **The cast checks** (`Spell.CanQueue`, `Spell.CanCast`) ran `CanCompleteCast` first (the unit and
+  target checks, form and stance requirements, the spell's cast conditions and its cost) and only
+  then compared the GCD and cooldown timers. The timers now come first, through one helper,
+  `Spell.timersBlockQueue`. The mana cost check also opens and closes out-of-mana stretches, so these
+  now count only spells that are otherwise ready: a spell on cooldown that could not be afforded no
+  longer counts as out of mana. DPS is unaffected.
+- **A cast action whose spell has a cooldown** checks those timers before its condition
+  (`APLAction.IsReady`), so a long cooldown costs two comparisons a look instead of its condition.
+  Conditions only read state (an audit of every value getter found only local accumulators and the
+  variable cache, which memoises within a look), so skipping one changes nothing. Spells without a
+  cooldown are not gated: they are usually ready, and gating them paid the timer checks twice, which
+  cost Assassination and Subtlety 4 to 6%.
+- **The default Retribution preset** dropped "Judgement can be cast" from the Judgement cast, the
+  same check the cast makes. The rankings page uses the generated rotation, so this only changes the
+  spec page's default.
+
+Measured single-threaded on the 25 builds the DPS rankings page simulates (exported from its own
+`buildRaid` with the launch gear, consumables and rotations, each run alone with the page's raid and
+party buffs, 3000 iterations, three alternating rounds): +7.9% over all 25 by total time, from +19%
+(Protection Paladin) through +10 to +16% for the hunters, Fury and Retribution, to about -1% for
+Assassination and Subtlety, which ten paired rounds put at -1.0% +-0.9% and -2.3% +-2.1%. DPS matched
+to six decimals for every build, and no suite golden moves.
+
+Drop this when upstream orders its cast checks this way.
