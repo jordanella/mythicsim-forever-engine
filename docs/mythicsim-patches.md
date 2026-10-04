@@ -1677,3 +1677,35 @@ within noise: ten paired rounds put Arcane, Shadow, Stormcaller and DS/Ruin Pand
 and +0.8%. DPS matched #81 to six decimals for every build, and no suite golden moves.
 
 Drop this when upstream orders a rotation's checks itself.
+
+## 83. `core: conditions that depend only on the fight's time keep their answer until it can change`
+
+Builds on #82.
+
+Cooldowns are often held for the end of a fight by a condition such as "Remaining Time <= 30s OR
+Remaining Time >= 140s". It gives the same answer for minutes at a time, but a rotation waiting for
+rage asks it on every look. A warrior looks about 850 times a fight and finds nothing to do on about
+90% of those looks, so these conditions were a large share of Fury's and Arms' time.
+
+- **The cache.** A comparison of the remaining or current time with a constant can change its
+  answer only at the one time where the two are equal. A condition, or any part of one, built only
+  from such comparisons, constants, And, Or and Not therefore keeps its answer until the next of
+  those times. `APLRotation.cacheTimeOnlyConditions` wraps each largest such part in an
+  `aplValueTimeCache`, which asks it as before and reuses the answer until then. The caches reset
+  each iteration, since the fight's length can vary. In a fight that ends at a health target and
+  estimates its remaining time from damage done, remaining time is not a function of time alone, so
+  those comparisons are never cached.
+- **Constant operands.** An And drops constant true operands and an Or drops constant false ones,
+  as in "Sunder stacks < 1 AND true".
+- **Untouched rotations stay as built.** A condition with no time-only part keeps its nodes and
+  operand slices, so the rotations of specs that do not use these conditions run exactly as before.
+
+Each skipped condition node saves about 4 ns, calibrated from Fury and Arms. Over the 25 rankings
+builds, counting the nodes each skips per fight predicts the gain: about 16% for Fury, 13% for Arms,
+1.5 to 2% for the four warlock builds, under 0.2% for Enhancement, the rogues, Shadow and Fire, and
+nothing for the rest. Ten paired rounds against #82 measured Fury +18.1% and Arms +12.8%, the
+warlocks +0.6 to +2.8%, and every other build within this machine's noise (the eight builds the cache
+cannot touch spread from -3.0% to +5.7%). DPS matched #82 to six decimals for every build, and no
+suite golden moves.
+
+Drop this when upstream caches time-only conditions itself.

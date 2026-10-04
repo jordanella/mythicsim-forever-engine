@@ -207,6 +207,7 @@ func (rot *APLRotation) prepareReadyChecks() {
 		action.prepareReady(false)
 	}
 	for _, action := range rot.allAPLActions() {
+		action.condition = rot.cacheTimeOnlyConditions(action.condition)
 		action.prepareReady(true)
 	}
 }
