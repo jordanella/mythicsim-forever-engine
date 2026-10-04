@@ -112,6 +112,21 @@ func (spell *Spell) timersBlockQueue(sim *Simulation) bool {
 	return MaxTimeToReady(spell.CD.Timer, spell.SharedCD.Timer, sim) > MaxSpellQueueWindow
 }
 
+// Whether the spell's energy, rage or focus cost alone keeps it from being cast now: the same answer
+// as the cost check in CanCompleteCast, without writing CurCast. A mana cost is left to the cast
+// check, which also opens and closes out-of-mana stretches.
+func (spell *Spell) cannotAffordNonMana() bool {
+	switch spell.Cost.ResourceCostImpl.(type) {
+	case *EnergyCost:
+		return spell.Unit.CurrentEnergy() < spell.Cost.GetCurrentCost()
+	case *RageCost:
+		return spell.Unit.CurrentRage() < spell.Cost.GetCurrentCost()
+	case *FocusCost:
+		return spell.Unit.currentFocus < spell.Cost.GetCurrentCost()
+	}
+	return false
+}
+
 // Helper function for APL checks to prevent infinite loops
 func (spell *Spell) CanCastOrQueue(sim *Simulation, target *Unit) bool {
 	return spell.Unit.CanQueueSpell(sim) && spell.CanQueue(sim, target)

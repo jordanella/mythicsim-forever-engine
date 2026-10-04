@@ -1646,3 +1646,34 @@ Assassination and Subtlety, which ten paired rounds put at -1.0% +-0.9% and -2.3
 to six decimals for every build, and no suite golden moves.
 
 Drop this when upstream orders its cast checks this way.
+
+## 82. `core: a rotation compiles each item's checks into the order its first iteration found cheapest`
+
+Builds on #81.
+
+#81 asks a cooldown spell's timers before its condition, the best order for a rotation turned away
+mostly by cooldowns. Other rotations are turned away by something else: a rogue mostly by energy, a
+Fury warrior by its own conditions. No one order suits every spec, and a fixed second gate for
+energy, rage and focus cost Fury 8%. So each rotation now finds its own order:
+
+- **The first iteration counts.** Each cast item with a cooldown or an energy, rage or focus cost
+  asks its timers, its cost and its condition independently (`APLAction.countingReady`) and counts
+  which say no. Its answer is the plain check's: blocked timers or cost mean the cast check would
+  fail too, and the cast check runs only when all three pass.
+- **The second iteration compiles.** `APLRotation.reset` turns each item's counts into a function
+  that asks the checks in the order with the lowest expected cost, treating them as independent and
+  pricing each roughly (a timer comparison 1, a cost check 2, a condition 1 per value in its tree,
+  the cast check 8). The cast check always comes last. `APLAction.IsReady` then only calls that
+  function, with no counters and no branches on which checks to ask.
+- **Mana is left out.** The mana cost check also opens and closes out-of-mana stretches, so it stays
+  in the cast check; `Spell.cannotAffordNonMana` reads energy, rage and focus only. Every other
+  check only reads (audited in #81), so the order changes only how quickly "not ready" is found.
+
+Measured as in #81 (the 25 rankings builds, 3000 iterations, five alternating rounds): +11.1% over
+all 25 by total time against the code before #81, where #81 alone measures +6.9%, so +3.9% over #81.
+The builds that gain most were the slowest: ten paired rounds against #81 put Subtlety at +26%,
+Combat +16% and Feral +11%. For mana builds, the compiled order is #81's, and the extra call costs
+within noise: ten paired rounds put Arcane, Shadow, Stormcaller and DS/Ruin Pandemic between -1.6%
+and +0.8%. DPS matched #81 to six decimals for every build, and no suite golden moves.
+
+Drop this when upstream orders a rotation's checks itself.

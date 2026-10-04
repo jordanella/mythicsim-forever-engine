@@ -265,6 +265,10 @@ func (rot *APLRotation) newActionStrictMultidot(config *proto.APLActionStrictMul
 		}
 	}
 
+	for _, action := range actions {
+		action.prepareReady(false)
+	}
+
 	return &APLActionStrictMultidot{
 		unit:       rot.unit,
 		spell:      spell,

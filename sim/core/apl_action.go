@@ -10,9 +10,12 @@ type APLAction struct {
 	condition APLValue
 	impl      APLActionImpl
 
-	// For a cast of a spell with a cooldown, the spell, checked against its timers before the
-	// condition; see IsReady. Set by newAPLAction and newAPLActionWithGroupVars.
-	cooldownSpell *Spell
+	// Whether this action can run now: its condition, its action, and for a cast any cheaper checks
+	// worth asking first, in the order compiled for this rotation; see apl_action_ready.go.
+	ready func(*Simulation) bool
+
+	// What this action counted in the first iteration, until its check is compiled.
+	counts *aplReadyCounts
 }
 
 func (action *APLAction) Finalize(rot *APLRotation) {
@@ -28,31 +31,7 @@ func (action *APLAction) Finalize(rot *APLRotation) {
 }
 
 func (action *APLAction) IsReady(sim *Simulation) bool {
-	// A cast whose spell is on cooldown or behind the GCD cannot be ready whatever its condition
-	// says, and two timer comparisons cost far less than most conditions. Conditions only read, so
-	// skipping one changes nothing.
-	if action.cooldownSpell != nil && action.cooldownSpell.timersBlockQueue(sim) {
-		return false
-	}
-	return (action.condition == nil || action.condition.GetBool(sim)) && action.impl.IsReady(sim)
-}
-
-// The spell a cast action casts, if it has a cooldown. One without spends most of its time ready, so
-// gating it would only pay the timer checks twice: in IsReady, and again in the cast check.
-func cooldownSpellOf(impl APLActionImpl) *Spell {
-	var spell *Spell
-	switch impl := impl.(type) {
-	case *APLActionCastSpell:
-		spell = impl.spell
-	case *APLActionCastFriendlySpell:
-		spell = impl.spell
-	case *APLActionChannelSpell:
-		spell = impl.spell
-	}
-	if spell != nil && (spell.CD.Timer != nil || spell.SharedCD.Timer != nil) {
-		return spell
-	}
-	return nil
+	return action.ready(sim)
 }
 
 func (action *APLAction) Execute(sim *Simulation) {
@@ -199,9 +178,8 @@ func (rot *APLRotation) newAPLAction(config *proto.APLAction) *APLAction {
 	}
 
 	action := &APLAction{
-		condition:     condition,
-		impl:          impl,
-		cooldownSpell: cooldownSpellOf(impl),
+		condition: condition,
+		impl:      impl,
 	}
 
 	return action
