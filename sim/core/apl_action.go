@@ -7,6 +7,8 @@ import (
 )
 
 type APLAction struct {
+	// ready captures condition and impl when the rotation is built, so neither may change after
+	// newAPLRotation returns.
 	condition APLValue
 	impl      APLActionImpl
 

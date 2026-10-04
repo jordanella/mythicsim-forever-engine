@@ -216,12 +216,20 @@ func (rot *APLRotation) compileReadyChecks() {
 	if rot.readyCompiled {
 		return
 	}
-	counted := false
+	calibrating, counted := false, false
 	for _, action := range rot.allAPLActions() {
-		if action.counts != nil && action.counts.checks > 0 {
-			counted = true
-			break
+		if action.counts != nil {
+			calibrating = true
+			if action.counts.checks > 0 {
+				counted = true
+				break
+			}
 		}
+	}
+	if !calibrating {
+		// Nothing has checks worth ordering, so there is nothing to compile, now or later.
+		rot.readyCompiled = true
+		return
 	}
 	if !counted {
 		return
