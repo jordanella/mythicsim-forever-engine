@@ -63,6 +63,26 @@ pub(crate) enum Float {
 }
 
 impl Cond {
+    /// Whether evaluating the condition can run a cost check (Go `APLValueSpellCanCast`).
+    pub(crate) fn asks_cost(&self) -> bool {
+        match self {
+            Cond::SpellCanCast(_) => true,
+            Cond::And(values) | Cond::Or(values) => values.iter().any(Cond::asks_cost),
+            Cond::Not(value) => value.asks_cost(),
+            Cond::DurationConst(_, lhs, _) => lhs.asks_cost(),
+            Cond::IntConst(_, lhs, _) => lhs.asks_cost(),
+            Cond::FloatConst(_, lhs, _) => lhs.asks_cost(),
+            Cond::Duration(_, operands) => operands.0.asks_cost() || operands.1.asks_cost(),
+            Cond::Int(_, operands) => operands.0.asks_cost() || operands.1.asks_cost(),
+            Cond::Float(_, operands) => operands.0.asks_cost() || operands.1.asks_cost(),
+            Cond::Other(value) => compiled_asks_cost(value),
+            Cond::Const(_)
+            | Cond::AuraIsActive(_)
+            | Cond::DotIsActive(_)
+            | Cond::IsExecutePhase(_) => false,
+        }
+    }
+
     /// Lower a compiled condition. Each node reads exactly what its compiled form reads.
     pub(crate) fn lower(value: &Compiled) -> Cond {
         match value {
@@ -107,7 +127,25 @@ impl Cond {
     }
 }
 
+/// Whether a compiled value can run a cost check (Go `APLValueSpellCanCast`).
+fn compiled_asks_cost(value: &Compiled) -> bool {
+    match value {
+        Compiled::SpellCanCast(_) => true,
+        Compiled::And(values) | Compiled::Or(values) => values.iter().any(compiled_asks_cost),
+        Compiled::Not(value) | Compiled::Coerced { inner: value, .. } => compiled_asks_cost(value),
+        Compiled::Compare { lhs, rhs, .. } | Compiled::Math { lhs, rhs, .. } => {
+            compiled_asks_cost(lhs) || compiled_asks_cost(rhs)
+        }
+        Compiled::AuraShouldRefresh { overlap, .. } => compiled_asks_cost(overlap),
+        _ => false,
+    }
+}
+
 impl Duration {
+    fn asks_cost(&self) -> bool {
+        matches!(self, Duration::Other(value) if compiled_asks_cost(value))
+    }
+
     fn lower(value: &Compiled) -> Duration {
         match value {
             Compiled::Const(constant) => Duration::Const(constant.duration_ns),
@@ -121,6 +159,10 @@ impl Duration {
 }
 
 impl Int {
+    fn asks_cost(&self) -> bool {
+        matches!(self, Int::Other(value) if compiled_asks_cost(value))
+    }
+
     fn lower(value: &Compiled) -> Int {
         match value {
             Compiled::Const(constant) => Int::Const(constant.int),
@@ -133,6 +175,10 @@ impl Int {
 }
 
 impl Float {
+    fn asks_cost(&self) -> bool {
+        matches!(self, Float::Other(value) if compiled_asks_cost(value))
+    }
+
     fn lower(value: &Compiled) -> Float {
         match value {
             Compiled::Const(constant) => Float::Const(constant.float),

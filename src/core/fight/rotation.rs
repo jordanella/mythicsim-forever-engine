@@ -11,8 +11,8 @@ use crate::{
 };
 
 use super::{
-    cast::MAX_SPELL_QUEUE_WINDOW, exclusive::RefreshReading, Agent, AuraRef, DotId, Fight, Side,
-    SpellId,
+    cast::MAX_SPELL_QUEUE_WINDOW, exclusive::RefreshReading, Agent, AuraRef, DotId, Fight,
+    ResourceKind, Side, SpellId,
 };
 
 use std::{ops::Range, rc::Rc};
@@ -109,6 +109,20 @@ pub(crate) struct Item {
     /// Shared so evaluation, which can change the fight, never borrows the rotation.
     condition: Option<Rc<Cond>>,
     action: Act,
+    /// Whether the condition runs a cost check (Go `APLValueSpellCanCast`), whose bookkeeping
+    /// must happen whenever Go asks it.
+    asks_cost: bool,
+}
+
+impl Item {
+    fn new(condition: Option<Rc<Cond>>, action: Act) -> Item {
+        let asks_cost = condition.as_deref().is_some_and(Cond::asks_cost);
+        Item {
+            condition,
+            action,
+            asks_cost,
+        }
+    }
 }
 
 /// Go `APLRotation` fields beyond the priority list: the controlling strict sequence, the
@@ -289,7 +303,7 @@ impl<A: Agent> Fight<A> {
                 CompiledCondition::Always => None,
                 CompiledCondition::When(condition) => Some(Rc::new(Cond::lower(&condition))),
             };
-            items.push(Item { condition, action });
+            items.push(Item::new(condition, action));
         }
         let priority = items.len();
         let mut groups = Vec::new();
@@ -309,7 +323,7 @@ impl<A: Agent> Fight<A> {
                 // whatever it holds.
                 let condition = compile_bool_value(item.condition.as_ref(), &lookup)
                     .map(|condition| Rc::new(Cond::lower(&condition)));
-                items.push(Item { condition, action });
+                items.push(Item::new(condition, action));
             }
             groups.push(start..items.len());
         }
@@ -792,8 +806,54 @@ impl<A: Agent> Fight<A> {
         true
     }
 
-    /// Go `APLAction.IsReady`: the condition, then the action's readiness.
+    /// Whether a cast is ruled out by what blocks it whatever its condition says: one queued
+    /// spell per timestep, the GCD or a channel beyond the queue window, its own cooldowns
+    /// beyond it, or a major cooldown waiting for the GCD. Only where Go's asking would leave
+    /// no trace: no log is kept, and the cast's cost check keeps no bookkeeping. A rage, energy
+    /// or focus cost never does; a mana cost does not while it is affordable with no
+    /// out-of-mana wait open, or while it is unaffordable and no lower than the mana waited for.
+    fn quietly_blocked(&self, spell: SpellId) -> bool {
+        let state = &self.spells[spell];
+        if self.log.is_some() || state.caster != Side::Player {
+            return false;
+        }
+        let unit = &self.player;
+        if let Some(cost) = state.cost {
+            if !matches!(
+                cost.kind,
+                ResourceKind::Energy | ResourceKind::Focus | ResourceKind::Rage
+            ) {
+                let cost = self.current_cost(spell);
+                let waiting = unit.waiting_for_mana;
+                let quiet = if unit.mana >= cost {
+                    waiting == 0.0
+                } else {
+                    waiting != 0.0 && cost >= waiting
+                };
+                if cost > 0.0 && !quiet {
+                    return false;
+                }
+            }
+        }
+        !self.can_queue_spell()
+            || (state.flags.channeled && unit.hardcast.expires > self.now + MAX_SPELL_QUEUE_WINDOW)
+            || (state.default_cast.gcd > 0 && (unit.gcd - self.now).max(0) > MAX_SPELL_QUEUE_WINDOW)
+            || self.spell_time_to_ready(spell) > MAX_SPELL_QUEUE_WINDOW
+            || (state.flags.mcd
+                && !state.flags.reactive
+                && !self.gcd_ready()
+                && !self.apl.in_sequence)
+    }
+
+    /// Go `APLAction.IsReady`: the condition, then the action's readiness. A cast its timers
+    /// rule out is not asked, where asking would leave no trace (see
+    /// [`Fight::quietly_blocked`]).
     fn item_ready(&mut self, item: usize) -> Option<Ready> {
+        if let Act::Cast(spell, _) = self.rotation[item].action {
+            if !self.rotation[item].asks_cost && self.quietly_blocked(spell) {
+                return None;
+            }
+        }
         if let Some(condition) = self.rotation[item].condition.clone() {
             if !self.condition(&condition) {
                 return None;
